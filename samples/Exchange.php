@@ -12,13 +12,12 @@ use PayNL\Sdk\Model\Pay\PayStatus;
 $exchange = new Exchange();
 
 
- try {
-    
-    # Process the exchange request
-    $payOrder = $exchange->process();  
+try {
 
-    switch ($payOrder->getStateId())   
-    {
+    # Process the exchange request
+    $payOrder = $exchange->process();
+
+    switch ($payOrder->getStateId()) {
         case PayStatus::PENDING :
             $responseResult = yourCodeToProcessPendingOrder($payOrder->getReference());
             $responseMessage = 'Processed pending';
@@ -36,7 +35,14 @@ $exchange = new Exchange();
     $responseMessage = $exception->getMessage();
 }
 
-function yourCodeToProcessPendingOrder($orderId) { return true; }
-function yourCodeToProcessPaidOrder($orderId) { return true; }
+function yourCodeToProcessPendingOrder($orderId)
+{
+    return true;
+}
+
+function yourCodeToProcessPaidOrder($orderId)
+{
+    return true;
+}
 
 $exchange->setResponse($responseResult, $responseMessage);
