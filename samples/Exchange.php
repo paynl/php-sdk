@@ -1,4 +1,5 @@
 <?php
+
 // phpcs:ignore
 # This is a minimal example on how to handle a Pay. exchange call and process an order
 declare(strict_types=1);
