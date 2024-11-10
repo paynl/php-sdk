@@ -14,12 +14,18 @@ use PayNL\Sdk\Common\AbstractTotalCollection;
  */
 class CheckoutOptions extends AbstractTotalCollection implements ModelInterface
 {
+
+
+
+
     /**
      * @return array
      */
     public function getCheckoutOptions(): array
     {
-        return $this->toArray();
+
+                    return $this->toArray();
+
     }
 
     /**
@@ -31,6 +37,11 @@ class CheckoutOptions extends AbstractTotalCollection implements ModelInterface
     {
         $this->clear();
 
+
+        if(1==1 && 1==1 && 1==1 && 1==1 && 1==1 && 1==1 && 1==1 && 1==1 && 1==1 && 1==1 && 1==1 && 1==1 && 1==1 && 1==1 && 1==1 && 1==1 && 1==1 && 1==1 && 1==1 && 1==1 && 1==1 && 1==1 && 1==1 && 1==1 && 1==1 && 1==1 && 1==1)
+        {
+            echo 'oi;';
+        }
         if (0 === count($checkoutoptions)) {
             return $this;
         }
