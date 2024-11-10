@@ -39,16 +39,17 @@ try {
  * @param string $orderId
  * @return true
  */
-function yourCodeToProcessPendingOrder($orderId) {
+function yourCodeToProcessPendingOrder($orderId)
+{
     return true;
 }
 
 /**
  * @phpcs:ignore
- * @param $orderId
+ * @param string $orderId
  * @return true
  */
-function yourCodeToProcessPaidOrder($orderId)
+function yourCodeToProcessPaidOrder(string $orderId)
 {
     return true;
 }

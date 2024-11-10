@@ -53,11 +53,12 @@ class CheckoutOptions extends AbstractTotalCollection implements ModelInterface
     }
 
     /**
-     * @phpcs:ignore
+     * @phpcs:disable
      * @inheritDoc
      */
-    public function getCollectionName(): string // phpcs:ignore
+    public function getCollectionName(): string
     {
         return 'checkoutoptions';
     }
+    /** @phpcs:enable */
 }
