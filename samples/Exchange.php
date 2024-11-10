@@ -13,16 +13,15 @@ $exchange = new Exchange();
 
 
 try {
-
     # Process the exchange request
     $payOrder = $exchange->process();
 
     switch ($payOrder->getStateId()) {
-        case PayStatus::PENDING :
+        case PayStatus::PENDING:
             $responseResult = yourCodeToProcessPendingOrder($payOrder->getReference());
             $responseMessage = 'Processed pending';
             break;
-        case PayStatus::PAID :
+        case PayStatus::PAID:
             $responseResult = yourCodeToProcessPaidOrder($payOrder->getReference());
             $responseMessage = 'Processed paid. Order: ' . $payOrder->getReference();
             break;
@@ -35,11 +34,18 @@ try {
     $responseMessage = $exception->getMessage();
 }
 
-function yourCodeToProcessPendingOrder($orderId)
-{
+/**
+ * @param $orderId
+ * @return true
+ */
+function yourCodeToProcessPendingOrder($orderId) {
     return true;
 }
 
+/**
+ * @param $orderId
+ * @return true
+ */
 function yourCodeToProcessPaidOrder($orderId)
 {
     return true;

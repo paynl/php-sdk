@@ -6,7 +6,6 @@ namespace PayNL\Sdk\Model;
 
 use PayNL\Sdk\Common\AbstractTotalCollection;
 
-
 /**
  * Class CheckoutOptions
  *
@@ -14,7 +13,6 @@ use PayNL\Sdk\Common\AbstractTotalCollection;
  */
 class CheckoutOptions extends AbstractTotalCollection implements ModelInterface
 {
-
     /**
      * @return array
      */
@@ -57,7 +55,7 @@ class CheckoutOptions extends AbstractTotalCollection implements ModelInterface
     /**
      * @inheritDoc
      */
-    public function getCollectionName(): string
+    public function getCollectionName(): string // phpcs:ignore
     {
         return 'checkoutoptions';
     }
