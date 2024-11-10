@@ -6,6 +6,7 @@ namespace PayNL\Sdk\Model;
 
 use PayNL\Sdk\Common\AbstractTotalCollection;
 
+
 /**
  * Class CheckoutOptions
  *
