@@ -1,5 +1,5 @@
 <?php
-
+// phpcs:ignore
 # This is a minimal example on how to handle a Pay. exchange call and process an order
 declare(strict_types=1);
 
@@ -25,7 +25,7 @@ try {
             $responseResult = yourCodeToProcessPaidOrder($payOrder->getReference());
             $responseMessage = 'Processed paid. Order: ' . $payOrder->getReference();
             break;
-        default :
+        default:
             $responseResult = true;
             $responseMessage = 'No action defined for payment state ' . $payOrder->getStateId();
     }
@@ -35,7 +35,8 @@ try {
 }
 
 /**
- * @param $orderId
+ * @phpcs:ignore
+ * @param string $orderId
  * @return true
  */
 function yourCodeToProcessPendingOrder($orderId) {
@@ -43,6 +44,7 @@ function yourCodeToProcessPendingOrder($orderId) {
 }
 
 /**
+ * @phpcs:ignore
  * @param $orderId
  * @return true
  */
