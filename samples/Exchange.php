@@ -1,6 +1,6 @@
 <?php
+// phpcs:ignore Generic.Files.OneClassPerFile
 
-// phpcs:ignore
 # This is a minimal example on how to handle a Pay. exchange call and process an order
 declare(strict_types=1);
 
