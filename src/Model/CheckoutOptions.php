@@ -18,9 +18,6 @@ class CheckoutOptions extends AbstractTotalCollection implements ModelInterface
 
 
 
-    /**
-     * @return array
-     */
     public function getCheckoutOptions(): array
     {
 
