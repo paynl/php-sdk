@@ -11,6 +11,7 @@ use PayNL\Sdk\Model\Pay\PayStatus;
 
 $exchange = new Exchange();
 
+
 try {
     # Process the exchange request
     $payOrder = $exchange->process();
