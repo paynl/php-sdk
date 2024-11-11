@@ -69,7 +69,10 @@ class Exchange
      */
     public function getAction()
     {
-        $payload = $this->getPayload();
+        try {
+            $payload = $this->getPayload();
+        } catch (\Throwable $e) {
+        }
         return $payload['action'] ?? false;
     }
 
@@ -78,7 +81,10 @@ class Exchange
      */
     public function getReference()
     {
-        $payload = $this->getPayload();
+        try {
+            $payload = $this->getPayload();
+        } catch (\Throwable $e) {
+        }
         return $payload['reference'] ?? '';
     }
 
@@ -89,8 +95,7 @@ class Exchange
     {
         try {
             $payload = $this->getPayload();
-        } catch (PayException $e) {
-
+        } catch (\Throwable $e) {
         }
         return $payload['payOrderId'] ?? false;
     }
@@ -195,7 +200,7 @@ class Exchange
     {
         $payload = $this->getPayload();
         $payStatus = new PayStatus();
-        
+
         if (empty($config)) {
             $config = Config::getConfig();
         }
