@@ -7,6 +7,6 @@ return [
         'username' => '', # Use AT-Code or SL-Code. Use AT-code together with API-Token.
         'password' => '', # Use API-Token or secret. Use Secret in combination with SL-Code.
     ],
-    'debug' => true,
+    'debug' => false,
     #'api' => ['url' => '']  # Core
 ];
