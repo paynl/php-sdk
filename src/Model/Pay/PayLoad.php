@@ -39,6 +39,14 @@ class PayLoad
     }
 
     /**
+     * @return string
+     */
+    public function getAction()
+    {
+        return $this->action;
+    }
+
+    /**
      * @return array
      */
     public function getFullPayLoad(): array
@@ -73,7 +81,7 @@ class PayLoad
     /**
      * @return string
      */
-    public function getReference(): string
+    public function  nce(): string
     {
         return $this->reference;
     }
