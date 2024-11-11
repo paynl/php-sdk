@@ -11,10 +11,7 @@ use PayNL\Sdk\Config\Config;
 
 $orderId = $_REQUEST['pay_order_id'] ?? exit('Pass orderId');
 
-$config = new Config();
-$config->setUsername($_REQUEST['username'] ?? '');
-$config->setPassword($_REQUEST['password'] ?? '');
-$config->setCore($_REQUEST['core'] ?? '');
+$config = (new Config())->setUsername($_REQUEST['username'] ?? '')->setPassword($_REQUEST['password'] ?? '');
 
 try {
     $transaction = (new TransactionStatusRequest($orderId))->setConfig($config)->start();

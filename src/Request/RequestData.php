@@ -68,10 +68,13 @@ abstract class RequestData implements RequestDataInterface
         if ($response->hasErrors()) {
             $jsonData = json_decode($response->getRawBody(), true);
             $jsonError = json_last_error();
+
             if (empty($jsonError) && !empty($jsonData)) {
-                $code = $jsonData['violations'][0]['code'] ?? 'PAY-';
+                $code = $jsonData['violations'][0]['code'] ?? 'PAY-0';
                 $detail = $jsonData['detail'] ?? '';
                 $errorMessage = empty($detail) ? ($jsonData['title'] ?? '') : $detail;
+                $errorMessage = (empty($errorMessage) && !empty($jsonData['error'])) ? $jsonData['error'] : $errorMessage;
+                $detail = empty($detail) ? $errorMessage : $detail;
                 throw (new PayException($code . ' - ' . $detail, (int)substr($code, 4), $response->getStatusCode()))->setFriendlyMessage(Text::getFriendlyMessage($errorMessage));
             } else {
                 throw (new PayException($response->getErrors(), 0, $response->getStatusCode()))->setFriendlyMessage(Text::getFriendlyMessage($response->getErrors()));

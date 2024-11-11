@@ -14,7 +14,6 @@ $request = new OrderStatusRequest($_REQUEST['pay_order_id'] ?? '');
 $config = new Config();
 $config->setUsername($_REQUEST['username'] ?? '');
 $config->setPassword($_REQUEST['password'] ?? '');
-$config->setCore($_REQUEST['core'] ?? '');
 $request->setConfig($config);
 
 try {
