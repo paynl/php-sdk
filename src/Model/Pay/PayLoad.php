@@ -19,24 +19,13 @@ class PayLoad
     protected array $checkoutData;
     protected array $fullPayLoad = [];
 
-
     /**
      * @param array $payload
      */
     public function __construct(array $payload)
     {
         $this->amount = (float)$payload['amount'];
-        $this->amountCap = (float)$payload['amount_cap'];
-        $this->amountAuth = (float)$payload['amount_auth'];
-        $this->reference = $payload['reference'];
-        $this->action = $payload['action'];
-        $this->paymentProfile = (int)$payload['payment_profile'];
-        $this->payOrderId = $payload['pay_order_id'];
-        $this->orderId = $payload['order_id'];
-        $this->internalStateId = $payload['internal_state_id'];
-        $this->internalStateName = (string)$payload['internal_state_name'];
-        $this->checkoutData = (array)$payload['checkout_data'];
-        $this->fullPayLoad = (array)$payload['full_payload'];
+
     }
 
 
@@ -44,8 +33,6 @@ class PayLoad
     {
         return $this->fullPayLoad;
     }
-
-
 
 
     public function getInternalStateId(): int
@@ -56,6 +43,16 @@ class PayLoad
     public function getInternalStateName(): string
     {
         return $this->internalStateName;
+    }
+
+    public function getPayOrderId(): string
+    {
+        return $this->payOrderId;
+    }
+
+    public function getReference(): string
+    {
+        return $this->reference;
     }
 
 }

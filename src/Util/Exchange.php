@@ -216,10 +216,10 @@ class Exchange
             } else {
                 # Continue to check the order status manually
                 try {
-                    if (empty($payload['payOrderId'])) {
+                    if (empty($payload->getPayOrderId())) {
                         throw new Exception('Missing pay order id in payload');
                     }
-                    $request = new OrderStatusRequest($payload['payOrderId']);
+                    $request = new OrderStatusRequest($payload->getPayOrderId());
                     $transaction = $request->setConfig($config)->start();
                     $paymentState = $transaction->getStatusCode();
                 } catch (PayException $e) {
@@ -229,7 +229,7 @@ class Exchange
             }
         }
 
-        $payOrder->setAmount($payload['amount']);
+        $payOrder->setAmount($payload->getAmount());
         $payOrder->setPaymentProfileId($payload['paymentProfile']);
         $payOrder->setOrderId($payload['payOrderId']);
         $payOrder->setReference($payload['reference'] ?? '');
