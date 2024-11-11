@@ -112,7 +112,7 @@ class Exchange
         } else {
             $request = $_REQUEST ?? false;
             if ($request === false) {
-                throw new Exception('Empty payLoad', 8001);
+                throw new Exception('Empty payload', 8001);
             }
         }
 
@@ -132,7 +132,7 @@ class Exchange
             } else {
                 $rawBody = file_get_contents('php://input');
                 if (empty(trim($rawBody))) {
-                    throw new Exception('Empty payLoad', 8002);
+                    throw new Exception('Empty payload', 8002);
                 }
 
                 $tguData = json_decode($rawBody, true, 512, 4194304);
@@ -210,8 +210,14 @@ class Exchange
                 throw new Exception('Signing request failed');
             }
         } else {
+            try {
+                $payloadState = $payStatus->get($payload->getInternalStateId());
+            } catch (\Throwable $e) {
+                $payloadState = null;
+            }
+
             # Not a signing request...
-            if ($payStatus->get($payload->getInternalStateId()) === PayStatus::PENDING) {
+            if ($payloadState === PayStatus::PENDING)  {
                 $paymentState = $payload->getInternalStateId();
             } else {
                 # Continue to check the order status manually
@@ -230,9 +236,9 @@ class Exchange
         }
 
         $payOrder->setAmount($payload->getAmount());
-        $payOrder->setPaymentProfileId($payload['paymentProfile']);
-        $payOrder->setOrderId($payload['payOrderId']);
-        $payOrder->setReference($payload['reference'] ?? '');
+        $payOrder->setPaymentProfileId($payload->getPaymentProfile());
+        $payOrder->setOrderId($payload->getPayOrderId());
+        $payOrder->setReference($payload->getReference());
         $payOrder->setStateId($payStatus->get($paymentState));
 
         return $payOrder;

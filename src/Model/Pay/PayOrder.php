@@ -40,7 +40,7 @@ class PayOrder
     {
         if (!empty($payload)) {
             foreach ($payload as $_key => $_val) {
-                $method = 'set' . ucfirst($_key);
+                $method = 'set' . ucfirst((string)$_key);
                 if (method_exists($this, $method)) {
                     $this->$method($_val);
                 }
