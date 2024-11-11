@@ -47,6 +47,14 @@ class PayLoad
     }
 
     /**
+     * @return string
+     */
+    public function getReference()
+    {
+        return $this->reference;
+    }
+    
+    /**
      * @return array
      */
     public function getFullPayLoad(): array

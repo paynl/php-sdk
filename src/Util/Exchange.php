@@ -65,7 +65,7 @@ class Exchange
     }
 
     /**
-     * @return false|mixed|string
+     * @return string
      */
     public function getAction()
     {
@@ -73,7 +73,7 @@ class Exchange
             $payload = $this->getPayload();
         } catch (\Throwable $e) {
         }
-        return $payload['action'] ?? false;
+        return $payload->getAction();
     }
 
     /**
@@ -85,11 +85,11 @@ class Exchange
             $payload = $this->getPayload();
         } catch (\Throwable $e) {
         }
-        return $payload['reference'] ?? '';
+        return $payload->getReference();
     }
 
     /**
-     * @return false|mixed|string
+     * @return string
      */
     public function getPayOrderId()
     {
@@ -97,7 +97,7 @@ class Exchange
             $payload = $this->getPayload();
         } catch (\Throwable $e) {
         }
-        return $payload['payOrderId'] ?? false;
+        return $payload->getPayOrderId();
     }
 
     /**
