@@ -9,6 +9,7 @@ use PayNL\Sdk\Config\Config;
 use PayNL\Sdk\Model\Request\OrderStatusRequest;
 use PayNL\Sdk\Model\Pay\PayStatus;
 use PayNL\Sdk\Model\Pay\PayOrder;
+use PayNL\Sdk\Model\Pay\PayLoad;
 use PayNL\Sdk\Exception\PayException;
 use Exception;
 
@@ -19,7 +20,7 @@ use Exception;
  */
 class Exchange
 {
-    private array $payload;
+    private PayLoad $payload;
     private ?array $custom_payload;
     private $headers;
 
@@ -86,96 +87,99 @@ class Exchange
      */
     public function getPayOrderId()
     {
-        $payload = $this->getPayload();
+        try {
+            $payload = $this->getPayload();
+        } catch (PayException $e) {
+
+        }
         return $payload['payOrderId'] ?? false;
     }
 
     /**
-     * @return array|string Array with payload or string with fault message.
+     * @return PayLoad
+     * @throws Exception
      */
     public function getPayLoad()
     {
-        try {
-            if (!empty($this->payload)) {
-                return $this->payload;
-            }
-
-            if (!empty($this->custom_payload)) {
-                $request = $this->custom_payload;
-            } else {
-                $request = $_REQUEST ?? false;
-                if ($request === false) {
-                    throw new Exception('Empty payload');
-                }
-            }
-
-            $action = $request['action'] ?? null;
-
-            if (!empty($action)) {
-                # The argument "action" tells us this is not coming from TGU
-                $action = $request['action'] ?? null;
-                $paymentProfile = $request['payment_profile_id'] ?? null;
-                $payOrderId = $request['order_id'] ?? '';
-                $orderId = $request['extra1'] ?? null;
-                $reference = $request['extra1'] ?? null;
-            } else {
-                # TGU
-                if (isset($request['object'])) {
-                    $tguData['object'] = $request['object'];
-                } else {
-                    $rawBody = file_get_contents('php://input');
-                    if (empty(trim($rawBody))) {
-                        throw new Exception('Empty Payload');
-                    }
-
-                    $tguData = json_decode($rawBody, true, 512, 4194304);
-
-                    $exchangeType = $tguData['type'] ?? null;
-                    if ($exchangeType != 'order') {
-                        throw new Exception('Cant handle exchange type other then order');
-                    }
-                }
-
-                if (empty($tguData['object'])) {
-                    throw new Exception('Payload error: object empty');
-                }
-
-                foreach (($tguData['object']['payments'] ?? []) as $payment) {
-                    $ppid = $payment['paymentMethod']['id'] ?? null;
-                }
-                $paymentProfile = $ppid ?? '';
-                $payOrderId = $tguData['object']['orderId'] ?? '';
-                $internalStateId = (int)$tguData['object']['status']['code'] ?? 0;
-                $internalStateName = $tguData['object']['status']['action'] ?? '';
-                $orderId = $tguData['object']['reference'] ?? '';
-
-                $action = in_array($internalStateId, [PayStatus::PAID, PayStatus::AUTHORIZE]) ? 'new_ppt' : $internalStateName;
-
-                $reference = $tguData['object']['reference'] ?? '';
-                $checkoutData = $tguData['object']['checkoutData'] ?? null;
-
-                $amount = $tguData['object']['amount']['value'] ?? '';
-                $amountCap = $tguData['object']['capturedAmount']['value'] ?? '';
-                $amountAuth = $tguData['object']['authorizedAmount']['value'] ?? '';
-            }
-
-            $this->payload = [
-                'amount' => $amount ?? null,
-                'amountCap' => $amountCap ?? null,
-                'amountAuth' => $amountAuth ?? null,
-                'reference' => $reference,
-                'action' => strtolower($action),
-                'paymentProfile' => $paymentProfile ?? null,
-                'payOrderId' => $payOrderId,
-                'orderId' => $orderId,
-                'internalStateId' => $internalStateId ?? 0,
-                'internalStateName' => $internalStateName ?? null,
-                'checkoutData' => $checkoutData ?? null,
-                'fullPayload' => $tguData ?? $request
-            ];
-        } catch (Exception $e) {
-            return $e->getMessage();
+        if (!empty($this->payload)) {
+            # Payload already initilized, then return payload.
+            return $this->payload;
         }
+
+        if (!empty($this->custom_payload)) {
+            # In case a payload has been provided, use that one.
+            $request = $this->custom_payload;
+        } else {
+            $request = $_REQUEST ?? false;
+            if ($request === false) {
+                throw new Exception('Empty payLoad', 8001);
+            }
+        }
+
+        $action = $request['action'] ?? null;
+
+        if (!empty($action)) {
+            # The argument "action" tells us this is GMS
+            $action = $request['action'] ?? null;
+            $paymentProfile = $request['payment_profile_id'] ?? null;
+            $payOrderId = $request['order_id'] ?? '';
+            $orderId = $request['extra1'] ?? null;
+            $reference = $request['extra1'] ?? null;
+        } else {
+            # TGU
+            if (isset($request['object'])) {
+                $tguData['object'] = $request['object'];
+            } else {
+                $rawBody = file_get_contents('php://input');
+                if (empty(trim($rawBody))) {
+                    throw new Exception('Empty payLoad', 8002);
+                }
+
+                $tguData = json_decode($rawBody, true, 512, 4194304);
+
+                $exchangeType = $tguData['type'] ?? null;
+                if ($exchangeType != 'order') {
+                    throw new Exception('Cant handle exchange type other then order', 8003);
+                }
+            }
+
+            if (empty($tguData['object'])) {
+                throw new Exception('Payload error: object empty', 8004);
+            }
+
+            foreach (($tguData['object']['payments'] ?? []) as $payment) {
+                $ppid = $payment['paymentMethod']['id'] ?? null;
+            }
+            $paymentProfile = $ppid ?? '';
+            $payOrderId = $tguData['object']['orderId'] ?? '';
+            $internalStateId = (int)$tguData['object']['status']['code'] ?? 0;
+            $internalStateName = $tguData['object']['status']['action'] ?? '';
+            $orderId = $tguData['object']['reference'] ?? '';
+
+            $action = in_array($internalStateId, [PayStatus::PAID, PayStatus::AUTHORIZE]) ? 'new_ppt' : $internalStateName;
+
+            $reference = $tguData['object']['reference'] ?? '';
+            $checkoutData = $tguData['object']['checkoutData'] ?? null;
+
+            $amount = $tguData['object']['amount']['value'] ?? '';
+            $amountCap = $tguData['object']['capturedAmount']['value'] ?? '';
+            $amountAuth = $tguData['object']['authorizedAmount']['value'] ?? '';
+        }
+
+        $this->payload = new PayLoad([
+            'amount' => $amount ?? null,
+            'amount_cap' => $amountCap ?? null,
+            'amount_auth' => $amountAuth ?? null,
+            'reference' => $reference,
+            'action' => strtolower($action),
+            'payment_profile' => $paymentProfile ?? null,
+            'pay_order_id' => $payOrderId,
+            'order_id' => $orderId,
+            'internal_state_id' => $internalStateId ?? 0,
+            'internal_state_name' => $internalStateName ?? null,
+            'checkout_data' => $checkoutData ?? null,
+            'full_payload' => $tguData ?? $request
+        ]);
 
         return $this->payload;
     }
@@ -185,31 +189,30 @@ class Exchange
      *
      * @param Config|null $config
      * @return PayOrder
+     * @throws Exception
      */
     public function process(PayConfig $config = null): PayOrder
     {
         $payload = $this->getPayload();
         $payStatus = new PayStatus();
-        if (!is_array($payload)) {
-            throw new Exception('Invalid payload');
-        }
+        
         if (empty($config)) {
             $config = Config::getConfig();
         }
 
-        $payOrder = new PayOrder($payload['fullPayload']);
+        $payOrder = new PayOrder($payload->getFullPayLoad());
 
         if ($this->isSignExchange()) {
             $signingResult = $this->checkSignExchange($config->getUsername(), $config->getPassword());
             if ($signingResult === true) {
-                $paymentState = $payload['internalStateId'];
+                $paymentState = $payload->getInternalStateId();
             } else {
                 throw new Exception('Signing request failed');
             }
         } else {
             # Not a signing request...
-            if ($payStatus->get($payload['internalStateId']) === PayStatus::PENDING) {
-                $paymentState = $payload['internalStateId'];
+            if ($payStatus->get($payload->getInternalStateId()) === PayStatus::PENDING) {
+                $paymentState = $payload->getInternalStateId();
             } else {
                 # Continue to check the order status manually
                 try {
