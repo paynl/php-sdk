@@ -63,7 +63,7 @@ class PayStatus
             if ($stateId < 0) {
                 return self::CANCEL;
             } else {
-                throw new Exception('Unexpected status');
+                throw new Exception('Unexpected status: ' . $stateId);
             }
         }
     }
