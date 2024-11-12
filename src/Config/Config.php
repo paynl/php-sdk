@@ -301,6 +301,17 @@ if (PHP_VERSION_ID >= 80000) {
         }
 
         /**
+         * @return string
+         */
+        public function getFailoverUrl(): string
+        {
+            if (!empty($this->data['failoverUrl'])) {
+                return trim($this->data['failoverUrl']);
+            }
+            return '';
+        }
+
+        /**
          * Set destination(core) url
          *
          * @param string $url
@@ -674,6 +685,17 @@ if (PHP_VERSION_ID >= 80000) {
         public function getDebug(): bool
         {
             return $this->data['debug'] == 1;
+        }
+
+        /**
+         * @return string
+         */
+        public function getFailoverUrl(): string
+        {
+            if (!empty($this->data['failoverUrl'])) {
+                return trim($this->data['failoverUrl']);
+            }
+            return '';
         }
 
         /**

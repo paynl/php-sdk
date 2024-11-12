@@ -92,7 +92,7 @@ $config->setCore($_REQUEST['core'] ?? '');
 $request->setConfig($config);
 
 try {
-    $transaction = $request->start();
+    $payOrder = $request->start();
 } catch (PayException $e) {
     echo '<pre>';
     echo 'Technical message: ' . $e->getMessage() . PHP_EOL;
@@ -104,5 +104,5 @@ try {
 
 echo '<pre>';
 echo 'Success, values:' . PHP_EOL;
-echo 'getId: ' . $transaction->getId() . PHP_EOL;
-echo 'getPaymentUrl: ' . '<a target="_blank" href="' . $transaction->getPaymentUrl() . '">' . $transaction->getPaymentUrl() . '</a>' . PHP_EOL;
+echo 'getId: ' . $payOrder->getId() . PHP_EOL;
+echo 'getPaymentUrl: ' . '<a target="_blank" href="' . $payOrder->getPaymentUrl() . '">' . $payOrder->getPaymentUrl() . '</a>' . PHP_EOL;

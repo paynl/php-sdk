@@ -6,7 +6,7 @@ namespace PayNL\Sdk\Model\Request;
 
 use PayNL\Sdk\Exception\PayException;
 use PayNL\Sdk\Request\RequestData;
-use PayNL\Sdk\Model\Response\OrderAbortResponse;
+use PayNL\Sdk\Model\Pay\PayOrder;
 use PayNL\Sdk\Request\RequestInterface;
 
 /**
@@ -44,10 +44,10 @@ class OrderAbortRequest extends RequestData
     }
 
     /**
-     * @return OrderAbortResponse
+     * @return PayOrder
      * @throws PayException
      */
-    public function start(): OrderAbortResponse
+    public function start(): PayOrder
     {
         return parent::start();
     }

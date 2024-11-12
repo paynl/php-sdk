@@ -203,20 +203,21 @@ class Exchange
     public function process(PayConfig $config = null): PayOrder
     {
         $payload = $this->getPayload();
-        $payStatus = new PayStatus();
+        $payOrder = new PayOrder();
 
         if (empty($config)) {
             $config = Config::getConfig();
         }
 
-        $payOrder = new PayOrder($payload->getFullPayLoad());
-        $payOrder->setAmount($payload->getAmount());
-        $payOrder->setPaymentProfileId($payload->getPaymentProfile());
-        $payOrder->setOrderId($payload->getPayOrderId());
-        $payOrder->setReference($payload->getReference());
-
-        if ($this->isSignExchange()) {
+        if ($this->isSignExchange())
+        {
             $signingResult = $this->checkSignExchange($config->getUsername(), $config->getPassword());
+            $payOrder = new PayOrder($payload->getFullPayLoad());
+            $payOrder->setAmount($payload->getAmount());
+            $payOrder->setPaymentProfileId($payload->getPaymentProfile());
+            $payOrder->setOrderId($payload->getPayOrderId());
+            $payOrder->setReference($payload->getReference());
+
             if ($signingResult === true) {
                 $paymentState = $payload->getInternalStateId();
             } else {
@@ -224,7 +225,7 @@ class Exchange
             }
         } else {
             try {
-                $payloadState = $payStatus->get($payload->getInternalStateId());
+                $payloadState = (new PayStatus())->get($payload->getInternalStateId());
             } catch (\Throwable $e) {
                 $payloadState = null;
             }
@@ -248,12 +249,10 @@ class Exchange
                         $request = new OrderStatusRequest($payload->getPayOrderId());
                     }
 
-                    $transaction = $request->setConfig($config)->start();
-                    $paymentState = $transaction->getStatusCode();
+                    $payOrder = $request->setConfig($config)->start();
+                    $paymentState = $payOrder->getStatusCode();
                     dbg('amount_payload: ' . $payload->getAmount());
-                    dbg('amount_trans: ' . $transaction->getAmount());
-
-                    $payOrder->setAmount($transaction->getAmount());
+                    dbg('amount_trans: ' . $payOrder->getAmount());
 
                 } catch (PayException $e) {
                     dbg($e->getMessage());
@@ -262,7 +261,7 @@ class Exchange
             }
         }
 
-        $payOrder->setStateId($payStatus->get($paymentState));
+        $payOrder->setStateId((new PayStatus())->get($paymentState));
 
         return $payOrder;
     }

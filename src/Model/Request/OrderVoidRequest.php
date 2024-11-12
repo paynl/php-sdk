@@ -6,7 +6,7 @@ namespace PayNL\Sdk\Model\Request;
 
 use PayNL\Sdk\Exception\PayException;
 use PayNL\Sdk\Request\RequestData;
-use PayNL\Sdk\Model\Response\OrderVoidResponse;
+use PayNL\Sdk\Model\Pay\PayOrder;
 use PayNL\Sdk\Request\RequestInterface;
 
 /**
@@ -44,10 +44,10 @@ class OrderVoidRequest extends RequestData
     }
 
     /**
-     * @return OrderVoidResponse
+     * @return PayOrder
      * @throws PayException
      */
-    public function start(): OrderVoidResponse
+    public function start(): PayOrder
     {
         return parent::start();
     }

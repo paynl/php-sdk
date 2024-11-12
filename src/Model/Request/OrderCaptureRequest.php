@@ -6,7 +6,7 @@ namespace PayNL\Sdk\Model\Request;
 
 use PayNL\Sdk\Exception\PayException;
 use PayNL\Sdk\Request\RequestData;
-use PayNL\Sdk\Model\Response\OrderCaptureResponse;
+use PayNL\Sdk\Model\Pay\PayOrder;
 use PayNL\Sdk\Request\RequestInterface;
 
 /**
@@ -90,10 +90,10 @@ class OrderCaptureRequest extends RequestData
     }
 
     /**
-     * @return OrderCaptureResponse
+     * @return PayOrder
      * @throws PayException
      */
-    public function start(): OrderCaptureResponse
+    public function start(): PayOrder
     {
         if ($this->mode == 'amount') {
             $this->uri = '/orders/%transactionId%/capture/amount';

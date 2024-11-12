@@ -20,7 +20,7 @@ $config->setCore($_REQUEST['core'] ?? '');
 $orderApproveRequest->setConfig($config);
 
 try {
-    $transaction = $orderApproveRequest->start();
+    $payOrder = $orderApproveRequest->start();
 } catch (PayException $e) {
     echo '<pre>';
     echo 'Technical message: ' . $e->getMessage() . PHP_EOL;
@@ -33,20 +33,17 @@ try {
 
 echo '<pre>';
 echo 'Success, values:' . PHP_EOL;
-echo 'getOrderId: ' . $transaction->getId() . PHP_EOL;
-echo 'getTransactionId: ' . $transaction->getOrderId() . PHP_EOL;
-echo 'getDescription: ' . $transaction->getDescription() . PHP_EOL;
-echo 'getReference: ' . $transaction->getReference() . PHP_EOL;
-echo 'getAmount getValue: ' . $transaction->getAmount()->getValue() . PHP_EOL;
-echo 'getAmount getCurrency: ' . $transaction->getAmount()->getCurrency() . PHP_EOL;
-echo 'getAuthorizedAmount getCurrency: ' . $transaction->getAuthorizedAmount()->getCurrency() . PHP_EOL;
-echo 'getAuthorizedAmount getValue: ' . $transaction->getAuthorizedAmount()->getValue() . PHP_EOL;
-echo 'getStatus:' . print_r($transaction->getStatus(), true) . PHP_EOL;
-echo 'getPaymentData:' . print_r($transaction->getPayments(), true) . PHP_EOL;
-echo 'getIntegration:' . print_r($transaction->getIntegration(), true) . PHP_EOL;
-echo 'getExpiresAt: ' . $transaction->getExpiresAt() . PHP_EOL;
-echo 'getCreatedAt: ' . $transaction->getCreatedAt() . PHP_EOL;
-echo 'getCreatedBy: ' . $transaction->getCreatedBy() . PHP_EOL;
-echo 'getModifiedAt: ' . $transaction->getModifiedAt() . PHP_EOL;
-echo 'getModifiedBy: ' . $transaction->getModifiedBy() . PHP_EOL;
-
+echo 'getOrderId: ' . $payOrder->getId() . PHP_EOL;
+echo 'getTransactionId: ' . $payOrder->getOrderId() . PHP_EOL;
+echo 'getServiceId: ' . $payOrder->getServiceId() . PHP_EOL;
+echo 'getDescription: ' . $payOrder->getDescription() . PHP_EOL;
+echo 'getReference: ' . $payOrder->getReference() . PHP_EOL;
+echo 'getAmount getValue: ' . $payOrder->getAmount() . PHP_EOL;
+echo 'getAmount getCurrency: ' . $payOrder->getCurrency() . PHP_EOL;
+echo 'getStatus:' . print_r($payOrder->getStatus(), true) . PHP_EOL;
+echo 'getTestmode: ' . ($payOrder->isTestmode() === true ? 'test order' : 'live order') . PHP_EOL;
+echo 'getExpiresAt: ' . $payOrder->getExpiresAt() . PHP_EOL;
+echo 'getCreatedAt: ' . $payOrder->getCreatedAt() . PHP_EOL;
+echo 'getCreatedBy: ' . $payOrder->getCreatedBy() . PHP_EOL;
+echo 'getModifiedAt: ' . $payOrder->getModifiedAt() . PHP_EOL;
+echo 'getModifiedBy: ' . $payOrder->getModifiedBy() . PHP_EOL;

@@ -8,7 +8,7 @@ use PayNL\Sdk\Exception\PayException;
 use PayNL\Sdk\Model\Customer;
 use PayNL\Sdk\Model\Order;
 use PayNL\Sdk\Model\Stats;
-use PayNL\Sdk\Model\Response\OrderCreateResponse;
+use PayNL\Sdk\Model\Pay\PayOrder;
 use PayNL\Sdk\Request\RequestData;
 use PayNL\Sdk\Request\RequestInterface;
 use PayNL\Sdk\Util\Vat;
@@ -427,10 +427,10 @@ class OrderCreateRequest extends RequestData
     }
 
     /**
-     * @return OrderCreateResponse
+     * @return PayOrder
      * @throws PayException
      */
-    public function start(): OrderCreateResponse
+    public function start(): PayOrder
     {
         $this->config->setversion(1);
         return parent::start();

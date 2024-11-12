@@ -191,6 +191,8 @@ class ConfigProvider implements ConfigProviderInterface
                 'OrderAbortResponse'         => Response\OrderAbortResponse::class,
                 'ServiceGetConfigResponse'   => Response\ServiceGetConfigResponse::class,
 
+                'PayOrder'                   => Pay\PayOrder::class,
+
                 'CheckoutOptions'       => CheckoutOptions::class,
                 'CheckoutOption'        => CheckoutOption::class,
                 'Method'                => Method::class,

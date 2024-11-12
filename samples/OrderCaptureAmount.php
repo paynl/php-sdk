@@ -23,7 +23,7 @@ $config->setCore($_REQUEST['core'] ?? '');
 $orderCaptureRequest->setConfig($config);
 
 try {
-    $capture = $orderCaptureRequest->start();
+    $payOrder = $orderCaptureRequest->start();
 } catch (PayException $e) {
     echo '<pre>';
     echo 'Technical message: ' . $e->getMessage() . PHP_EOL;
@@ -35,21 +35,17 @@ try {
 
 echo '<pre>';
 echo 'Success, values:' . PHP_EOL;
-echo 'getOrderId: ' . $capture->getId() . PHP_EOL;
-echo 'getTransactionId: ' . $capture->getOrderId() . PHP_EOL;
-echo 'getServiceCode: ' . $capture->getServiceCode() . PHP_EOL;
-echo 'getDescription: ' . $capture->getDescription() . PHP_EOL;
-echo 'getReference: ' . $capture->getReference() . PHP_EOL;
-echo 'getIpAddress: ' . $capture->getIpAddress() . PHP_EOL;
-echo 'getAmount getValue: ' . $capture->getAmount()->getValue() . PHP_EOL;
-echo 'getAmount getCurrency: ' . $capture->getAmount()->getCurrency() . PHP_EOL;
-echo 'getStatus:' . print_r($capture->getStatus(), true) . PHP_EOL;
-
-echo 'getIntegration:' . print_r($capture->getIntegration(), true) . PHP_EOL;
-echo 'getExpiresAt: ' . $capture->getExpiresAt() . PHP_EOL;
-echo 'getCreatedAt: ' . $capture->getCreatedAt() . PHP_EOL;
-echo 'getCreatedBy: ' . $capture->getCreatedBy() . PHP_EOL;
-echo 'getModifiedAt: ' . $capture->getModifiedAt() . PHP_EOL;
-echo 'getModifiedBy: ' . $capture->getModifiedBy() . PHP_EOL;
-echo 'getDeletedAt: ' . $capture->getDeletedAt() . PHP_EOL;
-echo 'getDeletedBy: ' . $capture->getDeletedBy() . PHP_EOL;
+echo 'getOrderId: ' . $payOrder->getId() . PHP_EOL;
+echo 'getTransactionId: ' . $payOrder->getOrderId() . PHP_EOL;
+echo 'getServiceId: ' . $payOrder->getServiceId() . PHP_EOL;
+echo 'getDescription: ' . $payOrder->getDescription() . PHP_EOL;
+echo 'getReference: ' . $payOrder->getReference() . PHP_EOL;
+echo 'getAmount getValue: ' . $payOrder->getAmount() . PHP_EOL;
+echo 'getAmount getCurrency: ' . $payOrder->getCurrency() . PHP_EOL;
+echo 'getStatus:' . print_r($payOrder->getStatus(), true) . PHP_EOL;
+echo 'getTestmode: ' . ($payOrder->isTestmode() === true ? 'test order' : 'live order') . PHP_EOL;
+echo 'getExpiresAt: ' . $payOrder->getExpiresAt() . PHP_EOL;
+echo 'getCreatedAt: ' . $payOrder->getCreatedAt() . PHP_EOL;
+echo 'getCreatedBy: ' . $payOrder->getCreatedBy() . PHP_EOL;
+echo 'getModifiedAt: ' . $payOrder->getModifiedAt() . PHP_EOL;
+echo 'getModifiedBy: ' . $payOrder->getModifiedBy() . PHP_EOL;

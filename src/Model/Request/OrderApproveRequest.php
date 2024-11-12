@@ -6,7 +6,7 @@ namespace PayNL\Sdk\Model\Request;
 
 use PayNL\Sdk\Exception\PayException;
 use PayNL\Sdk\Request\RequestData;
-use PayNL\Sdk\Model\Response\OrderApproveResponse;
+use PayNL\Sdk\Model\Pay\PayOrder;
 use PayNL\Sdk\Request\RequestInterface;
 
 /**
@@ -44,10 +44,10 @@ class OrderApproveRequest extends RequestData
     }
 
     /**
-     * @return OrderApproveResponse
+     * @return PayOrder
      * @throws PayException
      */
-    public function start(): OrderApproveResponse
+    public function start(): PayOrder
     {
         return parent::start();
     }

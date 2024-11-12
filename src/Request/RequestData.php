@@ -58,6 +58,10 @@ abstract class RequestData implements RequestDataInterface
             $config->merge($this->config);
         }
 
+        if (!empty($config->getFailoverUrl())) {
+            $config->setCore($config->getFailoverUrl());
+        }
+
         try {
             $response = (Application::init($config))->request($this)->run();
         } catch (\Throwable $e) {
