@@ -6,6 +6,7 @@ namespace PayNL\Sdk\Util;
 
 use PayNL\Sdk\Config\Config as PayConfig;
 use PayNL\Sdk\Config\Config;
+use PayNL\Sdk\Model\Amount;
 use PayNL\Sdk\Model\Request\OrderStatusRequest;
 use PayNL\Sdk\Model\Pay\PayStatus;
 use PayNL\Sdk\Model\Pay\PayOrder;
@@ -171,12 +172,14 @@ class Exchange
             $checkoutData = $tguData['object']['checkoutData'] ?? null;
 
             $amount = $tguData['object']['amount']['value'] ?? '';
+            $currency = $tguData['object']['amount']['currency'] ?? '';
             $amountCap = $tguData['object']['capturedAmount']['value'] ?? '';
             $amountAuth = $tguData['object']['authorizedAmount']['value'] ?? '';
         }
 
         $this->payload = new PayLoad([
             'amount' => $amount ?? null,
+            'currency' => $currency ?? '',
             'amount_cap' => $amountCap ?? null,
             'amount_auth' => $amountAuth ?? null,
             'reference' => $reference,
@@ -203,23 +206,21 @@ class Exchange
     public function process(PayConfig $config = null): PayOrder
     {
         $payload = $this->getPayload();
-        $payOrder = new PayOrder();
 
         if (empty($config)) {
             $config = Config::getConfig();
         }
 
-        if ($this->isSignExchange())
-        {
+        if ($this->isSignExchange()) {
             $signingResult = $this->checkSignExchange($config->getUsername(), $config->getPassword());
-            $payOrder = new PayOrder($payload->getFullPayLoad());
-            $payOrder->setAmount($payload->getAmount());
-            $payOrder->setPaymentProfileId($payload->getPaymentProfile());
-            $payOrder->setOrderId($payload->getPayOrderId());
-            $payOrder->setReference($payload->getReference());
 
             if ($signingResult === true) {
-                $paymentState = $payload->getInternalStateId();
+                dbg('signingResult true');
+                $payOrder = new PayOrder($payload->getFullPayLoad());
+                $payOrder->setReference($payload->getReference());
+                $payOrder->setOrderId($payload->getPayOrderId());
+                $payOrder->setAmount(new Amount($payload->getAmount(), $payload->getCurrency()));
+                #dbg((string)print_r($payOrder, true));
             } else {
                 throw new Exception('Signing request failed');
             }
@@ -231,8 +232,9 @@ class Exchange
             }
 
             # Not a signing request...
-            if ($payloadState === PayStatus::PENDING)  {
-                $paymentState = $payload->getInternalStateId();
+            if ($payloadState === PayStatus::PENDING) {
+                $payOrder = new PayOrder();
+                $payOrder->setStatusCodeName(PayStatus::PENDING, 'PENDING');
             } else {
                 # Continue to check the order status manually
                 try {
@@ -250,9 +252,6 @@ class Exchange
                     }
 
                     $payOrder = $request->setConfig($config)->start();
-                    $paymentState = $payOrder->getStatusCode();
-                    dbg('amount_payload: ' . $payload->getAmount());
-                    dbg('amount_trans: ' . $payOrder->getAmount());
 
                 } catch (PayException $e) {
                     dbg($e->getMessage());
@@ -260,8 +259,6 @@ class Exchange
                 }
             }
         }
-
-        $payOrder->setStateId((new PayStatus())->get($paymentState));
 
         return $payOrder;
     }

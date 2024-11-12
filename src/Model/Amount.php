@@ -29,6 +29,20 @@ class Amount implements ModelInterface, JsonSerializable
     protected $currency = 'EUR';
 
     /**
+     * @param int|null $value
+     * @param string|null $currency
+     */
+    public function __construct(int $value = null, string $currency = null)
+    {
+        if (!is_null($value)) {
+            $this->setValue($value);
+        }
+        if (!is_null($currency)) {
+            $this->setCurrency($currency);
+        }
+    }
+
+    /**
      * @return string
      */
     public function getCurrency(): string

@@ -17,9 +17,9 @@ class PayOrder implements ModelInterface
 {
 
     /**
-     * @var string
+     * @var int
      */
-    private $stateId;
+    private int $stateId;
 
     /**
      * @var string
@@ -29,7 +29,7 @@ class PayOrder implements ModelInterface
     /**
      * @var string
      */
-    protected $serviceId;
+    protected string $serviceId;
 
     /**
      * @var string
@@ -136,12 +136,29 @@ class PayOrder implements ModelInterface
      */
     protected $links;
 
+
+    public function __construct($payload = null)
+    {
+        if (!empty($payload['object'])) {
+            foreach ($payload['object'] as $_key => $_val) {
+                if (in_array($_key, ['amount', 'capturedAmount', 'authorizedAmount'])) {
+                    continue;
+                }
+                $method = 'set' . ucfirst((string)$_key);
+                if (method_exists($this, $method)) {
+                    $this->$method($_val);
+                }
+            }
+        }
+    }
+
+
     /**
      * @return int
      */
     public function getStatusCode(): int
     {
-        return (int)$this->status['code'];
+        return (int)($this->status['code'] ?? 0);
     }
 
     /**
@@ -314,14 +331,14 @@ class PayOrder implements ModelInterface
         return $this->stateId;
     }
 
-
     /**
-     * @param  $stateId
+     * @param $stateId
+     * @param $name
      * @return void
      */
-    public function setStateId($stateId): void
+    public function setStatusCodeName($stateId, $name): void
     {
-        $this->stateId = $stateId;
+        $this->status = ['code' => $stateId, 'action' => $name];
     }
 
     /**
@@ -360,7 +377,7 @@ class PayOrder implements ModelInterface
         $testmodeEnabled = $this->integration['test'] ?? false;
         return $testmodeEnabled === true;
     }
-    
+
     /**
      * @return array
      */
@@ -403,7 +420,6 @@ class PayOrder implements ModelInterface
     {
         return $this->payments[0]['paymentMethod']['id'] ?? null;
     }
-
 
 
     /**
@@ -636,7 +652,7 @@ class PayOrder implements ModelInterface
      */
     public function isPaid()
     {
-        return $this->stateId === PayStatus::PAID;
+        return $this->getStatusCode() === PayStatus::PAID;
     }
 
     /**
@@ -644,7 +660,7 @@ class PayOrder implements ModelInterface
      */
     public function isPending()
     {
-        return $this->stateId === PayStatus::PENDING;
+        return $this->getStatusCode() === PayStatus::PENDING;
     }
 
     /**
@@ -652,7 +668,7 @@ class PayOrder implements ModelInterface
      */
     public function isPartialPayment()
     {
-        return $this->stateId === PayStatus::PARTIAL_PAYMENT;
+        return $this->getStatusCode() === PayStatus::PARTIAL_PAYMENT;
     }
 
     /**
@@ -660,7 +676,7 @@ class PayOrder implements ModelInterface
      */
     public function isAuthorized(): bool
     {
-        return $this->stateId === PayStatus::AUTHORIZE;
+        return $this->getStatusCode() === PayStatus::AUTHORIZE;
     }
 
     /**
@@ -668,7 +684,7 @@ class PayOrder implements ModelInterface
      */
     public function isCancelled()
     {
-        return $this->stateId === PayStatus::CANCEL;
+        return $this->getStatusCode() === PayStatus::CANCEL;
     }
 
     /**
@@ -676,7 +692,7 @@ class PayOrder implements ModelInterface
      */
     public function isRefundedFully()
     {
-        return $this->stateId === PayStatus::REFUND;
+        return $this->getStatusCode() === PayStatus::REFUND;
     }
 
     /**
@@ -684,7 +700,7 @@ class PayOrder implements ModelInterface
      */
     public function isRefundedPartial()
     {
-        return $this->stateId === PayStatus::PARTIAL_REFUND;
+        return $this->getStatusCode() === PayStatus::PARTIAL_REFUND;
     }
 
     /**
@@ -692,7 +708,7 @@ class PayOrder implements ModelInterface
      */
     public function isBeingVerified()
     {
-        return $this->stateId === PayStatus::VERIFY;
+        return $this->getStatusCode() === PayStatus::VERIFY;
     }
 
     /**

@@ -6,7 +6,8 @@ namespace PayNL\Sdk\Model\Pay;
 
 class PayLoad
 {
-    protected float $amount;
+    protected int $amount;
+    protected string $currency;
     protected float $amountCap;
     protected float $amountAuth;
     protected string $reference;
@@ -24,7 +25,8 @@ class PayLoad
      */
     public function __construct(array $payload)
     {
-        $this->amount = (float)$payload['amount'];
+        $this->amount = (int)$payload['amount'];
+        $this->currency = (string)$payload['currency'];
         $this->amountCap = (float)$payload['amount_cap'];
         $this->amountAuth = (float)$payload['amount_auth'];
         $this->reference = (string)$payload['reference'];
@@ -95,11 +97,19 @@ class PayLoad
     }
 
     /**
-     * @return float
+     * @return int
      */
-    public function getAmount(): float
+    public function getAmount(): int
     {
         return $this->amount;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCurrency(): string
+    {
+        return $this->currency;
     }
 
     /**
