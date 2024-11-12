@@ -6,7 +6,7 @@ namespace PayNL\Sdk\Model\Request;
 
 use PayNL\Sdk\Exception\PayException;
 use PayNL\Sdk\Request\RequestData;
-use PayNL\Sdk\Model\Response\TransactionStatusResponse;
+use PayNL\Sdk\Model\Pay\PayOrder;
 use PayNL\Sdk\Request\RequestInterface;
 
 /**
@@ -41,10 +41,10 @@ class TransactionStatusRequest extends RequestData
     }
 
     /**
-     * @return TransactionStatusResponse
+     * @return PayOrder
      * @throws PayException
      */
-    public function start(): TransactionStatusResponse
+    public function start(): PayOrder
     {
         # Always use rest.pay.nl for this status request
         $this->config->setCore('https://rest.pay.nl');

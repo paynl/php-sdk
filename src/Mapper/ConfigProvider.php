@@ -86,7 +86,7 @@ class ConfigProvider implements ProviderInterface
                 'DeclineTransaction'            => 'Transaction',
                 'TokenizeTransaction'           => 'Transaction',
                 'TransactionRefund'             => 'TransactionRefundResponse',
-                'TransactionStatus'             => 'TransactionStatusResponse',
+                'TransactionStatus'             => 'PayOrder',
                 'OrderCreate'                   => 'PayOrder',
                 'OrderCapture'                  => 'PayOrder',
                 'OrderVoid'                     => 'PayOrder',
