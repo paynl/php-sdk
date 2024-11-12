@@ -12,6 +12,7 @@ use PayNL\Sdk\Model\Pay\PayOrder;
 use PayNL\Sdk\Model\Pay\PayLoad;
 use PayNL\Sdk\Exception\PayException;
 use Exception;
+use PayNL\Sdk\Model\Request\TransactionStatusRequest;
 
 /**
  * Class Signing
@@ -209,6 +210,10 @@ class Exchange
         }
 
         $payOrder = new PayOrder($payload->getFullPayLoad());
+        $payOrder->setAmount($payload->getAmount());
+        $payOrder->setPaymentProfileId($payload->getPaymentProfile());
+        $payOrder->setOrderId($payload->getPayOrderId());
+        $payOrder->setReference($payload->getReference());
 
         if ($this->isSignExchange()) {
             $signingResult = $this->checkSignExchange($config->getUsername(), $config->getPassword());
@@ -233,9 +238,23 @@ class Exchange
                     if (empty($payload->getPayOrderId())) {
                         throw new Exception('Missing pay order id in payload');
                     }
-                    $request = new OrderStatusRequest($payload->getPayOrderId());
+
+                    $action = $this->getAction();
+                    if (stripos($action, 'refund') !== false) {
+                        dbg('TransactionStatusRequest');
+                        $request = new TransactionStatusRequest($payload->getPayOrderId());
+                    } else {
+                        dbg('OrderStatusRequest');
+                        $request = new OrderStatusRequest($payload->getPayOrderId());
+                    }
+
                     $transaction = $request->setConfig($config)->start();
                     $paymentState = $transaction->getStatusCode();
+                    dbg('amount_payload: ' . $payload->getAmount());
+                    dbg('amount_trans: ' . $transaction->getAmount());
+
+                    $payOrder->setAmount($transaction->getAmount());
+
                 } catch (PayException $e) {
                     dbg($e->getMessage());
                     throw new Exception('API Retrieval error: ' . $e->getFriendlyMessage());
@@ -243,10 +262,6 @@ class Exchange
             }
         }
 
-        $payOrder->setAmount($payload->getAmount());
-        $payOrder->setPaymentProfileId($payload->getPaymentProfile());
-        $payOrder->setOrderId($payload->getPayOrderId());
-        $payOrder->setReference($payload->getReference());
         $payOrder->setStateId($payStatus->get($paymentState));
 
         return $payOrder;

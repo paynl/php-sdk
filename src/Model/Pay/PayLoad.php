@@ -53,7 +53,7 @@ class PayLoad
     {
         return $this->reference;
     }
-
+    
     /**
      * @return array
      */
@@ -84,6 +84,14 @@ class PayLoad
     public function getPayOrderId(): string
     {
         return $this->payOrderId;
+    }
+
+    /**
+     * @return string
+     */
+    public function  nce(): string
+    {
+        return $this->reference;
     }
 
     /**
