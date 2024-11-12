@@ -72,6 +72,7 @@ class Exchange
         try {
             $payload = $this->getPayload();
         } catch (\Throwable $e) {
+            return false;
         }
         return $payload->getAction();
     }
@@ -84,6 +85,7 @@ class Exchange
         try {
             $payload = $this->getPayload();
         } catch (\Throwable $e) {
+            return false;
         }
         return $payload->getReference();
     }
@@ -96,6 +98,7 @@ class Exchange
         try {
             $payload = $this->getPayload();
         } catch (\Throwable $e) {
+            return false;
         }
         return $payload->getPayOrderId();
     }
