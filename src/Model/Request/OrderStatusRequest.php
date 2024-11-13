@@ -26,7 +26,7 @@ class OrderStatusRequest extends RequestData
     public function __construct(string $orderId)
     {
         $this->orderId = $orderId;
-        parent::__construct('orderStatus', '/orders/%transactionId%/status', RequestInterface::METHOD_GET);
+        parent::__construct('OrderStatus', '/orders/%transactionId%/status', RequestInterface::METHOD_GET);
     }
 
     public function getPathParameters(): array

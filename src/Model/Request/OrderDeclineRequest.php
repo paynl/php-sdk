@@ -24,7 +24,7 @@ class OrderDeclineRequest extends RequestData
     public function __construct($transactionId)
     {
         $this->transactionId = $transactionId;
-        parent::__construct('orderDecline', '/orders/%transactionId%/decline', RequestInterface::METHOD_PATCH);
+        parent::__construct('OrderDecline', '/orders/%transactionId%/decline', RequestInterface::METHOD_PATCH);
     }
 
     /**

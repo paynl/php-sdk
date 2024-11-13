@@ -27,7 +27,7 @@ class OrderUpdateRequest extends RequestData
     {
         $this->transactionId = $transactionId;
         $this->description = '';
-        parent::__construct('orderUpdate', '/orders/%transactionId%', RequestInterface::METHOD_PATCH);
+        parent::__construct('OrderUpdate', '/orders/%transactionId%', RequestInterface::METHOD_PATCH);
     }
 
     /**

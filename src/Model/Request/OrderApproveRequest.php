@@ -24,7 +24,7 @@ class OrderApproveRequest extends RequestData
     public function __construct($transactionId)
     {
         $this->transactionId = $transactionId;
-        parent::__construct('orderApprove', '/orders/%transactionId%/approve', RequestInterface::METHOD_PATCH);
+        parent::__construct('OrderApprove', '/orders/%transactionId%/approve', RequestInterface::METHOD_PATCH);
     }
 
     /**

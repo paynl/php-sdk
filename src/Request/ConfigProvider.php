@@ -206,7 +206,7 @@ class ConfigProvider implements ConfigProviderInterface
               'transactionId' => '',
             ],
           ],
-        'orderUpdate' => [
+        'OrderUpdate' => [
             'uri' => '/',
             'method' => RequestInterface::METHOD_PATCH,
             'requiredParams' => [
@@ -243,21 +243,21 @@ class ConfigProvider implements ConfigProviderInterface
                 'transactionId' => '',
             ],
           ],
-          'orderStatus' => [
+          'OrderStatus' => [
             'uri' => '/transactions/%transactionId%/status',
             'method' => RequestInterface::METHOD_GET,
             'requiredParams' => [
               'transactionId' => '',
             ],
           ],
-          'orderApprove' => [
+          'OrderApprove' => [
             'uri' => '/',
             'method' => RequestInterface::METHOD_PATCH,
             'requiredParams' => [
               'transactionId' => '',
             ],
           ],
-          'orderDecline' => [
+          'OrderDecline' => [
             'uri' => '/',
             'method' => RequestInterface::METHOD_PATCH,
             'requiredParams' => [
