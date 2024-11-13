@@ -42,6 +42,7 @@ class PayStatus
     {
         $mapper[-70] = self::CHARGEBACK;
         $mapper[-71] = self::CHARGEBACK;
+        $mapper[-72] = self::REFUND;
         $mapper[-81] = self::REFUND;
         $mapper[-82] = self::PARTIAL_REFUND;
         $mapper[20] = self::PENDING;

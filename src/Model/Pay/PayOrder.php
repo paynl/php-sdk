@@ -645,14 +645,13 @@ class PayOrder implements ModelInterface
     {
         return $this->links['status'] ?? '';
     }
-
-
+    
     /**
      * @return bool
      */
     public function isPaid()
     {
-        return $this->getStatusCode() === PayStatus::PAID;
+        return (new PayStatus)->get($this->getStatusCode()) === PayStatus::PAID;
     }
 
     /**
@@ -660,23 +659,7 @@ class PayOrder implements ModelInterface
      */
     public function isPending()
     {
-        return $this->getStatusCode() === PayStatus::PENDING;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isPartialPayment()
-    {
-        return $this->getStatusCode() === PayStatus::PARTIAL_PAYMENT;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isAuthorized(): bool
-    {
-        return $this->getStatusCode() === PayStatus::AUTHORIZE;
+        return (new PayStatus)->get($this->getStatusCode()) === PayStatus::PENDING;
     }
 
     /**
@@ -684,7 +667,23 @@ class PayOrder implements ModelInterface
      */
     public function isCancelled()
     {
-        return $this->getStatusCode() === PayStatus::CANCEL;
+        return (new PayStatus)->get($this->getStatusCode()) === PayStatus::CANCEL;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPartialPayment()
+    {
+        return (new PayStatus)->get($this->getStatusCode()) === PayStatus::PARTIAL_PAYMENT;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAuthorized(): bool
+    {
+        return (new PayStatus)->get($this->getStatusCode()) === PayStatus::AUTHORIZE;
     }
 
     /**
@@ -692,7 +691,7 @@ class PayOrder implements ModelInterface
      */
     public function isRefundedFully()
     {
-        return $this->getStatusCode() === PayStatus::REFUND;
+        return (new PayStatus)->get($this->getStatusCode()) === PayStatus::REFUND;
     }
 
     /**
@@ -700,7 +699,8 @@ class PayOrder implements ModelInterface
      */
     public function isRefundedPartial()
     {
-        return $this->getStatusCode() === PayStatus::PARTIAL_REFUND;
+        return (new PayStatus)->get($this->getStatusCode()) === PayStatus::PARTIAL_REFUND;
+
     }
 
     /**
@@ -708,7 +708,7 @@ class PayOrder implements ModelInterface
      */
     public function isBeingVerified()
     {
-        return $this->getStatusCode() === PayStatus::VERIFY;
+        return (new PayStatus)->get($this->getStatusCode()) === PayStatus::VERIFY;
     }
 
     /**
@@ -728,11 +728,11 @@ class PayOrder implements ModelInterface
      */
     public function isRefunded(bool $allowPartialRefunds = true): bool
     {
-        if (($this->status['action'] ?? '') === 'REFUND') {
+        if ($this->isRefundedFully()) {
             return true;
         }
 
-        if ($allowPartialRefunds && ($this->status['action'] ?? '') === 'PARTIAL_REFUND') {
+        if ($allowPartialRefunds && $this->isRefundedPartial()) {
             return true;
         }
 
