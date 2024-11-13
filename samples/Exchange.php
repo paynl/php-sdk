@@ -7,7 +7,6 @@ declare(strict_types=1);
 require '../../../../vendor/autoload.php';
 
 use PayNL\Sdk\Util\Exchange;
-use PayNL\Sdk\Model\Pay\PayStatus;
 
 $exchange = new Exchange();
 
@@ -15,18 +14,29 @@ try {
     # Process the exchange request
     $payOrder = $exchange->process();
 
-    switch ($payOrder->getStateId()) {
-        case PayStatus::PENDING :
-            $responseResult = yourCodeToProcessPendingOrder($payOrder->getReference());
-            $responseMessage = 'Processed pending';
-            break;
-        case PayStatus::PAID :
-            $responseResult = yourCodeToProcessPaidOrder($payOrder->getReference());
-            $responseMessage = 'Processed paid. Order: ' . $payOrder->getReference();
-            break;
-        default :
-            $responseResult = true;
-            $responseMessage = 'No action defined for payment state ' . $payOrder->getStateId();
+    if($payOrder->isPending()) {
+        $responseResult = yourCodeToProcessPendingOrder($payOrder->getReference());
+        $responseMessage = 'Processed pending';
+
+    }
+    elseif($payOrder->isPaid() || $payOrder->isAuthorized()) {
+        $responseResult = yourCodeToProcessPaidOrder($payOrder->getReference());
+        $responseMessage = 'Processed paid. Order: ' . $payOrder->getReference();
+
+    }
+    elseif($payOrder->isRefunded()) {
+        $responseResult = true; # Your code to process refund here
+        $responseMessage = 'Processed refund.';
+
+    }
+    elseif($payOrder->isCancelled()) {
+        $responseResult = true; # Your code to cancel order here
+        $responseMessage = 'Processed cancelled.';
+
+    }
+    else {
+        $responseResult = true;
+        $responseMessage = 'No action defined for payment state '. $payOrder->getStatusCode();
     }
 } catch (Throwable $exception) {
     $responseResult = false;
