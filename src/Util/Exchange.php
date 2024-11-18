@@ -47,7 +47,7 @@ class Exchange
      *
      * @param bool $result
      * @param string $message
-     * @param $returnOutput If If true, then this method returs the output string
+     * @param bool $returnOutput If true, then this method returs the output string
      * @return false|string|void
      */
     public function setResponse(bool $result, string $message, $returnOutput = false)
@@ -223,8 +223,6 @@ class Exchange
                 $payOrder->setOrderId($payload->getPayOrderId());
                 $payOrder->setAmount(new Amount($payload->getAmount(), $payload->getCurrency()));
                 $payOrder->setType($payload->getType());
-
-                #dbg((string)print_r($payOrder, true));
             } else {
                 throw new Exception('Signing request failed');
             }
