@@ -3,7 +3,7 @@
 # This is a minimal example on how to handle a Pay. exchange call and process an order
 declare(strict_types=1);
 
-# You might need to adjust this mapping for your situation
+# You might need to adjust this mapping for your implementation
 require '../../../../vendor/autoload.php';
 
 use PayNL\Sdk\Util\Exchange;
