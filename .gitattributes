@@ -7,6 +7,8 @@
 *.phtml   text eol=lf diff=html
 *.twig    text eol=lf
 *.phar    binary
+*.json    text eol=lf diff=json
+*.md      text eol=lf diff=md
 
 # Configuration
 phpcs.xml    text eol=lf
