@@ -36,10 +36,7 @@
         },
         "files": [
             "./src/Resources/functions/text.php",
-            "./src/Resources/functions/vat.php",
-            "./build/guzzle/src/functions_include.php",
-            "./build/promises/src/functions_include.php",
-            "./build/psr7/src/functions_include.php"
+            "./src/Resources/functions/vat.php"
         ]
     },
     "minimum-stability": "dev",
