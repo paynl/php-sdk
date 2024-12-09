@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace PayNL\Sdk\Request;
 
+use GuzzleHttp\Client;
 use PayNL\Sdk\Common\FormatAwareInterface;
 use PayNL\Sdk\Response\Response;
-use PayNL\GuzzleHttp\Client;
 
 /**
  * Interface RequestInterface
