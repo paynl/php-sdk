@@ -32,10 +32,7 @@
     },
     "autoload": {
         "psr-4": {
-            "PayNL\\Sdk\\": "src/",
-            "PayNL\\GuzzleHttp\\": "build/guzzle/src",
-            "PayNL\\GuzzleHttp\\Promise\\": "build/promises/src",
-            "PayNL\\GuzzleHttp\\Psr7\\": "build/psr7/src"
+            "PayNL\\Sdk\\": "src/"
         },
         "files": [
             "./src/Resources/functions/text.php",

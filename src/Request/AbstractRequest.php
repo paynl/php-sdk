@@ -4,12 +4,6 @@ declare(strict_types=1);
 
 namespace PayNL\Sdk\Request;
 
-use PayNL\GuzzleHttp\{
-    Client,
-    Psr7\Request,
-    Exception\RequestException,
-    Exception\GuzzleException
-};
 use PayNL\Sdk\{
     Common\DebugAwareInterface,
     Common\DebugAwareTrait,
@@ -28,6 +22,9 @@ use PayNL\Sdk\{
     Validator\ValidatorManagerAwareInterface,
     Validator\ValidatorManagerAwareTrait
 };
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Exception\RequestException;
 use PayNL\Sdk\Packages\Symfony\Serializer\Encoder\{
     JsonEncoder,
     XmlEncoder
@@ -488,7 +485,7 @@ abstract class AbstractRequest implements
             $requestBody = $this->getBody();
 
             # Create a Guzzle PSR 7 Request
-            $guzzleRequest = new Request($this->getMethod(), $uri, $this->getHeaders(), $requestBody);
+            $guzzleRequest = new \GuzzleHttp\Psr7\Request($this->getMethod(), $uri, $this->getHeaders(), $requestBody);
 
             $curlRequest = 'curl -X ' . $this->getMethod() . ' ' . $guzzleClient->getConfig('base_uri') . $uri;
             foreach ($this->getHeaders() as $headerfield => $headervalue) {
