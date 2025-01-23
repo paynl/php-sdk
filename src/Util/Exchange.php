@@ -47,7 +47,7 @@ class Exchange
      *
      * @param bool $result
      * @param string $message
-     * @param bool $returnOutput If true, then this method returs the output string
+     * @param $returnOutput If If true, then this method returs the output string
      * @return false|string|void
      */
     public function setResponse(bool $result, string $message, $returnOutput = false)
