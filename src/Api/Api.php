@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace PayNL\Sdk\Api;
 
-use PayNL\GuzzleHttp\Client as GuzzleClient;
 use PayNL\Sdk\{
     AuthAdapter\AdapterInterface as AuthAdapterInterface,
     Common\DebugAwareInterface,
@@ -16,6 +15,7 @@ use PayNL\Sdk\{
     Request\RequestInterface,
     Response\ResponseInterface
 };
+use GuzzleHttp\Client;
 
 /**
  * Class Api
@@ -28,7 +28,7 @@ class Api implements OptionsAwareInterface, DebugAwareInterface
     use OptionsAwareTrait;
 
     /**
-     * @var GuzzleClient
+     * @var Client
      */
     protected $client;
 
@@ -41,10 +41,10 @@ class Api implements OptionsAwareInterface, DebugAwareInterface
      * Api constructor.
      *
      * @param AuthAdapterInterface $authenticationAdapter
-     * @param GuzzleClient $client
+     * @param Client $client
      * @param array $options
      */
-    public function __construct(AuthAdapterInterface $authenticationAdapter, GuzzleClient $client, array $options = [])
+    public function __construct(AuthAdapterInterface $authenticationAdapter, Client $client, array $options = [])
     {
         $this->setAuthAdapter($authenticationAdapter)
             ->setClient($client)
@@ -53,20 +53,20 @@ class Api implements OptionsAwareInterface, DebugAwareInterface
     }
 
     /**
-     * @param GuzzleClient $client
+     * @param Client $client
      *
      * @return Api
      */
-    protected function setClient(GuzzleClient $client): self
+    protected function setClient(Client $client): self
     {
         $this->client = $client;
         return $this;
     }
 
     /**
-     * @return GuzzleClient
+     * @return Client
      */
-    public function getClient(): GuzzleClient
+    public function getClient(): Client
     {
         return $this->client;
     }

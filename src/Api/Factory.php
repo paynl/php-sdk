@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace PayNL\Sdk\Api;
 
+use GuzzleHttp\Client;
 use Psr\Container\ContainerInterface;
-use PayNL\GuzzleHttp\Client as GuzzleClient;
 use PayNL\Sdk\{
     AuthAdapter\AdapterInterface as AuthAdapterInterface,
     Config\Config,
@@ -59,7 +59,7 @@ class Factory implements FactoryInterface
                 $version = $options->get('api')->get('version');
                 $pathVersion = empty($version) ? '' : '/v' . $version;
 
-                $guzzleClient = new GuzzleClient([
+                $guzzleClient = new Client([
                     'base_uri' => $filteredApiUrl . "{$pathVersion}/",
                 ]);
 
