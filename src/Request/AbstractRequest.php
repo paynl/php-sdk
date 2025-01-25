@@ -1,4 +1,6 @@
-<?php /** @noinspection ALL */
+<?php
+
+/** @noinspection ALL */
 
 declare(strict_types=1);
 
@@ -105,9 +107,7 @@ abstract class AbstractRequest implements
     {
         $this->setOptions($options);
 
-        if (true === $this->hasOption('format')
-            && true === is_string($this->getOption('format'))
-        ) {
+        if (true === $this->hasOption('format') && true === is_string($this->getOption('format'))) {
             $this->setFormat($this->getOption('format'));
         }
 
@@ -151,7 +151,7 @@ abstract class AbstractRequest implements
     }
 
     /**
-     * @param string|int $name
+     * @param string|integer $name
      *
      * @return bool
      */
@@ -498,7 +498,7 @@ abstract class AbstractRequest implements
             $this->dumpPreString(rtrim((string)$guzzleClient->getConfig('base_uri'), '/') . '/' . $guzzleRequest->getUri(), 'Requested URL');
             $this->dumpPreString(implode(PHP_EOL, array_map(static function ($item, $key) {
                 return "{$key}: {$item}";
-            }, $this->getHeaders(), array_keys($this->getHeaders()))) , 'Headers');
+            }, $this->getHeaders(), array_keys($this->getHeaders()))), 'Headers');
 
             $guzzleResponse = $guzzleClient->send($guzzleRequest);
 
@@ -544,7 +544,7 @@ abstract class AbstractRequest implements
 
     /**
      * @param string $responseFormat
-     * @param int $statusCode
+     * @param integer $statusCode
      * @param string $rawBody
      *
      * @return string

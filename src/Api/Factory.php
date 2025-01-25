@@ -23,10 +23,10 @@ use PayNL\Sdk\{
 class Factory implements FactoryInterface
 {
     /**
-     * @inheritDoc
-     *
-     * @throws ServiceNotFoundException
-     * @throws InvalidArgumentException
+     * @param ContainerInterface $container
+     * @param string $requestedName
+     * @param array|null $options
+     * @return Api|Service
      */
     public function __invoke(ContainerInterface $container, string $requestedName, array $options = null)
     {
