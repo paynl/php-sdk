@@ -8,7 +8,8 @@
         "ext-curl": "*",
         "ext-json": "*",
         "psr/container": "^2 || ^1",
-        "psr/http-message": "^2 || ^1"
+        "psr/http-message": "^2 || ^1",
+        "guzzlehttp/guzzle": "^7"
     },
     "license": "MIT",
     "support": {
@@ -22,7 +23,6 @@
     ],
     "require-dev": {
         "ext-simplexml": "*",
-        "guzzlehttp/guzzle": "^7",
         "phpmd/phpmd": "^2",
         "phpstan/phpstan": "^2",
         "phpunit/phpunit": "^11",
