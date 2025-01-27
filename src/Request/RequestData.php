@@ -18,6 +18,7 @@ use PayNL\Sdk\Util\Text;
  */
 abstract class RequestData implements RequestDataInterface
 {
+    protected $application;
     protected string $mapperName = '';
     protected string $uri = '';
     protected string $methodType = 'GET';
@@ -47,6 +48,15 @@ abstract class RequestData implements RequestDataInterface
     }
 
     /**
+     * @param $application
+     * @return void
+     */
+    public function setApplication($application)
+    {
+        $this->application = $application;
+    }
+
+    /**
      * @return mixed
      * @throws PayException
      * @throws Exception
@@ -62,8 +72,16 @@ abstract class RequestData implements RequestDataInterface
             $config->setCore($config->getFailoverUrl());
         }
 
+        if ($config->isEmpty()) {
+            throw new PayException('Please check your config', 0, 0);
+        }
+
         try {
-            $response = (Application::init($config))->request($this)->run();
+            if (empty($this->application)) {
+                $this->application = Application::init($config);
+            }
+
+            $response = $this->application->request($this)->run();
         } catch (\Throwable $e) {
             throw (new PayException('Could not initiate API call:' . $e->getMessage(), 0, 0))
                 ->setFriendlyMessage(Text::getFriendlyMessage($e->getMessage()));
