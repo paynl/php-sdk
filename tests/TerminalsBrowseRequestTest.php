@@ -35,7 +35,7 @@ class TerminalsBrowseRequestTest extends TestCase
         try {
             $request->setConfig($config)->start();
         } catch (PayException $e) {
-            $this->assertEquals('Wrong credentials', $e->getFriendlyMessage());
+            $this->assertEquals('Something went wrong', $e->getFriendlyMessage());
         }
     }
 }
