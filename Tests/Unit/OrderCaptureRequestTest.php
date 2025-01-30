@@ -8,6 +8,9 @@ use PHPUnit\Framework\TestCase;
 
 class OrderCaptureRequestTest extends TestCase
 {
+    /**
+     * @return void
+     */
     public function testConstructor(): void
     {
         $transactionId = '123456';
@@ -17,6 +20,9 @@ class OrderCaptureRequestTest extends TestCase
         $this->assertInstanceOf(OrderCaptureRequest::class, $orderCaptureRequest);
     }
 
+    /**
+     * @return void
+     */
     public function testGetPathParameters(): void
     {
         $transactionId = '123456';
@@ -29,6 +35,9 @@ class OrderCaptureRequestTest extends TestCase
         $this->assertSame($transactionId, $pathParameters['transactionId']);
     }
 
+    /**
+     * @return void
+     */
     public function testGetBodyParametersWithAmount(): void
     {
         $transactionId = '123456';
@@ -42,6 +51,9 @@ class OrderCaptureRequestTest extends TestCase
         $this->assertSame((int)round($amount * 100), $bodyParameters['amount']);
     }
 
+    /**
+     * @return void
+     */
     public function testSetProduct(): void
     {
         $transactionId = '123456';
@@ -61,6 +73,11 @@ class OrderCaptureRequestTest extends TestCase
         $this->assertSame($quantity, $bodyParameters['products'][0]['quantity']);
     }
 
+    /**
+     * @return void
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     * @throws \PayNL\Sdk\Exception\PayException
+     */
     public function testStartWithAmount(): void
     {
         $transactionId = '123456';
@@ -79,6 +96,11 @@ class OrderCaptureRequestTest extends TestCase
         $this->assertInstanceOf(PayOrder::class, $result);
     }
 
+    /**
+     * @return void
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     * @throws \PayNL\Sdk\Exception\PayException
+     */
     public function testStartWithProduct(): void
     {
         $transactionId = '123456';
@@ -99,5 +121,4 @@ class OrderCaptureRequestTest extends TestCase
 
         $this->assertInstanceOf(PayOrder::class, $result);
     }
-
 }

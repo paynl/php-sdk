@@ -8,6 +8,9 @@ use PHPUnit\Framework\TestCase;
 
 class ServiceGetConfigRequestTest extends TestCase
 {
+    /**
+     * @return void
+     */
     public function testConstructor(): void
     {
         $serviceId = 'service123';
@@ -31,6 +34,9 @@ class ServiceGetConfigRequestTest extends TestCase
         $this->assertSame($serviceId, $pathParameters['serviceId']);
     }
 
+    /**
+     * @return void
+     */
     public function testGetPathParametersWithoutServiceId(): void
     {
         $serviceGetConfigRequest = new ServiceGetConfigRequest();
@@ -41,6 +47,9 @@ class ServiceGetConfigRequestTest extends TestCase
         $this->assertEmpty($pathParameters);
     }
 
+    /**
+     * @return void
+     */
     public function testGetBodyParameters(): void
     {
         $serviceGetConfigRequest = new ServiceGetConfigRequest('service123');
@@ -51,6 +60,11 @@ class ServiceGetConfigRequestTest extends TestCase
         $this->assertEmpty($bodyParameters);
     }
 
+    /**
+     * @return void
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     * @throws \PayNL\Sdk\Exception\PayException
+     */
     public function testStart(): void
     {
         $serviceId = 'service123';
@@ -67,5 +81,4 @@ class ServiceGetConfigRequestTest extends TestCase
 
         $this->assertInstanceOf(ServiceGetConfigResponse::class, $result);
     }
-
 }

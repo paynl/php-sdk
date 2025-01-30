@@ -8,6 +8,9 @@ use PHPUnit\Framework\TestCase;
 
 class OrderApproveRequestTest extends TestCase
 {
+    /**
+     * @return void
+     */
     public function testConstructor(): void
     {
         $transactionId = '123456';
@@ -16,6 +19,9 @@ class OrderApproveRequestTest extends TestCase
         $this->assertInstanceOf(OrderApproveRequest::class, $orderApproveRequest);
     }
 
+    /**
+     * @return void
+     */
     public function testGetPathParameters(): void
     {
         $transactionId = '123456';
@@ -28,6 +34,9 @@ class OrderApproveRequestTest extends TestCase
         $this->assertSame($transactionId, $pathParameters['transactionId']);
     }
 
+    /**
+     * @return void
+     */
     public function testGetBodyParameters(): void
     {
         $transactionId = '123456';
@@ -39,6 +48,11 @@ class OrderApproveRequestTest extends TestCase
         $this->assertEmpty($bodyParameters);
     }
 
+    /**
+     * @return void
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     * @throws \PayNL\Sdk\Exception\PayException
+     */
     public function testStart(): void
     {
         $transactionId = '123456';
@@ -55,5 +69,4 @@ class OrderApproveRequestTest extends TestCase
 
         $this->assertInstanceOf(PayOrder::class, $result);
     }
-
 }

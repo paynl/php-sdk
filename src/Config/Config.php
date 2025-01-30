@@ -8,7 +8,6 @@ use Countable;
 use Iterator;
 use ArrayAccess;
 
-
 /**
  * Class Config
  *
@@ -18,9 +17,9 @@ use ArrayAccess;
  */
 class Config implements Countable, Iterator, ArrayAccess
 {
-    const TGU1 = 'https://connect.pay.nl';
-    const TGU2 = 'https://connect.payments.nl';
-    const TGU3 = 'https://connect.achterelkebetaling.nl';
+    protected const TGU1 = 'https://connect.pay.nl';
+    protected const TGU2 = 'https://connect.payments.nl';
+    protected const TGU3 = 'https://connect.achterelkebetaling.nl';
 
     protected array $data = [];
     private static Config $configObject;
@@ -58,29 +57,30 @@ class Config implements Countable, Iterator, ArrayAccess
     }
 
     /**
-     * @param $key
-     * @param null $default
+     * @param mixed $key
+     * @param mixed $default
+     * @return mixed|null
      */
-    public function get($key, $default = null)
+    public function get(mixed $key, mixed $default = null)
     {
         return $this->data[$key] ?? $default;
     }
 
     /**
-     * @param string|int $key
+     * @param string|integer $key
+     * @return mixed|null
      */
-    public function __get($key)
+    public function __get($key)  // phpcs:ignore
     {
         return $this->get($key);
     }
 
     /**
-     * @param string|int $key
-     * @param $value
-     *
+     * @param mixed $key
+     * @param mixed $value
      * @return void
      */
-    public function set($key, $value): void
+    public function set(mixed $key, mixed $value): void
     {
         if (true === is_array($value)) {
             $value = new self($value);
@@ -90,18 +90,17 @@ class Config implements Countable, Iterator, ArrayAccess
     }
 
     /**
-     * @param string|int $key
-     * @param $value
-     *
+     * @param mixed $key
+     * @param mixed $value
      * @return void
      */
-    public function __set($key, $value): void
+    public function __set($key, $value): void // phpcs:ignore
     {
         $this->set($key, $value);
     }
 
     /**
-     * @param string|int $key
+     * @param string|integer $key
      *
      * @return void
      */
@@ -113,7 +112,7 @@ class Config implements Countable, Iterator, ArrayAccess
     }
 
     /**
-     * @param string|int $key
+     * @param string|integer $key
      *
      * @return void
      */
@@ -123,9 +122,9 @@ class Config implements Countable, Iterator, ArrayAccess
     }
 
     /**
-     * @param string|int $key
+     * @param string|integer $key
      *
-     * @return bool
+     * @return boolean
      */
     public function has($key): bool
     {
@@ -133,9 +132,9 @@ class Config implements Countable, Iterator, ArrayAccess
     }
 
     /**
-     * @param string|int $key
+     * @param string|integer $key
      *
-     * @return bool
+     * @return boolean
      */
     public function __isset($key): bool
     {
@@ -161,7 +160,7 @@ class Config implements Countable, Iterator, ArrayAccess
     }
 
     /**
-     * @inheritDoc
+     * @return mixed
      */
     public function current(): mixed
     {
@@ -180,9 +179,7 @@ class Config implements Countable, Iterator, ArrayAccess
     }
 
     /**
-     * @inheritDoc
-     *
-     * @return
+     * @return mixed
      */
     public function key(): mixed
     {
@@ -191,8 +188,7 @@ class Config implements Countable, Iterator, ArrayAccess
 
     /**
      * @inheritDoc
-     *
-     * @return bool
+     * @return boolean
      */
     public function valid(): bool
     {
@@ -210,47 +206,44 @@ class Config implements Countable, Iterator, ArrayAccess
     }
 
     /**
-     * @inheritDoc
-     *
-     * @return bool
+     * @param mixed $offset
+     * @return boolean
      */
-    public function offsetExists($offset): bool
+    public function offsetExists($offset): bool  // phpcs:ignore
     {
         return $this->has($offset);
     }
 
     /**
-     * @inheritDoc
-     *
-     * @return
+     * @param mixed $offset
+     * @return mixed
      */
-    public function offsetGet($offset): mixed
+    public function offsetGet(mixed $offset): mixed
     {
         return $this->get($offset);
     }
 
     /**
-     * @inheritDoc
-     *
+     * @param mixed $offset
+     * @param mixed $value
      * @return void
      */
-    public function offsetSet($offset, $value): void
+    public function offsetSet($offset, $value): void // phpcs:ignore
     {
         $this->set($offset, $value);
     }
 
     /**
-     * @inheritDoc
-     *
+     * @param mixed $offset
      * @return void
      */
-    public function offsetUnset($offset): void
+    public function offsetUnset($offset): void  // phpcs:ignore
     {
         $this->remove($offset);
     }
 
     /**
-     * @inheritDoc
+     * @return integer
      */
     public function count(): int
     {
@@ -283,7 +276,7 @@ class Config implements Countable, Iterator, ArrayAccess
     }
 
     /**
-     * @param bool $debug
+     * @param boolean $debug
      * @return $this
      */
     public function setDebug(bool $debug): self
@@ -293,7 +286,7 @@ class Config implements Countable, Iterator, ArrayAccess
     }
 
     /**
-     * @return bool
+     * @return boolean
      */
     public function getDebug(): bool
     {
@@ -313,9 +306,8 @@ class Config implements Countable, Iterator, ArrayAccess
 
     /**
      * Set destination(core) url
-     *
      * @param string $url
-     * @return void
+     * @return $this
      */
     public function setCore(string $url): self
     {
@@ -356,12 +348,14 @@ class Config implements Countable, Iterator, ArrayAccess
     }
 
     /**
-     * @return bool
+     * @return boolean
      */
     public function isEmpty()
     {
-        if (empty($this->data['authentication']['password']) ||
-            empty($this->data['authentication']['username'])) {
+        if (
+            empty($this->data['authentication']['password']) ||
+            empty($this->data['authentication']['username'])
+        ) {
             return true;
         }
         return false;
@@ -405,8 +399,4 @@ class Config implements Countable, Iterator, ArrayAccess
         }
         return self::$configObject;
     }
-
 }
-
-
-

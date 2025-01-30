@@ -10,6 +10,11 @@ use PHPUnit\Framework\TestCase;
 
 class TerminalsBrowseRequestTest extends TestCase
 {
+    /**
+     * @return void
+     * @throws PayException
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
     public function testStartThrowsExceptionWithoutConfig()
     {
         $mockApplication = $this->createMock(Application::class);
@@ -25,6 +30,10 @@ class TerminalsBrowseRequestTest extends TestCase
         $request->start();
     }
 
+    /**
+     * @return void
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
     public function testStartWrongConfig()
     {
         $mockApplication = $this->createMock(Application::class);

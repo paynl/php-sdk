@@ -12,6 +12,9 @@ use PHPUnit\Framework\TestCase;
 
 class OrderCreateRequestTest extends TestCase
 {
+    /**
+     * @return void
+     */
     public function testEnableFastCheckout(): void
     {
         $request = new OrderCreateRequest();
@@ -29,6 +32,9 @@ class OrderCreateRequestTest extends TestCase
         ], $optimizeProperty->getValue($request));
     }
 
+    /**
+     * @return void
+     */
     public function testSetReturnUrl(): void
     {
         $request = new OrderCreateRequest();
@@ -41,6 +47,9 @@ class OrderCreateRequestTest extends TestCase
         $this->assertEquals('https://example.com/return', $returnUrlProperty->getValue($request));
     }
 
+    /**
+     * @return void
+     */
     public function testSetAmount(): void
     {
         $request = new OrderCreateRequest();
@@ -53,6 +62,10 @@ class OrderCreateRequestTest extends TestCase
         $this->assertEquals(12345, $amountProperty->getValue($request));
     }
 
+    /**
+     * @return void
+     * @throws \Exception
+     */
     public function testSetReference(): void
     {
         $request = new OrderCreateRequest();
@@ -66,6 +79,10 @@ class OrderCreateRequestTest extends TestCase
         $this->assertEquals('Order123', $referenceProperty->getValue($request));
     }
 
+    /**
+     * @return void
+     * @throws \Exception
+     */
     public function testSetReferenceThrowsExceptionForInvalidReference(): void
     {
         $this->expectException(\Exception::class);
@@ -75,6 +92,10 @@ class OrderCreateRequestTest extends TestCase
         $request->setReference('Order#123');
     }
 
+    /**
+     * @return void
+     * @throws \Exception
+     */
     public function testSetNotification(): void
     {
         $request = new OrderCreateRequest();
@@ -91,6 +112,10 @@ class OrderCreateRequestTest extends TestCase
         $this->assertEquals('test@example.com', $notificationRecipientProperty->getValue($request));
     }
 
+    /**
+     * @return void
+     * @throws \Exception
+     */
     public function testSetNotificationThrowsExceptionForInvalidEmail(): void
     {
         $this->expectException(\Exception::class);
@@ -100,6 +125,10 @@ class OrderCreateRequestTest extends TestCase
         $request->setNotification('email', 'invalid-email');
     }
 
+    /**
+     * @return void
+     * @throws \Exception
+     */
     public function testSetNotificationThrowsExceptionForInvalidPushRecipient(): void
     {
         $this->expectException(\Exception::class);
@@ -109,6 +138,10 @@ class OrderCreateRequestTest extends TestCase
         $request->setNotification('push', '1234');
     }
 
+    /**
+     * @return void
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
     public function testSetCustomer(): void
     {
         $mockCustomer = $this->createMock(Customer::class);
@@ -122,6 +155,10 @@ class OrderCreateRequestTest extends TestCase
         $this->assertSame($mockCustomer, $customerProperty->getValue($request));
     }
 
+    /**
+     * @return void
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
     public function testSetOrder(): void
     {
         $mockOrder = $this->createMock(Order::class);
@@ -135,6 +172,10 @@ class OrderCreateRequestTest extends TestCase
         $this->assertSame($mockOrder, $orderProperty->getValue($request));
     }
 
+    /**
+     * @return void
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
     public function testSetStats(): void
     {
         $mockStats = $this->createMock(Stats::class);
