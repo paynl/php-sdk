@@ -18,7 +18,7 @@ use PayNL\Sdk\Util\Text;
  */
 abstract class RequestData implements RequestDataInterface
 {
-    protected $application;
+    protected Application $application;
     protected string $mapperName = '';
     protected string $uri = '';
     protected string $methodType = 'GET';
@@ -48,10 +48,10 @@ abstract class RequestData implements RequestDataInterface
     }
 
     /**
-     * @param $application
+     * @param Application $application
      * @return void
      */
-    public function setApplication($application)
+    public function setApplication(Application $application): void
     {
         $this->application = $application;
     }
@@ -113,14 +113,13 @@ abstract class RequestData implements RequestDataInterface
         }
     }
 
-
-    /*
-     * For defining the arguments used in the requestpath
+    /**
+     * @return array
      */
     abstract public function getPathParameters(): array;
 
-    /*
-     * For defining the arguments used in the body of the request
+    /**
+     * @return array
      */
     abstract public function getBodyParameters(): array;
 
