@@ -1,9 +1,10 @@
 <?php
 
-use PHPUnit\Framework\TestCase;
+namespace Tests\Unit;
+
 use PayNL\Sdk\Model\Request\ServiceGetConfigRequest;
-use PayNL\Sdk\Exception\PayException;
 use PayNL\Sdk\Model\Response\ServiceGetConfigResponse;
+use PHPUnit\Framework\TestCase;
 
 class ServiceGetConfigRequestTest extends TestCase
 {

@@ -1,10 +1,12 @@
 <?php
 
+namespace Tests\Unit;
+
+use PayNL\Sdk\Application\Application;
 use PayNL\Sdk\Config\Config;
 use PayNL\Sdk\Exception\PayException;
 use PayNL\Sdk\Model\Request\TerminalsBrowseRequest;
 use PHPUnit\Framework\TestCase;
-use PayNL\Sdk\Application\Application;
 
 class TerminalsBrowseRequestTest extends TestCase
 {

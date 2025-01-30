@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-use PHPUnit\Framework\TestCase;
-use PayNL\Sdk\Model\Request\OrderCreateRequest;
-use PayNL\Sdk\Model\Order;
+namespace Tests\Unit;
+
 use PayNL\Sdk\Model\Customer;
-use PayNL\Sdk\Model\Product;
+use PayNL\Sdk\Model\Order;
+use PayNL\Sdk\Model\Request\OrderCreateRequest;
 use PayNL\Sdk\Model\Stats;
-use PayNL\Sdk\Config\Config;
+use PHPUnit\Framework\TestCase;
 
 class OrderCreateRequestTest extends TestCase
 {

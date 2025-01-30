@@ -1,10 +1,12 @@
 <?php
 
-use PHPUnit\Framework\TestCase;
-use PayNL\Sdk\Model\Pay\PayOrder;;
+namespace Tests\Unit;
+
+use PayNL\Sdk\Model\Pay\PayOrder;
 use PayNL\Sdk\Model\Request\OrderStatusRequest;
-use PayNL\Sdk\Exception\PayException;
-use PayNL\Sdk\Config\Config;
+use PHPUnit\Framework\TestCase;
+
+;
 
 class OrderStatusRequestTest extends TestCase
 {
