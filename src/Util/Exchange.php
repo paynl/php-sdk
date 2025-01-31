@@ -142,7 +142,7 @@ class Exchange
             } else {
                 $rawBody = file_get_contents('php://input');
                 if (empty(trim($rawBody))) {
-                    throw new Exception('Empty payload', 8002);
+                    throw new Exception('Empty or incomplete payload', 8002);
                 }
 
                 $tguData = json_decode($rawBody, true, 512, 4194304);
