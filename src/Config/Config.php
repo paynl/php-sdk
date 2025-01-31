@@ -17,9 +17,9 @@ use ArrayAccess;
  */
 class Config implements Countable, Iterator, ArrayAccess
 {
-    protected const TGU1 = 'https://connect.pay.nl';
-    protected const TGU2 = 'https://connect.payments.nl';
-    protected const TGU3 = 'https://connect.achterelkebetaling.nl';
+    public const TGU1 = 'https://connect.pay.nl';
+    public const TGU2 = 'https://connect.payments.nl';
+    public const TGU3 = 'https://connect.achterelkebetaling.nl';
 
     protected array $data = [];
     private static Config $configObject;
