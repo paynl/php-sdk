@@ -151,6 +151,16 @@ class Order implements
     }
 
     /**
+     * Alias for setDeliveryAddress
+     * @param Address $shippingAddress
+     * @return $this
+     */
+    public function setShippingAddress(Address $shippingAddress): self
+    {
+        return $this->setDeliveryAddress($shippingAddress);
+    }
+
+    /**
      * @return Address
      */
     public function getInvoiceAddress(): Address

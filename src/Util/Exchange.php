@@ -145,7 +145,7 @@ class Exchange
                     throw new Exception('Empty payload', 8002);
                 }
 
-                $tguData = json_decode($rawBody, true, 512, 4194304);
+                $tguData = json_decode($rawBody, true, 512, JSON_BIGINT_AS_STRING);
 
                 $exchangeType = $tguData['type'] ?? null;
                 if ($exchangeType != 'order') {

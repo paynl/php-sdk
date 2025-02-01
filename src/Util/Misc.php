@@ -20,14 +20,14 @@ class Misc
     /**
      * @param string $file
      *
-     * @throws InvalidArgumentException when given file can not be found or read
+     * @return string
      * @throws LogicException when the class name is not the same as the terminating class file name
      *  (PSR-4 3.3 - https://www.php-fig.org/psr/psr-4/)
      *
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      *
-     * @return string
+     * @throws InvalidArgumentException when given file can not be found or read
      */
     public static function getClassNameByFile(string $file): string
     {
@@ -73,9 +73,9 @@ class Misc
                 }
 
                 if ($tokens[$counter][0] === T_CLASS) {
-                    for ($nextCounter = $counter+1; $nextCounter < $tokenCount; $nextCounter++) {
+                    for ($nextCounter = $counter + 1; $nextCounter < $tokenCount; $nextCounter++) {
                         if ($tokens[$nextCounter] === '{') {
-                            $class = $tokens[$counter+2][1];
+                            $class = $tokens[$counter + 2][1];
                         }
                     }
                 }
@@ -107,4 +107,61 @@ class Misc
         $parts = explode($namespaceSeparator, $fqn);
         return array_pop($parts) ?? '';
     }
+
+    /**
+     * Get the IP of the user
+     *
+     * @return mixed
+     */
+    public function getIp()
+    {
+        // Use $_SERVER or get the headers if we can
+        $headers = $_SERVER;
+        if (function_exists('apache_request_headers')) {
+            $headers = apache_request_headers();
+        }
+
+        // Get the forwarded IP if it exists
+        $the_ip = $_SERVER['REMOTE_ADDR'];
+        if (array_key_exists('X-Forwarded-For', $headers)) {
+            $the_ip = $headers['X-Forwarded-For'];
+        } elseif (array_key_exists('HTTP_X_FORWARDED_FOR', $headers)) {
+            $the_ip = $headers['HTTP_X_FORWARDED_FOR'];
+        }
+        $arrIp = explode(',', $the_ip);
+
+        return filter_var(trim(trim(!empty($arrIp[0]) ? $arrIp[0] : ''), '[]'), FILTER_VALIDATE_IP);
+    }
+
+    /**
+     * @param string $address
+     *
+     * @return array
+     */
+    public function splitAddress(string $address): array
+    {
+        $street = $number = '';
+
+        $address = trim($address);
+        $addressParts = preg_split('/(\s+)(\d+)/', $address, 2, PREG_SPLIT_DELIM_CAPTURE);
+
+        if (true === is_array($addressParts)) {
+            $street = trim(array_shift($addressParts) ?? '');
+            $number = trim(implode('', $addressParts));
+        }
+
+        if (true === empty($street) || true === empty($number)) {
+            $addressParts = preg_split('/([A-z]{2,})/', $address, 2, PREG_SPLIT_DELIM_CAPTURE);
+
+            if (true === is_array($addressParts)) {
+                $number = trim(array_shift($addressParts) ?? '');
+                $street = trim(implode('', $addressParts));
+            }
+        }
+
+        $number = substr($number, 0, 45);
+
+        return compact('street', 'number');
+    }
+
 }
