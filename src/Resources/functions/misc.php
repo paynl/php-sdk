@@ -18,11 +18,9 @@ if (false === function_exists('paynl_split_address')) {
 
 if (false === function_exists('paynl_get_ip')) {
     /**
-     * @param string $address
-     *
-     * @return array
+     * @return mixed
      */
-    function paynl_get_ip(): array
+    function paynl_get_ip(): mixed
     {
         return (new Misc())->getIp();
     }
