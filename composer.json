@@ -36,7 +36,8 @@
         },
         "files": [
             "./src/Resources/functions/text.php",
-            "./src/Resources/functions/vat.php"
+            "./src/Resources/functions/vat.php",
+            "./src/Resources/functions/misc.php"
         ]
     },
     "autoload-dev": {
