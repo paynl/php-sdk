@@ -163,4 +163,5 @@ class Misc
 
         return compact('street', 'number');
     }
+
 }

@@ -64,7 +64,7 @@ class PayLoad
     {
         return $this->reference;
     }
-    
+
     /**
      * @return array
      */
@@ -143,6 +143,14 @@ class PayLoad
     public function getPaymentProfile(): int
     {
         return $this->paymentProfile;
+    }
+
+    /**
+     * @return array
+     */
+    public function getCheckoutData(): array
+    {
+        return $this->checkoutData;
     }
 
 }

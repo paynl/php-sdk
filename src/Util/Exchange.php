@@ -7,6 +7,7 @@ namespace PayNL\Sdk\Util;
 use PayNL\Sdk\Config\Config as PayConfig;
 use PayNL\Sdk\Config\Config;
 use PayNL\Sdk\Model\Amount;
+use PayNL\Sdk\Util\ExchangeResponse;
 use PayNL\Sdk\Model\Request\OrderStatusRequest;
 use PayNL\Sdk\Model\Pay\PayStatus;
 use PayNL\Sdk\Model\Pay\PayOrder;
@@ -36,10 +37,38 @@ class Exchange
 
     /**
      * @return bool
+     * @throws PayException
      */
-    public function eventStateChangeToPaid()
+    public function eventPaid($includeAuth = false)
     {
-        return $this->getAction() === PayStatus::EVENT_PAID;
+        return $this->getAction() === PayStatus::EVENT_PAID || ($includeAuth == true && $this->getAction() === PayStatus::AUTHORIZE);
+    }
+
+    /**
+     * @return bool
+     * @throws PayException
+     */
+    public function eventChargeback()
+    {
+        return substr($this->getAction(), 0, 10) === PayStatus::EVENT_CHARGEBACK;
+    }
+
+    /**
+     * @return bool
+     * @throws PayException
+     */
+    public function eventRefund()
+    {
+        return substr($this->getAction(), 0, 6) === PayStatus::EVENT_REFUND;
+    }
+
+    /**
+     * @return bool
+     * @throws PayException
+     */
+    public function eventCapture()
+    {
+        return $this->getAction() == PayStatus::EVENT_CAPTURE;
     }
 
     /**
@@ -50,8 +79,10 @@ class Exchange
      * @param bool $returnOutput If true, then this method returs the output string
      * @return false|string|void
      */
-    public function setResponse(bool $result, string $message, $returnOutput = false)
+    public function setResponse(bool $result, string $message, bool $returnOutput = false)
     {
+        $message = ucfirst(strtolower($message));
+
         if ($this->isSignExchange() === true) {
             $response = json_encode(['result' => $result, 'description' => $message]);
         } else {
@@ -67,40 +98,53 @@ class Exchange
     }
 
     /**
+     * @param \PayNL\Sdk\Util\ExchangeResponse $e
+     * @param bool $returnOutput
+     * @return false|string|null
+     */
+    public function setExchangeResponse(ExchangeResponse $e, bool $returnOutput = false)
+    {
+        return $this->setResponse($e->getResult(), $e->getMessage(), $returnOutput);
+    }
+
+    /**
      * @return string
+     * @throws PayException
      */
     public function getAction()
     {
         try {
             $payload = $this->getPayload();
         } catch (\Throwable $e) {
-            return false;
+            throw new PayException('Could not retrieve action: ' . $e->getMessage());
         }
         return $payload->getAction();
     }
 
     /**
-     * @return mixed|string
+     * @return string
+     * @throws PayException
      */
     public function getReference()
     {
         try {
             $payload = $this->getPayload();
         } catch (\Throwable $e) {
-            return false;
+            throw new PayException('Could not retrieve reference: ' . $e->getMessage());
         }
         return $payload->getReference();
     }
 
     /**
      * @return string
+     * @throws PayException
      */
     public function getPayOrderId()
     {
         try {
             $payload = $this->getPayload();
         } catch (\Throwable $e) {
-            return false;
+            throw new Exception('Could not retrieve payOrderId: ' . $e->getMessage());
         }
         return $payload->getPayOrderId();
     }
@@ -146,11 +190,6 @@ class Exchange
                 }
 
                 $tguData = json_decode($rawBody, true, 512, JSON_BIGINT_AS_STRING);
-
-                $exchangeType = $tguData['type'] ?? null;
-                if ($exchangeType != 'order') {
-                    throw new Exception('Cant handle exchange type other then order', 8003);
-                }
             }
 
             if (empty($tguData['object'])) {
@@ -236,6 +275,7 @@ class Exchange
             # Not a signing request...
             if ($payloadState === PayStatus::PENDING) {
                 $payOrder = new PayOrder();
+                $payOrder->setType($payload->getType());
                 $payOrder->setStatusCodeName(PayStatus::PENDING, 'PENDING');
             } else {
                 # Continue to check the order status manually

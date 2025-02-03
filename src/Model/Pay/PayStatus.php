@@ -28,6 +28,9 @@ class PayStatus
 
     const EVENT_PAID = 'new_ppt';
     const EVENT_PENDING = 'pending';
+    const EVENT_CHARGEBACK = 'chargeback';
+    const EVENT_REFUND = 'retund';
+    const EVENT_CAPTURE = 'capture';
 
     /**
      * @param int $stateId

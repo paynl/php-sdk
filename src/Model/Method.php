@@ -11,9 +11,10 @@ namespace PayNL\Sdk\Model;
  */
 class Method implements ModelInterface
 {
-    const IDEAL = 10;
-    const PIN = 1927;
-    const PAYPAL = 138;
+    public const IDEAL = 10;
+    public const PIN = 1927;
+    public const PAYPAL = 138;
+    public const RETOURPIN = 2351;
 
     /**
      * @var int
