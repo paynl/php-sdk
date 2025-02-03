@@ -1,6 +1,6 @@
 <?php
 
-declare (strict_types=1);
+declare(strict_types=1);
 
 namespace PayNL\Sdk\Util;
 
@@ -13,12 +13,11 @@ use PayNL\Sdk\Config\Config;
  */
 class Text
 {
-
     /**
-     * @param $errorMessage
+     * @param string $errorMessage
      * @return string
      */
-    public static function getFriendlyMessage($errorMessage)
+    public static function getFriendlyMessage(string $errorMessage)
     {
         $friendlyMessages = [
           'INVALID_TRANSACTION_STAT' => 'Transaction not ready for refund.',
