@@ -2,12 +2,10 @@
 
 declare(strict_types=1);
 
-use PayNL\Sdk\Util\Text;
-
 if (false === function_exists('dbg')) {
     /**
      * @param string $message
-     * @return string
+     * @return void
      */
     function dbg(string $message): void
     {

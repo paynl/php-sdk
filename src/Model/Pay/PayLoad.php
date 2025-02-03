@@ -74,7 +74,7 @@ class PayLoad
     }
 
     /**
-     * @return int
+     * @return integer
      */
     public function getInternalStateId(): int
     {
@@ -100,13 +100,13 @@ class PayLoad
     /**
      * @return string
      */
-    public function  nce(): string
+    public function nce(): string
     {
         return $this->reference;
     }
 
     /**
-     * @return int
+     * @return integer
      */
     public function getAmount(): int
     {
@@ -138,7 +138,7 @@ class PayLoad
     }
 
     /**
-     * @return int
+     * @return integer
      */
     public function getPaymentProfile(): int
     {
@@ -152,5 +152,4 @@ class PayLoad
     {
         return $this->checkoutData;
     }
-
 }

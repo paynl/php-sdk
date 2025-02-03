@@ -8,7 +8,7 @@ class ExchangeResponse
     private string $message;
 
     /**
-     * @param bool $result
+     * @param boolean $result
      * @param string $message
      */
     public function __construct(bool $result, string $message)
@@ -18,12 +18,11 @@ class ExchangeResponse
     }
 
     /**
-     * @return bool
+     * @return boolean
      */
     public function getResult(): bool
     {
         return $this->result;
-
     }
 
     /**
