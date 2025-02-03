@@ -14,28 +14,31 @@ use Exception;
  */
 class PayStatus
 {
-    const PENDING = 20;
-    const PAID = 100;
-    const AUTHORIZE = 95;
-    const CANCEL = -1;
-    const REFUND = -81;
-    const VERIFY = 85;
-    const PARTIAL_PAYMENT = 80;
-    const CHARGEBACK = -71;
-    const PARTIAL_REFUND = -82;
-    const PARTLY_CAPTURED = 97;
-    const CONFIRMED = 75;
+    public const PENDING = 20;
+    public const PAID = 100;
+    public const AUTHORIZE = 95;
+    public const CANCEL = -1;
+    public const REFUND = -81;
+    public const VERIFY = 85;
+    public const PARTIAL_PAYMENT = 80;
+    public const CHARGEBACK = -71;
+    public const PARTIAL_REFUND = -82;
+    public const PARTLY_CAPTURED = 97;
+    public const CONFIRMED = 75;
 
-    const EVENT_PAID = 'new_ppt';
-    const EVENT_PENDING = 'pending';
+    public const EVENT_PAID = 'new_ppt';
+    public const EVENT_PENDING = 'pending';
+    public const EVENT_CHARGEBACK = 'chargeback';
+    public const EVENT_REFUND = 'retund';
+    public const EVENT_CAPTURE = 'capture';
 
     /**
-     * @param int $stateId
+     * @param integer $stateId
      *
      * Source:
      * https://developer.pay.nl/docs/transaction-statuses#processing-statusses
      *
-     * @return int|mixed
+     * @return integer|mixed
      * @throws Exception
      */
     public function get(int $stateId)
@@ -68,5 +71,4 @@ class PayStatus
             }
         }
     }
-
 }
