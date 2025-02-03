@@ -25,7 +25,7 @@ class Exchange
 {
     private PayLoad $payload;
     private ?array $custom_payload;
-    private $headers;
+    private string $headers;
 
     /**
      * @param array|null $payload
@@ -36,25 +36,26 @@ class Exchange
     }
 
     /**
-     * @return bool
+     * @param boolean $includeAuth If yes, treat authorize as "paid"
+     * @return boolean
      * @throws PayException
      */
-    public function eventPaid($includeAuth = false)
+    public function eventPaid(bool $includeAuth = false): bool
     {
         return $this->getAction() === PayStatus::EVENT_PAID || ($includeAuth == true && $this->getAction() === PayStatus::AUTHORIZE);
     }
 
     /**
-     * @return bool
+     * @return boolean
      * @throws PayException
      */
-    public function eventChargeback()
+    public function eventChargeback(): bool
     {
         return substr($this->getAction(), 0, 10) === PayStatus::EVENT_CHARGEBACK;
     }
 
     /**
-     * @return bool
+     * @return boolean
      * @throws PayException
      */
     public function eventRefund()
@@ -63,7 +64,7 @@ class Exchange
     }
 
     /**
-     * @return bool
+     * @return boolean
      * @throws PayException
      */
     public function eventCapture()
@@ -74,9 +75,9 @@ class Exchange
     /**
      * Set your exchange response in the end of your exchange processing
      *
-     * @param bool $result
+     * @param boolean $result
      * @param string $message
-     * @param bool $returnOutput If true, then this method returs the output string
+     * @param boolean $returnOutput If true, then this method returs the output string
      * @return false|string|void
      */
     public function setResponse(bool $result, string $message, bool $returnOutput = false)
@@ -99,7 +100,7 @@ class Exchange
 
     /**
      * @param \PayNL\Sdk\Util\ExchangeResponse $e
-     * @param bool $returnOutput
+     * @param boolean $returnOutput
      * @return false|string|null
      */
     public function setExchangeResponse(ExchangeResponse $e, bool $returnOutput = false)
@@ -294,7 +295,6 @@ class Exchange
                     }
 
                     $payOrder = $request->setConfig($config)->start();
-
                 } catch (PayException $e) {
                     dbg($e->getMessage());
                     throw new Exception('API Retrieval error: ' . $e->getFriendlyMessage());
@@ -308,7 +308,7 @@ class Exchange
     /**
      * @param string $username Token code
      * @param string $password API Token
-     * @return bool Returns true if the signing is successful and authorised
+     * @return boolean Returns true if the signing is successful and authorised
      */
     public function checkSignExchange(string $username = '', string $password = ''): bool
     {
@@ -346,7 +346,7 @@ class Exchange
     }
 
     /**
-     * @return bool
+     * @return boolean
      */
     public function isSignExchange(): bool
     {
@@ -358,12 +358,11 @@ class Exchange
     /**
      * @return array|false|string
      */
-    private function getRequestHeaders()
+    private function getRequestHeaders(): bool|array|string
     {
         if (empty($this->headers)) {
             $this->headers = array_change_key_case(getallheaders());
         }
         return $this->headers;
     }
-
 }
