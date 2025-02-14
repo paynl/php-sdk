@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PayNL\Sdk\Model\Pay;
 
+use Exception;
 use PayNL\Sdk\Model\ModelInterface;
 use PayNL\Sdk\Model\Amount;
 
@@ -674,7 +675,7 @@ class PayOrder implements ModelInterface
 
     /**
      * @return bool
-     * @throws \Exception
+     * @throws Exception
      */
     public function isPaid()
     {
@@ -683,7 +684,7 @@ class PayOrder implements ModelInterface
 
     /**
      * @return bool
-     * @throws \Exception
+     * @throws Exception
      */
     public function isPending()
     {
@@ -692,7 +693,7 @@ class PayOrder implements ModelInterface
 
     /**
      * @return bool
-     * @throws \Exception
+     * @throws Exception
      */
     public function isCancelled()
     {
@@ -701,7 +702,7 @@ class PayOrder implements ModelInterface
 
     /**
      * @return bool
-     * @throws \Exception
+     * @throws Exception
      */
     public function isPartialPayment()
     {
@@ -710,7 +711,7 @@ class PayOrder implements ModelInterface
 
     /**
      * @return bool
-     * @throws \Exception
+     * @throws Exception
      */
     public function isAuthorized(): bool
     {
@@ -719,26 +720,34 @@ class PayOrder implements ModelInterface
 
     /**
      * @return bool
-     * @throws \Exception
+     * @throws Exception
      */
-    public function isRefundedFully()
+    public function isRefundedFully(): bool
     {
         return (new PayStatus)->get($this->getStatusCode()) === PayStatus::REFUND;
     }
 
     /**
      * @return bool
-     * @throws \Exception
+     * @throws Exception
      */
-    public function isRefundedPartial()
+    public function isRefundedPartial(): bool
     {
         return (new PayStatus)->get($this->getStatusCode()) === PayStatus::PARTIAL_REFUND;
-
     }
 
     /**
      * @return bool
-     * @throws \Exception
+     * @throws Exception
+     */
+    public function isVoided(): bool
+    {
+        return (new PayStatus)->get($this->getStatusCode()) === PayStatus::VOID;
+    }
+    
+    /**
+     * @return bool
+     * @throws Exception
      */
     public function isBeingVerified()
     {
@@ -758,7 +767,7 @@ class PayOrder implements ModelInterface
     /**
      * @param bool $allowPartialRefunds
      * @return bool
-     * @throws \Exception
+     * @throws Exception
      */
     public function isRefunded(bool $allowPartialRefunds = true): bool
     {

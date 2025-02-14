@@ -25,7 +25,7 @@ class Exchange
 {
     private PayLoad $payload;
     private ?array $custom_payload;
-    private string $headers;
+    private mixed $headers;
 
     /**
      * @param array|null $payload

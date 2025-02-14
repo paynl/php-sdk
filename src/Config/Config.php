@@ -294,6 +294,16 @@ class Config implements Countable, Iterator, ArrayAccess
     }
 
     /**
+     * @param string $url
+     * @return self
+     */
+    public function setupFailoverUrl(string $url): self
+    {
+        $this->data['failoverUrl'] = $url;
+        return $this;
+    }
+
+    /**
      * @return string
      */
     public function getFailoverUrl(): string
