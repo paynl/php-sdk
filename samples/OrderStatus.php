@@ -41,6 +41,7 @@ echo 'isPartialPayment: ' . ($payOrder->isPartialPayment() ? 'YES' : 'no') . PHP
 echo 'isRefunded: ' . ($payOrder->isRefunded() ? 'YES' : 'no') . PHP_EOL;
 echo 'isPartiallyRefunded: ' . ($payOrder->isRefundedPartial() ? 'YES' : 'no') . PHP_EOL . PHP_EOL;
 echo 'isFastcheckout: ' . ($payOrder->isFastcheckout() ? 'YES' : 'no') . PHP_EOL;
+echo 'getAmountRefunded: ' . ($payOrder->getAmountRefunded()) . PHP_EOL . PHP_EOL;
 echo 'getStatusCode: ' . $payOrder->getStatusCode() . PHP_EOL;
 echo 'getStatusName: ' . $payOrder->getStatusName() . PHP_EOL;
 echo 'getId: ' . $payOrder->getId() . PHP_EOL;
