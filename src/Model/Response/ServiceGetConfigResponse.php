@@ -316,7 +316,7 @@ class ServiceGetConfigResponse implements ModelInterface
      */
     public function getTguList(): array
     {
-        return $this->tguList;
+        return $this->tguList ?? [];
     }
 
     /**

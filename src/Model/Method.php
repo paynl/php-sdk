@@ -160,7 +160,7 @@ class Method implements ModelInterface
      */
     public function getSettings(): array
     {
-        return $this->settings;
+        return $this->settings ?? [];
     }
 
     /**

@@ -131,6 +131,11 @@ class PayOrder implements ModelInterface
     protected $completedAt;
 
     /**
+     * @var Amount
+     */
+    protected $amountRefunded;
+
+    /**
      * @var array
      */
     protected $links;
@@ -151,6 +156,27 @@ class PayOrder implements ModelInterface
                 }
             }
         }
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAmountRefunded()
+    {
+        if (!empty($this->amountRefunded) && $this->amountRefunded instanceof Amount) {
+            return $this->amountRefunded->getValue() / 100;
+        }
+        return null;
+    }
+
+    /**
+     * @param $amountRefunded
+     * @return $this
+     */
+    public function setAmountRefunded($amountRefunded): self
+    {
+        $this->amountRefunded = $amountRefunded;
+        return $this;
     }
 
     /**

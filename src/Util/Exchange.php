@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace PayNL\Sdk\Util;
 
-use PayNL\Sdk\Config\Config as PayConfig;
 use PayNL\Sdk\Config\Config;
 use PayNL\Sdk\Model\Amount;
 use PayNL\Sdk\Util\ExchangeResponse;
@@ -241,11 +240,11 @@ class Exchange
     /**
      * Process the exchange request.
      *
-     * @param Config|null $config
+     * @param Config |null $config
      * @return PayOrder
      * @throws Exception
      */
-    public function process(PayConfig $config = null): PayOrder
+    public function process(Config $config = null): PayOrder
     {
         $payload = $this->getPayload();
 
