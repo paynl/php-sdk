@@ -136,9 +136,9 @@ class PayOrder implements ModelInterface
     protected $links;
 
     /**
-     * @param $payload
+     * @param array $payload
      */
-    public function __construct($payload = null)
+    public function __construct(array $payload = null)
     {
         if (!empty($payload['object'])) {
             foreach ($payload['object'] as $_key => $_val) {
@@ -357,11 +357,11 @@ class PayOrder implements ModelInterface
     }
 
     /**
-     * @param $code
-     * @param $name
+     * @param mixed $code
+     * @param mixed $name
      * @return $this
      */
-    public function setStatusCodeName($code, $name): self
+    public function setStatusCodeName(mixed $code, mixed $name): self
     {
         $this->status = ['code' => $code, 'action' => $name];
         return $this;
