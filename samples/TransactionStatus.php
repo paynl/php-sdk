@@ -27,7 +27,7 @@ try {
 }
 
 echo '<pre>';
-echo 'Success, values:' . PHP_EOL.PHP_EOL;
+echo 'Success, values:' . PHP_EOL . PHP_EOL;
 
 echo 'isPending: ' . ($payOrder->isPending() ? 'YES' : 'no') . PHP_EOL;
 echo 'isPaid: ' . ($payOrder->isPaid() ? 'YES' : 'no') . PHP_EOL;

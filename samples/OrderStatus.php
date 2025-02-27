@@ -28,7 +28,7 @@ try {
 }
 
 echo '<pre>';
-echo 'Success, values:' . PHP_EOL.PHP_EOL;
+echo 'Success, values:' . PHP_EOL . PHP_EOL;
 
 echo 'type: ' . $payOrder->getType() . PHP_EOL;
 echo 'isPending: ' . ($payOrder->isPending() ? 'YES' : 'no') . PHP_EOL;
@@ -48,7 +48,7 @@ echo 'getId: ' . $payOrder->getId() . PHP_EOL;
 echo 'getOrderId: ' . $payOrder->getOrderId() . PHP_EOL;
 echo 'getDescription: ' . $payOrder->getDescription() . PHP_EOL;
 echo 'getReference: ' . $payOrder->getReference() . PHP_EOL;
-echo 'getAmount: ' . $payOrder->getAmount(). PHP_EOL;
+echo 'getAmount: ' . $payOrder->getAmount() . PHP_EOL;
 echo 'getCurrency: ' . $payOrder->getCurrency() . PHP_EOL;
 echo 'paymentMethod: ' . $payOrder->getPaymentMethod() . PHP_EOL;
 
