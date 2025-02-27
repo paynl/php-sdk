@@ -170,10 +170,10 @@ class PayOrder implements ModelInterface
     }
 
     /**
-     * @param $amountRefunded
+     * @param Amount $amountRefunded
      * @return $this
      */
-    public function setAmountRefunded($amountRefunded): self
+    public function setAmountRefunded(Amount $amountRefunded): self
     {
         $this->amountRefunded = $amountRefunded;
         return $this;
