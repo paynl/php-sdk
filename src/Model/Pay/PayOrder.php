@@ -766,16 +766,6 @@ class PayOrder implements ModelInterface
      * @return bool
      * @throws \Exception
      */
-    public function amountRefunded()
-    {
-        return (new PayStatus)->get($this->getStatusCode()) === PayStatus::PARTIAL_REFUND;
-
-    }
-
-    /**
-     * @return bool
-     * @throws \Exception
-     */
     public function isBeingVerified()
     {
         return (new PayStatus)->get($this->getStatusCode()) === PayStatus::VERIFY;
