@@ -328,35 +328,11 @@ class ServiceGetConfigResponse implements ModelInterface
     }
 
     /**
-     * Returns formatted cores with ensured subdomains and HTTPS prefix.
-     *
      * @return array
      */
     public function getCores(): array
     {
-        $tguList = $this->getTguList();
-
-        foreach ($tguList as &$v) {
-            $domain = trim($v['domain']);
-            $hasHttp = strtolower(substr($domain, 0, 4)) == 'http';
-
-            $host = parse_url($hasHttp ? $domain : 'https://' . $domain, PHP_URL_HOST);
-            $parts = explode('.', $host);
-
-            # No subdomain, then add "connect"
-            if (count($parts) <= 2) {
-                $domain = 'connect.' . $domain;
-            }
-
-            # Ensure HTTPS prefix
-            if (!$hasHttp) {
-                $domain = 'https://' . $domain;
-            }
-
-            $v['domain'] = $domain;
-        }
-
-        return $tguList;
+        return $this->getTguList();
     }
 
     /**

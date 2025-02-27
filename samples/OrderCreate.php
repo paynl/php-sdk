@@ -15,7 +15,7 @@ $request->setServiceId($_REQUEST['slcode'] ?? '');
 $request->setDescription('Order ABC0123456789');
 $request->setAmount((float)($_REQUEST['amount'] ?? 5.3));
 $request->setCurrency('EUR');
-$request->setExpire(date('Y-m-d H:i:s', strtotime('+1 DAY')));
+$request->setExpire(date('c', time() + 60));
 $request->setReturnurl($_REQUEST['returnUrl'] ?? 'https://yourdomain/finish.php');
 $request->setExchangeUrl($_REQUEST['exchangeUrl'] ?? 'https://yourdomain/exchange.php');
 $request->setPaymentMethodId((int)($_REQUEST['paymentMethodId'] ?? 10));
