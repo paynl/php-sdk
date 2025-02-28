@@ -15,7 +15,7 @@ $request->setServiceId($_REQUEST['slcode'] ?? '');
 $request->setDescription('Order ABC0123456789');
 $request->setAmount((float)($_REQUEST['amount'] ?? 5.3));
 $request->setCurrency('EUR');
-$request->setExpire(date('Y-m-d H:i:s', strtotime('+1 DAY')));
+$request->setExpire(date('c', time() + 60));
 $request->setReturnurl($_REQUEST['returnUrl'] ?? 'https://yourdomain/finish.php');
 $request->setExchangeUrl($_REQUEST['exchangeUrl'] ?? 'https://yourdomain/exchange.php');
 $request->setPaymentMethodId((int)($_REQUEST['paymentMethodId'] ?? 10));
@@ -92,8 +92,7 @@ $request->setStats((new \PayNL\Sdk\Model\Stats())
   ->setExtra1('ex1')
   ->setExtra2('ex2')
   ->setExtra3('ex3')
-  ->setDomainId('WU-1234-1234')
-);
+  ->setDomainId('WU-1234-1234'));
 
 $request->setNotification('EMAIL', 'youremail@yourdomain.ext');
 $request->setTransferData([['yourField' => 'yourData'], ['tracker' => 'trackerinfo']]);

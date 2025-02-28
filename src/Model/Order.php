@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PayNL\Sdk\Model;
 
-use JsonSerializable, DateTime;
+use JsonSerializable;
 use PayNL\Sdk\Common\JsonSerializeTrait;
 
 /**
@@ -148,6 +148,16 @@ class Order implements
     {
         $this->deliveryAddress = $deliveryAddress;
         return $this;
+    }
+
+    /**
+     * Alias for setDeliveryAddress
+     * @param Address $shippingAddress
+     * @return $this
+     */
+    public function setShippingAddress(Address $shippingAddress): self
+    {
+        return $this->setDeliveryAddress($shippingAddress);
     }
 
     /**

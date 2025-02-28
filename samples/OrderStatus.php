@@ -28,7 +28,7 @@ try {
 }
 
 echo '<pre>';
-echo 'Success, values:' . PHP_EOL.PHP_EOL;
+echo 'Success, values:' . PHP_EOL . PHP_EOL;
 
 echo 'type: ' . $payOrder->getType() . PHP_EOL;
 echo 'isPending: ' . ($payOrder->isPending() ? 'YES' : 'no') . PHP_EOL;
@@ -41,13 +41,14 @@ echo 'isPartialPayment: ' . ($payOrder->isPartialPayment() ? 'YES' : 'no') . PHP
 echo 'isRefunded: ' . ($payOrder->isRefunded() ? 'YES' : 'no') . PHP_EOL;
 echo 'isPartiallyRefunded: ' . ($payOrder->isRefundedPartial() ? 'YES' : 'no') . PHP_EOL . PHP_EOL;
 echo 'isFastcheckout: ' . ($payOrder->isFastcheckout() ? 'YES' : 'no') . PHP_EOL;
+echo 'getAmountRefunded: ' . ($payOrder->getAmountRefunded()) . PHP_EOL . PHP_EOL;
 echo 'getStatusCode: ' . $payOrder->getStatusCode() . PHP_EOL;
 echo 'getStatusName: ' . $payOrder->getStatusName() . PHP_EOL;
 echo 'getId: ' . $payOrder->getId() . PHP_EOL;
 echo 'getOrderId: ' . $payOrder->getOrderId() . PHP_EOL;
 echo 'getDescription: ' . $payOrder->getDescription() . PHP_EOL;
 echo 'getReference: ' . $payOrder->getReference() . PHP_EOL;
-echo 'getAmount: ' . $payOrder->getAmount(). PHP_EOL;
+echo 'getAmount: ' . $payOrder->getAmount() . PHP_EOL;
 echo 'getCurrency: ' . $payOrder->getCurrency() . PHP_EOL;
 echo 'paymentMethod: ' . $payOrder->getPaymentMethod() . PHP_EOL;
 

@@ -16,7 +16,6 @@ use PayNL\Sdk\Model\Method;
  */
 class ServiceGetConfigResponse implements ModelInterface
 {
-
     /**
      * @required
      *
@@ -93,9 +92,8 @@ class ServiceGetConfigResponse implements ModelInterface
     }
 
     /**
-     * @param string $id
-     *
-     * @return Config
+     * @param string $code
+     * @return $this
      */
     public function setCode(string $code): self
     {
@@ -123,7 +121,7 @@ class ServiceGetConfigResponse implements ModelInterface
     }
 
     /**
-     * @return bool
+     * @return boolean
      */
     public function isTestMode(): bool
     {
@@ -172,6 +170,7 @@ class ServiceGetConfigResponse implements ModelInterface
 
     /**
      * @param array $translations
+     * @return void
      */
     public function setTranslations(array $translations): void
     {
@@ -188,6 +187,7 @@ class ServiceGetConfigResponse implements ModelInterface
 
     /**
      * @param string $status
+     * @return void
      */
     public function setStatus(string $status): void
     {
@@ -204,6 +204,7 @@ class ServiceGetConfigResponse implements ModelInterface
 
     /**
      * @param array $merchant
+     * @return void
      */
     public function setMerchant(array $merchant): void
     {
@@ -211,7 +212,7 @@ class ServiceGetConfigResponse implements ModelInterface
     }
 
     /**
-     * @return bool
+     * @return boolean
      */
     public function getTestMode(): bool
     {
@@ -228,6 +229,7 @@ class ServiceGetConfigResponse implements ModelInterface
 
     /**
      * @param array $checkoutSequence
+     * @return void
      */
     public function setCheckoutSequence(array $checkoutSequence): void
     {
@@ -257,6 +259,7 @@ class ServiceGetConfigResponse implements ModelInterface
 
     /**
      * @param CheckoutOptions $checkoutOptions
+     * @return void
      */
     public function setCheckoutOptions(CheckoutOptions $checkoutOptions): void
     {
@@ -273,6 +276,7 @@ class ServiceGetConfigResponse implements ModelInterface
 
     /**
      * @param array $layout
+     * @return void
      */
     public function setLayout(array $layout): void
     {
@@ -289,6 +293,7 @@ class ServiceGetConfigResponse implements ModelInterface
 
     /**
      * @param array $turnoverGroup
+     * @return void
      */
     public function setTurnoverGroup(array $turnoverGroup): void
     {
@@ -305,6 +310,7 @@ class ServiceGetConfigResponse implements ModelInterface
 
     /**
      * @param array $category
+     * @return void
      */
     public function setCategory(array $category): void
     {
@@ -316,11 +322,12 @@ class ServiceGetConfigResponse implements ModelInterface
      */
     public function getTguList(): array
     {
-        return $this->tguList;
+        return $this->tguList ?? [];
     }
 
     /**
      * @param array $tguList
+     * @return void
      */
     public function setTguList(array $tguList): void
     {

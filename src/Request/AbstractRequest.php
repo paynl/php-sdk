@@ -1,15 +1,11 @@
-<?php /** @noinspection ALL */
+<?php
+
+/** @noinspection ALL */
 
 declare(strict_types=1);
 
 namespace PayNL\Sdk\Request;
 
-use PayNL\GuzzleHttp\{
-    Client,
-    Psr7\Request,
-    Exception\RequestException,
-    Exception\GuzzleException
-};
 use PayNL\Sdk\{
     Common\DebugAwareInterface,
     Common\DebugAwareTrait,
@@ -28,6 +24,9 @@ use PayNL\Sdk\{
     Validator\ValidatorManagerAwareInterface,
     Validator\ValidatorManagerAwareTrait
 };
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Exception\RequestException;
 use PayNL\Sdk\Packages\Symfony\Serializer\Encoder\{
     JsonEncoder,
     XmlEncoder
@@ -108,15 +107,11 @@ abstract class AbstractRequest implements
     {
         $this->setOptions($options);
 
-        if (true === $this->hasOption('format')
-            && true === is_string($this->getOption('format'))
-        ) {
+        if (true === $this->hasOption('format') && true === is_string($this->getOption('format'))) {
             $this->setFormat($this->getOption('format'));
         }
 
-        if (true === $this->hasOption('headers')
-            && true === is_array($this->getOption('headers'))
-        ) {
+        if (true === $this->hasOption('headers') && true === is_array($this->getOption('headers'))) {
             $this->setHeaders($this->getOption('headers'));
         }
 
@@ -141,7 +136,7 @@ abstract class AbstractRequest implements
     }
 
     /**
-     * @param string|int $name
+     * @param string|integer $name
      *
      * @return mixed|null
      */
@@ -154,9 +149,9 @@ abstract class AbstractRequest implements
     }
 
     /**
-     * @param string|int $name
+     * @param string|integer $name
      *
-     * @return bool
+     * @return boolean
      */
     public function hasParam($name): bool
     {
@@ -191,7 +186,7 @@ abstract class AbstractRequest implements
         $optionalParams = [];
         foreach ($this->getOptionalParams() as $paramName => $paramDefinition) {
             # If optional paramater is provided...
-            if(isset($params[$paramName])) {
+            if (isset($params[$paramName])) {
                 if (true === is_string($paramDefinition) && '' !== $paramDefinition && 1 !== preg_match("/^{$paramDefinition}$/", $this->getParam($paramName))) {
                     throw new InvalidArgumentException(sprintf('Optional param %s is not valid. It must match "%s"', $paramName, $paramDefinition));
                 }
@@ -207,7 +202,7 @@ abstract class AbstractRequest implements
     }
 
     /**
-     * @inheritDoc
+     * @return string
      */
     public function getUri(): string
     {
@@ -226,7 +221,7 @@ abstract class AbstractRequest implements
     }
 
     /**
-     * @inheritDoc
+     * @return string
      */
     public function getMethod(): string
     {
@@ -349,16 +344,15 @@ abstract class AbstractRequest implements
      *
      * @return AbstractRequest
      */
-    public function setBody($body): self
+    public function setBody(mixed $body): self
     {
         $this->body = $body;
         return $this;
     }
 
     /**
-     * @inheritDoc
-     *
-     * @return AbstractRequest
+     * @param Client $client
+     * @return $this
      */
     public function applyClient(Client $client): self
     {
@@ -436,7 +430,7 @@ abstract class AbstractRequest implements
      *
      * @return string
      */
-    private function encodeBody($body): string
+    private function encodeBody(mixed $body): string
     {
         $encoder = new JsonEncoder();
         $contentTypeHeader = 'application/json';
@@ -488,7 +482,7 @@ abstract class AbstractRequest implements
             $requestBody = $this->getBody();
 
             # Create a Guzzle PSR 7 Request
-            $guzzleRequest = new Request($this->getMethod(), $uri, $this->getHeaders(), $requestBody);
+            $guzzleRequest = new \GuzzleHttp\Psr7\Request($this->getMethod(), $uri, $this->getHeaders(), $requestBody);
 
             $curlRequest = 'curl -X ' . $this->getMethod() . ' ' . $guzzleClient->getConfig('base_uri') . $uri;
             foreach ($this->getHeaders() as $headerfield => $headervalue) {
@@ -501,7 +495,7 @@ abstract class AbstractRequest implements
             $this->dumpPreString(rtrim((string)$guzzleClient->getConfig('base_uri'), '/') . '/' . $guzzleRequest->getUri(), 'Requested URL');
             $this->dumpPreString(implode(PHP_EOL, array_map(static function ($item, $key) {
                 return "{$key}: {$item}";
-            }, $this->getHeaders(), array_keys($this->getHeaders()))) , 'Headers');
+            }, $this->getHeaders(), array_keys($this->getHeaders()))), 'Headers');
 
             $guzzleResponse = $guzzleClient->send($guzzleRequest);
 
@@ -547,7 +541,7 @@ abstract class AbstractRequest implements
 
     /**
      * @param string $responseFormat
-     * @param int $statusCode
+     * @param integer $statusCode
      * @param string $rawBody
      *
      * @return string
@@ -619,7 +613,7 @@ abstract class AbstractRequest implements
      *
      * @return void
      */
-    protected function validateBody($body): void
+    protected function validateBody(mixed $body): void
     {
         if (true === is_string($body)) {
             return;

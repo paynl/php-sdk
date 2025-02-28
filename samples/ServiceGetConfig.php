@@ -36,7 +36,7 @@ print_r($banks);
 $terminals = $config->getTerminals();
 print_r($terminals);
 
-$tguList = $config->getTguList();
+$tguList = $config->getCores();
 print_r($tguList);
 
 $paymentMethods = $config->getPaymentMethods();

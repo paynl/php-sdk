@@ -11,9 +11,10 @@ namespace PayNL\Sdk\Model;
  */
 class Method implements ModelInterface
 {
-    const IDEAL = 10;
-    const PIN = 1927;
-    const PAYPAL = 138;
+    public const IDEAL = 10;
+    public const PIN = 1927;
+    public const PAYPAL = 138;
+    public const RETOURPIN = 2351;
 
     /**
      * @var int
@@ -61,7 +62,7 @@ class Method implements ModelInterface
     protected $maxAmount;
 
     /**
-     * @return int
+     * @return integer
      */
     public function getId(): int
     {
@@ -69,7 +70,7 @@ class Method implements ModelInterface
     }
 
     /**
-     * @param int $id
+     * @param integer $id
      * @return $this
      */
     public function setId(int $id): self
@@ -79,15 +80,15 @@ class Method implements ModelInterface
     }
 
     /**
-     * @param $language
+     * @param string|null $language
      * @return string
      */
-    public function getName($language = null): string
+    public function getName(string $language = null): string
     {
         if (!empty($language) && isset($this->translations['name'][$language])) {
             return $this->translations['name'][$language];
         }
-        return (string)$this->name;
+        return $this->name;
     }
 
     /**
@@ -159,7 +160,7 @@ class Method implements ModelInterface
      */
     public function getSettings(): array
     {
-        return $this->settings;
+        return $this->settings ?? [];
     }
 
     /**
@@ -172,16 +173,19 @@ class Method implements ModelInterface
         return $this;
     }
 
+    /**
+     * @return boolean
+     */
     public function hasOptions(): bool
     {
         return !empty($this->options);
     }
 
     /**
-     * @param $language
+     * @param string|null $language
      * @return string
      */
-    public function getDescription($language = null): string
+    public function getDescription(string $language = null): string
     {
         if (!empty($language)) {
             if (isset($this->translations['description'][$language])) {
@@ -203,7 +207,7 @@ class Method implements ModelInterface
 
     /**
      * @param string $description
-     * @return void
+     * @return $this
      */
     public function setDescription(string $description): self
     {
@@ -212,7 +216,7 @@ class Method implements ModelInterface
     }
 
     /**
-     * @return int
+     * @return integer
      */
     public function getMinAmount(): int
     {
@@ -220,7 +224,8 @@ class Method implements ModelInterface
     }
 
     /**
-     * @param int $minAmount
+     * @param integer $minAmount
+     * @return $this
      */
     public function setMinAmount(int $minAmount): self
     {
@@ -229,7 +234,7 @@ class Method implements ModelInterface
     }
 
     /**
-     * @return int
+     * @return integer
      */
     public function getMaxAmount(): int
     {
@@ -237,7 +242,8 @@ class Method implements ModelInterface
     }
 
     /**
-     * @param int $maxAmount
+     * @param integer $maxAmount
+     * @return $this
      */
     public function setMaxAmount(int $maxAmount): self
     {
