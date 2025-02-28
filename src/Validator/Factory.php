@@ -6,7 +6,7 @@ namespace PayNL\Sdk\Validator;
 
 use PayNL\Sdk\Common\FactoryInterface;
 use Psr\Container\ContainerInterface;
-use PayNL\Sdk\Hydrator\HydratorAwareInterface;
+use PayNL\Sdk\Packages\Laminas\Hydrator\HydratorAwareInterface;
 
 /**
  * Class Factory

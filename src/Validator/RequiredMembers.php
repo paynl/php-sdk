@@ -7,8 +7,8 @@ namespace PayNL\Sdk\Validator;
 use PayNL\Sdk\Exception\InvalidArgumentException;
 use PayNL\Sdk\Exception\RuntimeException;
 use ReflectionClass, ReflectionException;
-use PayNL\Sdk\Hydrator\HydratorAwareInterface;
-use PayNL\Sdk\Hydrator\HydratorAwareTrait;
+use PayNL\Sdk\Packages\Laminas\Hydrator\HydratorAwareInterface;
+use PayNL\Sdk\Packages\Laminas\Hydrator\HydratorAwareTrait;
 
 /**
  * Class RequiredMembers
