@@ -16,9 +16,12 @@ use PayNL\Sdk\Packages\Laminas\Hydrator\HydratorAwareInterface;
 class Factory implements FactoryInterface
 {
     /**
-     * @inheritDoc
-     *
+     * @param ContainerInterface $container
+     * @param string $requestedName
+     * @param array|null $options
      * @return ValidatorInterface
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
      */
     public function __invoke(ContainerInterface $container, string $requestedName, array $options = null): ValidatorInterface
     {

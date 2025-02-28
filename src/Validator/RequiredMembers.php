@@ -6,7 +6,9 @@ namespace PayNL\Sdk\Validator;
 
 use PayNL\Sdk\Exception\InvalidArgumentException;
 use PayNL\Sdk\Exception\RuntimeException;
-use ReflectionClass, ReflectionException;
+use ReflectionClass,
+
+ReflectionException;
 use PayNL\Sdk\Packages\Laminas\Hydrator\HydratorAwareInterface;
 use PayNL\Sdk\Packages\Laminas\Hydrator\HydratorAwareTrait;
 
@@ -38,9 +40,10 @@ class RequiredMembers extends AbstractValidator implements HydratorAwareInterfac
     ];
 
     /**
-     * @inheritDoc
+     * @param mixed $filledObjectToCheck
+     * @return boolean
      */
-    public function isValid($filledObjectToCheck): bool
+    public function isValid(mixed $filledObjectToCheck): bool
     {
         $className = get_class($filledObjectToCheck);
         $required = $this->getRequiredMembers($className);
@@ -101,7 +104,8 @@ class RequiredMembers extends AbstractValidator implements HydratorAwareInterfac
 
         foreach ($ref->getProperties() as $property) {
             $docComment = $property->getDocComment();
-            if (false !== $docComment
+            if (
+                false !== $docComment
                 && false !== preg_match_all("/@(?P<tag>\S+)(?:\n|\s(?P<type>.+)\n)/s", $docComment, $annotations)
                 && true === in_array('required', $annotations['tag'], true)
             ) {
@@ -120,7 +124,7 @@ class RequiredMembers extends AbstractValidator implements HydratorAwareInterfac
      *
      * @return array
      */
-    private function getDataFromObject($objectToExtract): array
+    private function getDataFromObject(mixed $objectToExtract): array
     {
         $hydrator = $this->getHydrator();
         if (null === $hydrator) {
@@ -149,12 +153,12 @@ class RequiredMembers extends AbstractValidator implements HydratorAwareInterfac
      * Checks if the given $value is empty. In other words, its an empty string, null or
      * (if the key is an id field) equal to zero (0).
      *
-     * @param string|int $key
+     * @param string|integer $key
      * @param mixed $value
      *
-     * @return bool
+     * @return boolean
      */
-    private function isEmpty($key, $value): bool
+    private function isEmpty(string $key, mixed $value): bool
     {
         return null === $value
             || '' === $value
