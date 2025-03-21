@@ -106,7 +106,6 @@ $request->setConfig($config);
 try {
     $request->setReference('SDK0123456789');
     $payOrder = $request->start();
-    echo get_class($payOrder);
 } catch (PayException $e) {
     echo '<pre>';
     echo 'Technical message: ' . $e->getMessage() . PHP_EOL;

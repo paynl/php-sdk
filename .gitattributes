@@ -1,0 +1,11 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+* text eol=lf
+
+# Convert images to binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.tiff binary
+*.ico binary
