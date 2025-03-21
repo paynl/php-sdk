@@ -8,6 +8,7 @@ use PayNL\Sdk\Exception\PayException;
 use PayNL\Sdk\Request\RequestData;
 use PayNL\Sdk\Model\Response\ServiceGetConfigResponse;
 use PayNL\Sdk\Request\RequestInterface;
+use PayNL\Sdk\Util\PayCache;
 
 /**
  * Class ServiceGetConfigRequest
@@ -54,8 +55,15 @@ class ServiceGetConfigRequest extends RequestData
      */
     public function start(): ServiceGetConfigResponse
     {
-        $this->config->setCore('https://rest.pay.nl');
-        $this->config->setVersion(2);
-        return parent::start();
+        $cache = new PayCache();
+        $cacheKey = 'service_config_' . md5(json_encode([$this->config->getUsername(), $this->serviceId]));
+
+        return $cache->get($cacheKey, function () {
+            # Not in cache, doing request
+            echo "Niet in cache, voer API-verzoek uit";
+            $this->config->setCore('https://rest.pay.nl');
+            $this->config->setVersion(2);
+            return parent::start();
+        }, 5); // 5 seconds caching
     }
 }

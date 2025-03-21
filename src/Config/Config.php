@@ -372,6 +372,14 @@ class Config implements Countable, Iterator, ArrayAccess
     }
 
     /**
+     * @return bool
+     */
+    public function isCacheEnabled()
+    {
+        return ($this->data['useFileCaching'] ?? 0) == 1;
+    }
+
+    /**
      * @return string
      */
     public function getUsername()
