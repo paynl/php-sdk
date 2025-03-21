@@ -2,8 +2,6 @@
 
 namespace PayNL\Sdk\Util;
 
-use PayNL\Sdk\Config\Config;
-
 class PayCache
 {
     private string $cacheDir;
@@ -39,10 +37,6 @@ class PayCache
      */
     public function get(string $key, callable $callback = null, int $ttl = null): mixed
     {
-        if (!(Config::getConfig())->isCacheEnabled()) {
-            $this->enabled = false;
-        }
-
         if (!$this->enabled) {
             return $callback ? $callback() : null;
         }

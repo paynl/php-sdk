@@ -398,6 +398,24 @@ class Config implements Countable, Iterator, ArrayAccess
     }
 
     /**
+     * @return $this
+     */
+    public function enableCaching()
+    {
+        $this->data['useFileCaching'] = true;
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function disableCaching()
+    {
+        $this->data['useFileCaching'] = false;
+        return $this;
+    }
+
+    /**
      * @return string
      */
     public function getPassword()

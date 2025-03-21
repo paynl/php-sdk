@@ -12,7 +12,7 @@ use PayNL\Sdk\Exception\PayException;
 $config = new Config();
 $config->setUsername($_REQUEST['username'] ?? '');
 $config->setPassword($_REQUEST['password'] ?? '');
-
+$config->enableCaching();
 
 try {
     $slCode = $_REQUEST['slcode'] ?? '';

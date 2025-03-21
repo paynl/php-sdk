@@ -56,13 +56,25 @@ class ServiceGetConfigRequest extends RequestData
     public function start(): ServiceGetConfigResponse
     {
         $cache = new PayCache();
-        $cacheKey = 'service_getconfig_' . md5(json_encode([$this->config->getUsername(), $this->config->getPassword(), $this->serviceId]));
 
-        return $cache->get($cacheKey, function () {
-            # Not in cache, doing request
-            $this->config->setCore('https://rest.pay.nl');
-            $this->config->setVersion(2);
-            return parent::start();
-        }, 5); // 5 seconds caching
+        if ($this->config->isCacheEnabled()) {
+            $cacheKey = 'service_getconfig_' . md5(json_encode([$this->config->getUsername(), $this->config->getPassword(), $this->serviceId]));
+            return $cache->get($cacheKey, function () {
+                return $this->startAPI();
+            }, 5); // 5 seconds caching
+        }
+
+        return $this->startAPI();
+    }
+
+    /**
+     * @return mixed
+     * @throws PayException
+     */
+    private function startAPI(): mixed
+    {
+        $this->config->setCore('https://rest.pay.nl');
+        $this->config->setVersion(2);
+        return parent::start();
     }
 }

@@ -43,7 +43,8 @@ abstract class RequestData implements RequestDataInterface
      */
     public function setConfig(Config $config): self
     {
-        $this->config = $config;
+        $this->config = (new Config(require __DIR__ . '/../../config/config.global.php'));
+        $this->config->merge($config);
         return $this;
     }
 
