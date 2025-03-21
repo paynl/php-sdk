@@ -130,7 +130,6 @@ class PayCache
      */
     private function getCacheFile(string $key): string
     {
-        echo  $this->cacheDir . '/' . md5($key) . '.cache';
         return $this->cacheDir . '/' . md5($key) . '.cache';
     }
 
