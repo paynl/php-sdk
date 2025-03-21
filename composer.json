@@ -4,7 +4,7 @@
     "version": "0.2.0",
     "type": "library",
     "require": {
-        "php": "^8.2",
+        "php": "^8.1",
         "ext-curl": "*",
         "ext-json": "*",
         "psr/container": "^2 || ^1",
@@ -36,9 +36,15 @@
         },
         "files": [
             "./src/Resources/functions/text.php",
-            "./src/Resources/functions/vat.php"
+            "./src/Resources/functions/vat.php",
+            "./src/Resources/functions/misc.php"
         ]
     },
+    "autoload-dev": {
+            "psr-4": {
+                "Tests\\": "tests/"
+            }
+        },
     "minimum-stability": "dev",
     "prefer-stable": true,
     "repositories": [

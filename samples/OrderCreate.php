@@ -92,8 +92,7 @@ $request->setStats((new \PayNL\Sdk\Model\Stats())
   ->setExtra1('ex1')
   ->setExtra2('ex2')
   ->setExtra3('ex3')
-  ->setDomainId('WU-1234-1234')
-);
+  ->setDomainId('WU-1234-1234'));
 
 $request->setNotification('EMAIL', 'youremail@yourdomain.ext');
 $request->setTransferData([['yourField' => 'yourData'], ['tracker' => 'trackerinfo']]);

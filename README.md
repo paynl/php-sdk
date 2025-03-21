@@ -6,7 +6,7 @@ Use this SDK to implement Pay. into your PHP integration.
 
 #### Requirements
 
-> PHP 8.2+  
+> PHP 8.1+  
 > JSON extension installed  
 > CURL extension installed
 
