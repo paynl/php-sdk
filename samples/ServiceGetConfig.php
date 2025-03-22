@@ -13,10 +13,9 @@ $config = new Config();
 $config->setUsername($_REQUEST['username'] ?? '');
 $config->setPassword($_REQUEST['password'] ?? '');
 
-
 try {
     $slCode = $_REQUEST['slcode'] ?? '';
-    $config = (new ServiceGetConfigRequest($slCode))->setConfig($config)->start();
+    $serviceConfig = (new ServiceGetConfigRequest($slCode))->setConfig($config)->start();
 } catch (PayException $e) {
     echo '<pre>';
     echo 'Technical message: ' . $e->getMessage() . PHP_EOL;
@@ -28,18 +27,18 @@ try {
 
 echo '<pre>';
 
-echo $config->getCode() . ' - ' . $config->getName() . PHP_EOL;
+echo $serviceConfig->getCode() . ' - ' . $serviceConfig->getName() . PHP_EOL;
 
-$banks = $config->getBanks();
+$banks = $serviceConfig->getBanks();
 print_r($banks);
 
-$terminals = $config->getTerminals();
+$terminals = $serviceConfig->getTerminals();
 print_r($terminals);
 
-$tguList = $config->getCores();
+$tguList = $serviceConfig->getCores();
 print_r($tguList);
 
-$paymentMethods = $config->getPaymentMethods();
+$paymentMethods = $serviceConfig->getPaymentMethods();
 foreach ($paymentMethods as $method) {
     echo $method->getId() . ' - ';
     echo $method->getName() . ' - ';
@@ -51,6 +50,6 @@ foreach ($paymentMethods as $method) {
     echo PHP_EOL;
 }
 
-foreach ($config->getCheckoutOptions() as $checkoutOption) {
+foreach ($serviceConfig->getCheckoutOptions() as $checkoutOption) {
     echo '=> TAG: ' . $checkoutOption->getTag() . PHP_EOL;
 }

@@ -372,6 +372,14 @@ class Config implements Countable, Iterator, ArrayAccess
     }
 
     /**
+     * @return bool
+     */
+    public function isCacheEnabled()
+    {
+        return ($this->data['useFileCaching'] ?? 0) == 1;
+    }
+
+    /**
      * @return string
      */
     public function getUsername()
@@ -386,6 +394,16 @@ class Config implements Countable, Iterator, ArrayAccess
     public function setPassword(string $password): self
     {
         $this->data['authentication']['password'] = $password;
+        return $this;
+    }
+
+    /**
+     * @param bool $caching
+     * @return self
+     */
+    public function setCaching(bool $caching): self
+    {
+        $this->data['useFileCaching'] = $caching;
         return $this;
     }
 
