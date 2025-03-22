@@ -52,18 +52,6 @@ class TransactionStatusRequest extends RequestData
 
     /**
      * @return PayOrder
-     * @throws PayException
-     */
-    public function stgtart(): PayOrder
-    {
-        # Always use rest.pay.nl for this status request
-        $this->config->setCore('https://rest.pay.nl');
-        return parent::start();
-    }
-
-
-    /**
-     * @return PayOrder
      * @throws \Exception
      */
     public function start(): PayOrder
