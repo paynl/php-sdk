@@ -335,11 +335,30 @@ class ServiceGetConfigResponse implements ModelInterface
     }
 
     /**
+     * Provides a core-list prepared with web protocol.
      * @return array
      */
     public function getCores(): array
     {
-        return $this->getTguList();
+        $cores = $this->getTguList();
+
+        $payDomain = false;
+        foreach ($cores as &$core) {
+            $domain = $core['domain'];
+
+            if (in_array($domain, ['pay.nl', 'connect.pay.nl'])) {
+                $payDomain = true;
+            }
+
+            $core['domain'] = 'https://' . $domain;
+            $core['label'] = $domain;
+        }
+
+        if ($payDomain !== true) {
+            array_unshift($cores, ['domain' => 'https://connect.pay.nl', 'label' => 'connect.pay.nl']);
+        }
+
+        return $cores;
     }
 
     /**
