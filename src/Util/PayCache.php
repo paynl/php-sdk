@@ -52,7 +52,7 @@ class PayCache
                 }
             }
 
-            // Cache is verlopen of ongeldig
+            # Cache expired or invalid
             @unlink($file);
         }
 
@@ -105,7 +105,7 @@ class PayCache
     }
 
     /**
-     * @return void\
+     * @return void
      */
     public function clear(): void
     {

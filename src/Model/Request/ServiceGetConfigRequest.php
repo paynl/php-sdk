@@ -50,28 +50,57 @@ class ServiceGetConfigRequest extends RequestData
     }
 
     /**
+     * @var array cached result
+     */
+    private static $cache = array();
+
+    /**
      * @return ServiceGetConfigResponse
      * @throws PayException
      */
     public function start(): ServiceGetConfigResponse
     {
-        $cache = new PayCache();
+        $cacheKey = 'service_getconfig_' . md5(json_encode([$this->config->getUsername(), $this->config->getPassword(), $this->serviceId]));
 
-        if ($this->config->isCacheEnabled()) {
-            $cacheKey = 'service_getconfig_' . md5(json_encode([$this->config->getUsername(), $this->config->getPassword(), $this->serviceId]));
-            return $cache->get($cacheKey, function () {
-                return $this->startAPI();
-            }, 5); // 5 seconds caching
+        # First check static cache
+        if (isset(self::$cache[$cacheKey])) {
+            if (self::$cache[$cacheKey] instanceof \Exception) {
+                throw self::$cache[$cacheKey];
+            }
+            return self::$cache[$cacheKey];
         }
 
-        return $this->startAPI();
+        # Then check file-based cache
+        if ($this->config->isCacheEnabled()) {
+            $cache = new PayCache();
+
+            return $cache->get($cacheKey, function () use ($cacheKey) {
+                try {
+                    $result = $this->startAPI();
+                    self::$cache[$cacheKey] = $result;
+                    return $result;
+                } catch (\Exception $e) {
+                    self::$cache[$cacheKey] = $e;
+                    throw $e;
+                }
+            }, 5); // 5 seconden caching
+        }
+
+        try {
+            $result = $this->startAPI();
+            self::$cache[$cacheKey] = $result;
+            return $result;
+        } catch (\Exception $e) {
+            self::$cache[$cacheKey] = $e;
+            throw $e;
+        }
     }
 
     /**
-     * @return mixed
+     * @return ServiceGetConfigResponse
      * @throws PayException
      */
-    private function startAPI(): mixed
+    private function startAPI(): ServiceGetConfigResponse
     {
         $this->config->setCore('https://rest.pay.nl');
         $this->config->setVersion(2);

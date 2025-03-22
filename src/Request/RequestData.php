@@ -57,16 +57,17 @@ abstract class RequestData implements RequestDataInterface
         $this->application = $application;
     }
 
+
     /**
-     * @return mixed
+     * @return Config|null
      * @throws PayException
-     * @throws Exception
      */
-    public function start()
+    private function getConfig(): Config
     {
-        $config = (new Config(require __DIR__ . '/../../config/config.global.php'));
-        if (!empty($this->config)) {
-            $config->merge($this->config);
+        if (empty($this->config)) {
+            $config = (new Config(require __DIR__ . '/../../config/config.global.php'));
+        } else {
+            $config = $this->config;
         }
 
         if (!empty($config->getFailoverUrl())) {
@@ -76,6 +77,17 @@ abstract class RequestData implements RequestDataInterface
         if ($config->isEmpty()) {
             throw new PayException('Please check your config', 0, 0);
         }
+
+        return $config;
+    }
+
+    /**
+     * @return mixed
+     * @throws PayException
+     */
+    public function start()
+    {
+        $config = $this->getConfig();
 
         try {
             if (empty($this->application)) {
