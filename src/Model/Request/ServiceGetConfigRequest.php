@@ -9,6 +9,7 @@ use PayNL\Sdk\Request\RequestData;
 use PayNL\Sdk\Model\Response\ServiceGetConfigResponse;
 use PayNL\Sdk\Request\RequestInterface;
 use PayNL\Sdk\Util\PayCache;
+use PayNL\Sdk\Helpers\StaticCacheTrait;
 
 /**
  * Class ServiceGetConfigRequest
@@ -19,6 +20,7 @@ use PayNL\Sdk\Util\PayCache;
  */
 class ServiceGetConfigRequest extends RequestData
 {
+    use StaticCacheTrait;
     private string $serviceId;
 
     /**
@@ -50,11 +52,6 @@ class ServiceGetConfigRequest extends RequestData
     }
 
     /**
-     * @var array cached result
-     */
-    private static $cache = array();
-
-    /**
      * @return ServiceGetConfigResponse
      * @throws PayException
      */
@@ -62,38 +59,22 @@ class ServiceGetConfigRequest extends RequestData
     {
         $cacheKey = 'service_getconfig_' . md5(json_encode([$this->config->getUsername(), $this->config->getPassword(), $this->serviceId]));
 
-        # First check static cache
-        if (isset(self::$cache[$cacheKey])) {
-            if (self::$cache[$cacheKey] instanceof \Exception) {
-                throw self::$cache[$cacheKey];
-            }
-            return self::$cache[$cacheKey];
+        if ($this->hasStaticCache($cacheKey)) {
+            return $this->getStaticCacheValue($cacheKey);
         }
 
-        # Then check file-based cache
         if ($this->config->isCacheEnabled()) {
             $cache = new PayCache();
-
             return $cache->get($cacheKey, function () use ($cacheKey) {
-                try {
-                    $result = $this->startAPI();
-                    self::$cache[$cacheKey] = $result;
-                    return $result;
-                } catch (\Exception $e) {
-                    self::$cache[$cacheKey] = $e;
-                    throw $e;
-                }
-            }, 5); // 5 seconden caching
+                return $this->staticCache($cacheKey, function () {
+                    return $this->startAPI();
+                });
+            }, 5);
         }
 
-        try {
-            $result = $this->startAPI();
-            self::$cache[$cacheKey] = $result;
-            return $result;
-        } catch (\Exception $e) {
-            self::$cache[$cacheKey] = $e;
-            throw $e;
-        }
+        return $this->staticCache($cacheKey, function () {
+            return $this->startAPI();
+        });
     }
 
     /**
