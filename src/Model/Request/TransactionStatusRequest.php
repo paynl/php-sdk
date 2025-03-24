@@ -10,6 +10,7 @@ use PayNL\Sdk\Request\RequestData;
 use PayNL\Sdk\Model\Pay\PayOrder;
 use PayNL\Sdk\Request\RequestInterface;
 use PayNL\Sdk\Helpers\StaticCacheTrait;
+use PayNL\Sdk\Util\PayCache;
 
 /**
  * Class TransactionStatusRequest
@@ -58,9 +59,24 @@ class TransactionStatusRequest extends RequestData
     {
         $cacheKey = 'transaction_status_' . md5(json_encode([$this->config->getUsername(), $this->orderId]));
 
+        if ($this->hasStaticCache($cacheKey)) {
+            return $this->getStaticCacheValue($cacheKey);
+        }
+
+        if ($this->config->isCacheEnabled()) {
+            $cache = new PayCache();
+            return $cache->get($cacheKey, function () use ($cacheKey) {
+                return $this->staticCache($cacheKey, function () {
+                    $this->config->setCore('https://rest.pay.nl');
+                    return parent::start();
+                });
+            }, 3); # 3 seconds file caching
+        }
+
         return $this->staticCache($cacheKey, function () {
             $this->config->setCore('https://rest.pay.nl');
             return parent::start();
         });
     }
+
 }
