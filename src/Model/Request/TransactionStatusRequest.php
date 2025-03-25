@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace PayNL\Sdk\Model\Request;
 
+use PayNL\Sdk\Config\Config;
 use PayNL\Sdk\Exception\PayException;
 use PayNL\Sdk\Request\RequestData;
 use PayNL\Sdk\Model\Pay\PayOrder;
 use PayNL\Sdk\Request\RequestInterface;
+use PayNL\Sdk\Helpers\StaticCacheTrait;
+use PayNL\Sdk\Util\PayCache;
 
 /**
  * Class TransactionStatusRequest
@@ -17,12 +20,14 @@ use PayNL\Sdk\Request\RequestInterface;
  */
 class TransactionStatusRequest extends RequestData
 {
+    use StaticCacheTrait;
+
     private string $orderId;
 
     /**
-     * @param $orderid
+     * @param string $orderId
      */
-    public function __construct($orderId)
+    public function __construct(string $orderId)
     {
         $this->orderId = $orderId;
         parent::__construct('TransactionStatus', '/transactions/%transactionId%/status', RequestInterface::METHOD_GET);
@@ -48,12 +53,29 @@ class TransactionStatusRequest extends RequestData
 
     /**
      * @return PayOrder
-     * @throws PayException
+     * @throws \Exception
      */
     public function start(): PayOrder
     {
-        # Always use rest.pay.nl for this status request
-        $this->config->setCore('https://rest.pay.nl');
-        return parent::start();
+        $cacheKey = 'transaction_status_' . md5(json_encode([$this->config->getUsername(), $this->orderId]));
+
+        if ($this->hasStaticCache($cacheKey)) {
+            return $this->getStaticCacheValue($cacheKey);
+        }
+
+        if ($this->config->isCacheEnabled()) {
+            $cache = new PayCache();
+            return $cache->get($cacheKey, function () use ($cacheKey) {
+                return $this->staticCache($cacheKey, function () {
+                    $this->config->setCore('https://rest.pay.nl');
+                    return parent::start();
+                });
+            }, 3); # 3 seconds file caching
+        }
+
+        return $this->staticCache($cacheKey, function () {
+            $this->config->setCore('https://rest.pay.nl');
+            return parent::start();
+        });
     }
 }
