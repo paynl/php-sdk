@@ -10,7 +10,7 @@ class PayCache
 
     /**
      * @param string|null $cacheDir
-     * @param int $defaultTtl
+     * @param integer $defaultTtl
      */
     public function __construct(string $cacheDir = null, int $defaultTtl = 600)
     {
@@ -32,7 +32,7 @@ class PayCache
     /**
      * @param string $key
      * @param callable|null $callback
-     * @param int|null $ttl
+     * @param integer|null $ttl
      * @return mixed|null
      */
     public function get(string $key, callable $callback = null, int $ttl = null): mixed
@@ -68,7 +68,7 @@ class PayCache
     /**
      * @param string $key
      * @param mixed $value
-     * @param int|null $ttl
+     * @param integer|null $ttl
      * @return void
      */
     public function set(string $key, mixed $value, int $ttl = null): void
@@ -128,7 +128,7 @@ class PayCache
     }
 
     /**
-     * @return bool
+     * @return boolean
      */
     public function isEnabled(): bool
     {

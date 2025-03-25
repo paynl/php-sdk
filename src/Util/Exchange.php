@@ -74,9 +74,9 @@ class Exchange
     /**
      * Set your exchange response in the end of your exchange processing
      *
-     * @param bool $result
+     * @param boolean $result
      * @param string $message
-     * @param bool $returnOutput
+     * @param boolean $returnOutput
      * @return false|string|void
      */
     public function setResponse(bool $result, string $message, bool $returnOutput = false)
