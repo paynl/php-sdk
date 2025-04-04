@@ -50,6 +50,9 @@ class TerminalsBrowseRequestTest extends TestCase
         }
     }
 
+    /**
+     * @return void
+     */
     public function testPathParametersWithMerchantCode()
     {
         $request = new TerminalsBrowseRequest();
@@ -60,6 +63,47 @@ class TerminalsBrowseRequestTest extends TestCase
         $this->assertArrayHasKey('merchant[eq]', $params);
         $this->assertEquals('M-1111-2222', $params['merchant[eq]']);
         $this->assertArrayNotHasKey('merchant[neq]', $params);
+    }
+
+    /**
+     * @return void
+     */
+    public function testPathParametersWithExcludeMerchantCode()
+    {
+        $request = new TerminalsBrowseRequest();
+        $request->setExcludeMerchantCode('M-9999-8888');
+
+        $params = $request->getPathParameters();
+
+        $this->assertArrayHasKey('merchant[neq]', $params);
+        $this->assertEquals('M-9999-8888', $params['merchant[neq]']);
+        $this->assertArrayNotHasKey('merchant[eq]', $params);
+    }
+
+    /**
+     * @return void
+     */
+    public function testPathParametersWithBoth()
+    {
+        $request = new TerminalsBrowseRequest();
+        $request
+            ->setMerchantCode('M-1111-2222')
+            ->setExcludeMerchantCode('M-9999-8888');
+
+        $params = $request->getPathParameters();
+
+        $this->assertEquals('M-1111-2222', $params['merchant[eq]']);
+        $this->assertEquals('M-9999-8888', $params['merchant[neq]']);
+    }
+
+    /**
+     * @return void
+     */
+    public function testPathParametersEmpty()
+    {
+        $request = new TerminalsBrowseRequest();
+        $params = $request->getPathParameters();
+        $this->assertEmpty($params);
     }
 
 }
