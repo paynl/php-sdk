@@ -17,7 +17,7 @@ use PayNL\Sdk\{Config\ProviderInterface as ConfigProviderInterface,
 class ConfigProvider implements ConfigProviderInterface
 {
     /**
-     * @inheritDoc
+     * @return array
      */
     public function __invoke(): array
     {
@@ -38,7 +38,7 @@ class ConfigProvider implements ConfigProviderInterface
     }
 
     /**
-     * @inheritDoc
+     * @return array
      */
     public function getDependencyConfig(): array
     {
@@ -65,10 +65,10 @@ class ConfigProvider implements ConfigProviderInterface
             DebugAwareInitializer::class,
           ],
           'services' => array_merge(
-            $this->getIsPayServicesConfig(),
-            $this->getPinServicesConfig(),
-            $this->getServiceServicesConfig(),
-            $this->getTransactionServicesConfig(),
+              $this->getIsPayServicesConfig(),
+              $this->getPinServicesConfig(),
+              $this->getServiceServicesConfig(),
+              $this->getTransactionServicesConfig(),
           ),
           'factories' => [
             Request::class => Factory::class,
@@ -202,13 +202,13 @@ class ConfigProvider implements ConfigProviderInterface
               'transactionId' => '',
             ],
           ],
-        'OrderUpdate' => [
+          'OrderUpdate' => [
             'uri' => '/',
             'method' => RequestInterface::METHOD_PATCH,
             'requiredParams' => [
                 'transactionId' => '',
             ],
-        ],
+          ],
           'OrderCapture' => [
             'uri' => '',
             'requiredParams' => [
@@ -237,7 +237,7 @@ class ConfigProvider implements ConfigProviderInterface
                 'method' => RequestInterface::METHOD_GET,
                 'requiredParams' => [
                 'transactionId' => '',
-            ],
+                ],
           ],
           'OrderStatus' => [
             'uri' => '/transactions/%transactionId%/status',
@@ -276,5 +276,4 @@ class ConfigProvider implements ConfigProviderInterface
           ]
         ];
     }
-
 }

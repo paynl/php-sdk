@@ -105,5 +105,4 @@ class TerminalsBrowseRequestTest extends TestCase
         $params = $request->getPathParameters();
         $this->assertEmpty($params);
     }
-
 }

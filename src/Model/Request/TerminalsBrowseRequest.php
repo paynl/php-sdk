@@ -20,7 +20,7 @@ class TerminalsBrowseRequest extends RequestData
     protected string $excludeMerchantCode;
 
     /**
-     * @param string|null $merchantCode
+     * @param string $merchantCode
      * @param string $excludeMerchantCode
      */
     public function __construct(string $merchantCode = '', string $excludeMerchantCode = '')
@@ -31,10 +31,10 @@ class TerminalsBrowseRequest extends RequestData
     }
 
     /**
-     * @param $merchantCode
+     * @param string $merchantCode
      * @return $this
      */
-    public function setMerchantCode($merchantCode): self
+    public function setMerchantCode(string $merchantCode): self
     {
         $this->merchantCode = $merchantCode;
         return $this;

@@ -34,15 +34,12 @@ class Manager extends AbstractPluginManager
      */
     protected $mapping = [];
 
+
     /**
-     * @inheritDoc
-     *
-     * @throws ServiceNotCreatedException
-     * @throws ServiceNotFoundException
-     * @throws MapperSourceServiceNotFoundException
-     * @throws MapperTargetServiceNotFoundException
-     *
-     * @SuppressWarnings(PHPMD.StaticAccess)
+     * @param array $config
+     * @return ServiceManager
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
      */
     public function configure(array $config): ServiceManager
     {
@@ -109,7 +106,8 @@ class Manager extends AbstractPluginManager
     }
 
     /**
-     * @inheritDoc
+     * @param array $config
+     * @return void
      */
     protected function validateOverrides(array $config): void
     {
