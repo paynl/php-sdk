@@ -170,33 +170,17 @@ abstract class AbstractRequest implements
     {
         $this->params = $params;
 
-        foreach ($this->getRequiredParams() as $paramName => $paramDefinition) {
-            if (false === $this->hasParam($paramName)) {
-                throw new MissingParamException(sprintf('Missing param "%s"', $paramName));
-            }
+        $additionalArgmuments = '';
 
-            if (true === is_string($paramDefinition) && '' !== $paramDefinition && 1 !== preg_match("/^{$paramDefinition}$/", $this->getParam($paramName))) {
-                throw new InvalidArgumentException(sprintf('Required param %s is not valid. It must match "%s"', $paramName, $paramDefinition));
-            }
-
-            # Set it in the array
-            $this->setUri(str_replace("%{$paramName}%", $this->getParam($paramName), $this->getUri()));
-        }
-
-        $optionalParams = [];
-        foreach ($this->getOptionalParams() as $paramName => $paramDefinition) {
-            # If optional paramater is provided...
-            if (isset($params[$paramName])) {
-                if (true === is_string($paramDefinition) && '' !== $paramDefinition && 1 !== preg_match("/^{$paramDefinition}$/", $this->getParam($paramName))) {
-                    throw new InvalidArgumentException(sprintf('Optional param %s is not valid. It must match "%s"', $paramName, $paramDefinition));
-                }
-                $optionalParams[$paramName] = $this->params[$paramName];
+        foreach ($params as $key => $value) {
+            if (strpos($this->getUri(), '%' . $key . '%') !== false) {
+                $this->setUri(str_replace("%{$key}%", $value, $this->getUri()));
+            } else {
+                $additionalArgmuments .= $key . '=' . $value . '&';
             }
         }
 
-        if (!empty($optionalParams)) {
-            $this->setUri($this->getUri() . '?' . http_build_query($optionalParams));
-        }
+        $this->setUri($this->getUri() . '?' . substr($additionalArgmuments, 0, -1));
 
         return $this;
     }
