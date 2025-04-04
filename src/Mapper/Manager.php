@@ -71,7 +71,7 @@ class Manager extends AbstractPluginManager
                 $mappingConfig[$mapper] = $map;
                 unset($mappingConfig[$mapperAlias]);
 
-                // determine the necessary managers
+                # Determine the necessary managers
                 preg_match_all('/((?:^|[A-Z])[a-z]+)/', Misc::getClassNameByFQN($mapper), $matches);
                 if (2 > count($matches[1])) {
                     throw new ServiceNotFoundException(
@@ -82,7 +82,7 @@ class Manager extends AbstractPluginManager
                     );
                 }
 
-                // determine the name of the source and target
+                # Determine the name of the source and target
                 $sourceManagerName = lcfirst(current($matches[1]));
                 next($matches[1]);
                 $targetManagerName = lcfirst(current($matches[1]));
@@ -93,22 +93,10 @@ class Manager extends AbstractPluginManager
                 # Check the map
                 foreach ($map as $source => $target) {
                     if ($sourceManager->has($source) === false) {
-                        throw new MapperSourceServiceNotFoundException(
-                          sprintf(
-                            'Mapping source service with name "%s" not found in %s',
-                            $source,
-                            $sourceManagerName
-                          )
-                        );
+                        throw new MapperSourceServiceNotFoundException(sprintf('Mapping source service with name "%s" not found in %s', $source, $sourceManagerName));
                     }
                     if ($targetManager->has($target) === false) {
-                        throw new MapperTargetServiceNotFoundException(
-                          sprintf(
-                            'Mapping target service with name "%s" not found in %s',
-                            $target,
-                            $targetManagerName
-                          )
-                        );
+                        throw new MapperTargetServiceNotFoundException(sprintf('Mapping target service with name "%s" not found in %s', $target, $targetManagerName));
                     }
                 }
 

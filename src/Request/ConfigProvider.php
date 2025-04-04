@@ -108,11 +108,7 @@ class ConfigProvider implements ConfigProviderInterface
             'method' => RequestInterface::METHOD_GET,
             'requiredParams' => ['terminalCode' => ''],
           ],
-          'TerminalsBrowse' => [
-            'uri' => '/terminals',
-            'method' => RequestInterface::METHOD_GET,
-            'requiredParams' => [],
-          ],
+          'TerminalsBrowse' => [],
           'ConfirmTerminalTransaction' => [
             'uri' => '/pin/%terminalTransactionId%/confirm',
             'method' => RequestInterface::METHOD_PATCH,
