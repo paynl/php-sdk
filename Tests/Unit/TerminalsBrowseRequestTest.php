@@ -49,4 +49,17 @@ class TerminalsBrowseRequestTest extends TestCase
             $this->assertEquals('Something went wrong', $e->getFriendlyMessage());
         }
     }
+
+    public function testPathParametersWithMerchantCode()
+    {
+        $request = new TerminalsBrowseRequest();
+        $request->setMerchantCode('M-1111-2222');
+
+        $params = $request->getPathParameters();
+
+        $this->assertArrayHasKey('merchant[eq]', $params);
+        $this->assertEquals('M-1111-2222', $params['merchant[eq]']);
+        $this->assertArrayNotHasKey('merchant[neq]', $params);
+    }
+
 }
