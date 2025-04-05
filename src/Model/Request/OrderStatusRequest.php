@@ -78,5 +78,4 @@ class OrderStatusRequest extends RequestData
             return parent::start();
         });
     }
-
 }

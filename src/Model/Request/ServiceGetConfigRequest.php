@@ -21,12 +21,16 @@ use PayNL\Sdk\Helpers\StaticCacheTrait;
 class ServiceGetConfigRequest extends RequestData
 {
     use StaticCacheTrait;
+
+    /**
+     * @var string|mixed
+     */
     private string $serviceId;
 
     /**
-     * @param $serviceId
+     * @param string $serviceId
      */
-    public function __construct($serviceId = '')
+    public function __construct(string $serviceId = '')
     {
         $this->serviceId = $serviceId;
         parent::__construct('GetConfig', '/services/config', RequestInterface::METHOD_GET);
