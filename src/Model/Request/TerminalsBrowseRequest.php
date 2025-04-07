@@ -16,17 +16,55 @@ use PayNL\Sdk\Request\RequestInterface;
  */
 class TerminalsBrowseRequest extends RequestData
 {
-    public function __construct()
+    protected string $merchantCode;
+    protected string $excludeMerchantCode;
+
+    /**
+     * @param string $merchantCode
+     * @param string $excludeMerchantCode
+     */
+    public function __construct(string $merchantCode = '', string $excludeMerchantCode = '')
     {
+        $this->setMerchantCode($merchantCode);
+        $this->setExcludeMerchantCode($excludeMerchantCode);
         parent::__construct('TerminalsBrowse', '/terminals', RequestInterface::METHOD_GET);
     }
 
     /**
-     * @return array
+     * @param string $merchantCode
+     * @return $this
+     */
+    public function setMerchantCode(string $merchantCode): self
+    {
+        $this->merchantCode = $merchantCode;
+        return $this;
+    }
+
+    /**
+     * @param string $excludeMerchantCode
+     * @return $this
+     */
+    public function setExcludeMerchantCode(string $excludeMerchantCode): self
+    {
+        $this->excludeMerchantCode = $excludeMerchantCode;
+        return $this;
+    }
+
+    /**
+     * @return array|null[]
      */
     public function getPathParameters(): array
     {
-        return [];
+        $parameters = [];
+
+        if (!empty($this->merchantCode)) {
+            $parameters['merchant[eq]'] = $this->merchantCode;
+        }
+        if (!empty($this->excludeMerchantCode)) {
+            $parameters['merchant[neq]'] = $this->excludeMerchantCode;
+        }
+
+        return $parameters;
     }
 
     /**
