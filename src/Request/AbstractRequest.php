@@ -160,27 +160,30 @@ abstract class AbstractRequest implements
 
     /**
      * @param array $params
-     *
-     * @throws MissingParamException
-     * @throws InvalidArgumentException
-     *
-     * @return static
+     * @return $this
      */
     public function setParams(array $params): self
     {
         $this->params = $params;
 
-        $additionalArgmuments = '';
+        $queryParams = [];
+        $uri = $this->getUri();
 
         foreach ($params as $key => $value) {
-            if (strpos($this->getUri(), '%' . $key . '%') !== false) {
-                $this->setUri(str_replace("%{$key}%", $value, $this->getUri()));
+            $placeholder = "%{$key}%";
+
+            if (strpos($uri, $placeholder) !== false) {
+                $uri = str_replace($placeholder, $value, $uri);
             } else {
-                $additionalArgmuments .= $key . '=' . $value . '&';
+                $queryParams[$key] = $value;
             }
         }
 
-        $this->setUri($this->getUri() . '?' . substr($additionalArgmuments, 0, -1));
+        if (!empty($queryParams)) {
+            $uri .= '?' . http_build_query($queryParams);
+        }
+
+        $this->setUri($uri);
 
         return $this;
     }

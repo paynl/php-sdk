@@ -25,8 +25,8 @@ class TerminalsBrowseRequest extends RequestData
      */
     public function __construct(string $merchantCode = '', string $excludeMerchantCode = '')
     {
-        $this->setMerchantCode($merchantCode ?? '');
-        $this->setExcludeMerchantCode($excludeMerchantCode ?? '');
+        $this->setMerchantCode($merchantCode);
+        $this->setExcludeMerchantCode($excludeMerchantCode);
         parent::__construct('TerminalsBrowse', '/terminals', RequestInterface::METHOD_GET);
     }
 
