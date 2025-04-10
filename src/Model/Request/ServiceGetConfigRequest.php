@@ -64,18 +64,17 @@ class ServiceGetConfigRequest extends RequestData
         }
 
         if ($this->config->isCacheEnabled()) {
-            $cache = new PayCache();
-            return $cache->get($cacheKey, function () use ($cacheKey) {
-                return $this->staticCache($cacheKey, function () {
-                    return $this->startAPI();
-                });
+            $result = (new PayCache())->get($cacheKey, function () {
+                return $this->startAPI();
             }, 5);
+        } else {
+            $result = $this->startAPI();
         }
-
-        return $this->staticCache($cacheKey, function () {
-            return $this->startAPI();
+        return $this->staticCache($cacheKey, function () use ($result) {
+            return $result;
         });
     }
+
 
     /**
      * @return ServiceGetConfigResponse

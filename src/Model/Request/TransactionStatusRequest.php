@@ -59,24 +59,24 @@ class TransactionStatusRequest extends RequestData
     {
         $cacheKey = 'transaction_status_' . md5(json_encode([$this->config->getUsername(), $this->orderId]));
 
-        if ($this->hasStaticCache($cacheKey)) {
-            return $this->getStaticCacheValue($cacheKey);
-        }
+        $this->config->setCore('https://rest.pay.nl');
+
+//        if ($this->hasStaticCache($cacheKey)) {
+//            return $this->getStaticCacheValue($cacheKey);
+//        }
 
         if ($this->config->isCacheEnabled()) {
-            $cache = new PayCache();
-            return $cache->get($cacheKey, function () use ($cacheKey) {
-                return $this->staticCache($cacheKey, function () {
-                    $this->config->setCore('https://rest.pay.nl');
-                    return parent::start();
-                });
-            }, 3); # 3 seconds file caching
+            $result = (new PayCache())->get($cacheKey, function () {
+                return parent::start();
+            }, 3); // 3 seconds file caching
+        } else {
+            $result = parent::start();
         }
 
-        return $this->staticCache($cacheKey, function () {
-            $this->config->setCore('https://rest.pay.nl');
-            return parent::start();
+        return $this->staticCache($cacheKey, function () use ($result) {
+            return $result;
         });
     }
+
 
 }
