@@ -32,7 +32,7 @@ class ServiceGetConfigRequest extends RequestData
      */
     public function __construct(string $serviceId = '')
     {
-        $this->serviceId = $serviceId;
+        $this->serviceId = trim($serviceId);
         parent::__construct('GetConfig', '/services/config', RequestInterface::METHOD_GET);
     }
 

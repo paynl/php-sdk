@@ -353,7 +353,7 @@ class Config implements Countable, Iterator, ArrayAccess
      */
     public function setUsername(string $username): self
     {
-        $this->data['authentication']['username'] = $username;
+        $this->data['authentication']['username'] = trim($username);
         return $this;
     }
 
@@ -393,7 +393,7 @@ class Config implements Countable, Iterator, ArrayAccess
      */
     public function setPassword(string $password): self
     {
-        $this->data['authentication']['password'] = $password;
+        $this->data['authentication']['password'] = trim($password);
         return $this;
     }
 
