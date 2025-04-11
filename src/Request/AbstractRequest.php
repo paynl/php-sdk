@@ -160,43 +160,30 @@ abstract class AbstractRequest implements
 
     /**
      * @param array $params
-     *
-     * @throws MissingParamException
-     * @throws InvalidArgumentException
-     *
-     * @return static
+     * @return $this
      */
     public function setParams(array $params): self
     {
         $this->params = $params;
 
-        foreach ($this->getRequiredParams() as $paramName => $paramDefinition) {
-            if (false === $this->hasParam($paramName)) {
-                throw new MissingParamException(sprintf('Missing param "%s"', $paramName));
-            }
+        $queryParams = [];
+        $uri = $this->getUri();
 
-            if (true === is_string($paramDefinition) && '' !== $paramDefinition && 1 !== preg_match("/^{$paramDefinition}$/", $this->getParam($paramName))) {
-                throw new InvalidArgumentException(sprintf('Required param %s is not valid. It must match "%s"', $paramName, $paramDefinition));
-            }
+        foreach ($params as $key => $value) {
+            $placeholder = "%{$key}%";
 
-            # Set it in the array
-            $this->setUri(str_replace("%{$paramName}%", $this->getParam($paramName), $this->getUri()));
-        }
-
-        $optionalParams = [];
-        foreach ($this->getOptionalParams() as $paramName => $paramDefinition) {
-            # If optional paramater is provided...
-            if (isset($params[$paramName])) {
-                if (true === is_string($paramDefinition) && '' !== $paramDefinition && 1 !== preg_match("/^{$paramDefinition}$/", $this->getParam($paramName))) {
-                    throw new InvalidArgumentException(sprintf('Optional param %s is not valid. It must match "%s"', $paramName, $paramDefinition));
-                }
-                $optionalParams[$paramName] = $this->params[$paramName];
+            if (strpos($uri, $placeholder) !== false) {
+                $uri = str_replace($placeholder, $value, $uri);
+            } else {
+                $queryParams[$key] = $value;
             }
         }
 
-        if (!empty($optionalParams)) {
-            $this->setUri($this->getUri() . '?' . http_build_query($optionalParams));
+        if (!empty($queryParams)) {
+            $uri .= '?' . http_build_query($queryParams);
         }
+
+        $this->setUri($uri);
 
         return $this;
     }

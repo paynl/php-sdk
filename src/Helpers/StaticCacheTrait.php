@@ -36,7 +36,7 @@ trait StaticCacheTrait
 
     /**
      * @param string $key
-     * @return bool
+     * @return boolean
      */
     protected function hasStaticCache(string $key): bool
     {
@@ -60,6 +60,4 @@ trait StaticCacheTrait
 
         return self::$cache[$key];
     }
-
-
 }

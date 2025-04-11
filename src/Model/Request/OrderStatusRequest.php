@@ -76,5 +76,4 @@ class OrderStatusRequest extends RequestData
             return $result;
         });
     }
-
 }

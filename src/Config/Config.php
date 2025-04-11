@@ -372,7 +372,7 @@ class Config implements Countable, Iterator, ArrayAccess
     }
 
     /**
-     * @return bool
+     * @return boolean
      */
     public function isCacheEnabled()
     {
@@ -398,7 +398,7 @@ class Config implements Countable, Iterator, ArrayAccess
     }
 
     /**
-     * @param bool $caching
+     * @param boolean $caching
      * @return self
      */
     public function setCaching(bool $caching): self
