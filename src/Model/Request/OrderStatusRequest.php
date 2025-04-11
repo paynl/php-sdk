@@ -55,10 +55,6 @@ class OrderStatusRequest extends RequestData
      * @return PayOrder
      * @throws PayException
      */
-    /**
-     * @return PayOrder
-     * @throws PayException
-     */
     public function start(): PayOrder
     {
         $cacheKey = 'order_status_' . md5(json_encode([$this->config->getUsername(), $this->orderId]));
