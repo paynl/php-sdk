@@ -342,21 +342,22 @@ class ServiceGetConfigResponse implements ModelInterface
     {
         $cores = $this->getTguList();
 
-        $payDomain = false;
         foreach ($cores as &$core) {
             $domain = $core['domain'];
 
-            if (in_array($domain, ['pay.nl', 'connect.pay.nl'])) {
-                $payDomain = true;
+            $parts = explode('.', $domain);
+            if (count($parts) === 2) {
+                $domain = 'connect.' . $domain;
             }
 
             $core['domain'] = 'https://' . $domain;
             $core['label'] = $domain;
         }
 
-        if ($payDomain !== true) {
-            array_unshift($cores, ['domain' => 'https://connect.pay.nl', 'label' => 'connect.pay.nl']);
-        }
+        # Sort on share
+        usort($cores, function ($a, $b) {
+            return $b['share'] <=> $a['share'];
+        });
 
         return $cores;
     }

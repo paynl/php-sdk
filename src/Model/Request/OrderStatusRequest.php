@@ -58,24 +58,22 @@ class OrderStatusRequest extends RequestData
     public function start(): PayOrder
     {
         $cacheKey = 'order_status_' . md5(json_encode([$this->config->getUsername(), $this->orderId]));
+        $this->config->setCore(Config::TGU1);
 
         if ($this->hasStaticCache($cacheKey)) {
             return $this->getStaticCacheValue($cacheKey);
         }
 
         if ($this->config->isCacheEnabled()) {
-            $cache = new PayCache();
-            return $cache->get($cacheKey, function () use ($cacheKey) {
-                return $this->staticCache($cacheKey, function () {
-                    $this->config->setCore(Config::TGU1);
-                    return parent::start();
-                });
-            }, 3); # 3 seconds file caching
+            $result = (new PayCache())->get($cacheKey, function () {
+                return parent::start();
+            }, 3); // 3 seconds file caching
+        } else {
+            $result = parent::start();
         }
 
-        return $this->staticCache($cacheKey, function () {
-            $this->config->setCore(Config::TGU1);
-            return parent::start();
+        return $this->staticCache($cacheKey, function () use ($result) {
+            return $result;
         });
     }
 }
