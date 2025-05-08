@@ -224,6 +224,24 @@ class Application
     }
 
     /**
+     * Sets body of the request
+     * @param string|array $json JSON string or associative array to be encoded
+     * @return self
+     */
+    public function setBody($json): self
+    {
+        if (is_array($json)) {
+            $json = json_encode($json);
+        }
+
+        if (!empty($json)) {
+            $this->request->setBody($json);
+        }
+
+        return $this;
+    }
+
+    /**
      * Spin it up and make the call
      *
      * @return Response

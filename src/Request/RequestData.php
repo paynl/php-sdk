@@ -23,6 +23,7 @@ abstract class RequestData implements RequestDataInterface
     protected string $uri = '';
     protected string $methodType = 'GET';
     protected ?Config $config;
+    protected $bodyJson = null;
 
     /**
      * @param string $mapperName Internal name of the call to make
@@ -57,6 +58,14 @@ abstract class RequestData implements RequestDataInterface
         $this->application = $application;
     }
 
+    /**
+     * @param $json
+     * @return void
+     */
+    public function setBody($json)
+    {
+        $this->bodyJson = $json;
+    }
 
     /**
      * @return Config|null
@@ -93,8 +102,12 @@ abstract class RequestData implements RequestDataInterface
             if (empty($this->application)) {
                 $this->application = Application::init($config);
             }
-
             $response = $this->application->request($this)->run();
+            $app = $this->application->request($this);
+            if (!empty($this->bodyJson)) {
+                $app->setBody($this->bodyJson);
+            }
+            $response = $app->run();
         } catch (\Throwable $e) {
             throw (new PayException('Could not initiate API call:' . $e->getMessage(), 0, 0))
                 ->setFriendlyMessage(Text::getFriendlyMessage($e->getMessage()));
