@@ -20,6 +20,9 @@ class PayLoad
     protected string $internalStateName;
     protected array $checkoutData;
     protected array $fullPayLoad = [];
+    protected string $extra1;
+    protected string $extra2;
+    protected string $extra3;
 
     /**
      * @param array $payload
@@ -40,6 +43,33 @@ class PayLoad
         $this->internalStateName = (string)$payload['internal_state_name'];
         $this->checkoutData = (array)$payload['checkout_data'];
         $this->fullPayLoad = (array)$payload['full_payload'];
+        $this->extra1 = (string)($payload['full_payload']['extra1'] ?? '');
+        $this->extra2 = (string)($payload['full_payload']['extra2'] ?? '');
+        $this->extra3 = (string)($payload['full_payload']['extra3'] ?? '');
+    }
+
+    /**
+     * @return string
+     */
+    public function getExtra1(): string
+    {
+        return $this->extra1;
+    }
+
+    /**
+     * @return string
+     */
+    public function getExtra2(): string
+    {
+        return $this->extra2;
+    }
+
+    /**
+     * @return string
+     */
+    public function getExtra3(): string
+    {
+        return $this->extra3;
     }
 
     /**
