@@ -102,7 +102,7 @@ abstract class RequestData implements RequestDataInterface
             if (empty($this->application)) {
                 $this->application = Application::init($config);
             }
-            $response = $this->application->request($this)->run();
+
             $app = $this->application->request($this);
             if (!empty($this->bodyJson)) {
                 $app->setBody($this->bodyJson);
