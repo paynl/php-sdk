@@ -24,13 +24,17 @@ class OrderCaptureRequest extends RequestData
 
     /**
      * @param $transactionId
-     * @param float|null $amount
+     * @param int|float|null $amount Amount in cents (int) or whole units (float), e.g. 1234 or 12.34 
      */
-    public function __construct($transactionId, float $amount = null)
+    public function __construct($transactionId, float|int $amount = null)
     {
         $this->transactionId = $transactionId;
         if (!empty($amount)) {
-            $this->setAmount($amount);
+            if (is_int($amount)) {
+                $this->amount = $amount;
+            } else {
+                $this->setAmount($amount);
+            }
         }
 
         parent::__construct('OrderCapture', '/orders/%transactionId%/capture', RequestInterface::METHOD_PATCH);
@@ -84,6 +88,17 @@ class OrderCaptureRequest extends RequestData
     {
         $this->mode = 'amount';
         $this->amount = (int)round($amount * 100);
+        return $this;
+    }
+
+    /**
+     * @param float $amount Amount in cents.
+     * @return $this
+     */
+    public function setAmountInCents(int $amountInCents): self
+    {
+        $this->mode = 'amount';
+        $this->amount = amountInCents;
         return $this;
     }
 
