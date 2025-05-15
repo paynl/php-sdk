@@ -11,11 +11,23 @@ class OrderCaptureRequestTest extends TestCase
     /**
      * @return void
      */
-    public function testConstructor(): void
+    public function testConstructorWithFloatAmount(): void
     {
         $transactionId = '123456';
         $amount = 100.50;
         $orderCaptureRequest = new OrderCaptureRequest($transactionId, $amount);
+
+        $this->assertInstanceOf(OrderCaptureRequest::class, $orderCaptureRequest);
+    }
+
+    /**
+     * @return void
+     */
+    public function testConstructorWithIntAmount(): void
+    {
+        $transactionId = '123456';
+        $amountInCents = 10050;
+        $orderCaptureRequest = new OrderCaptureRequest($transactionId, $amountInCents);
 
         $this->assertInstanceOf(OrderCaptureRequest::class, $orderCaptureRequest);
     }
@@ -38,7 +50,7 @@ class OrderCaptureRequestTest extends TestCase
     /**
      * @return void
      */
-    public function testGetBodyParametersWithAmount(): void
+    public function testGetBodyParametersWithFloatAmount(): void
     {
         $transactionId = '123456';
         $amount = 150.75;
@@ -49,6 +61,22 @@ class OrderCaptureRequestTest extends TestCase
         $this->assertIsArray($bodyParameters);
         $this->assertArrayHasKey('amount', $bodyParameters);
         $this->assertSame((int)round($amount * 100), $bodyParameters['amount']);
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetBodyParametersWithIntAmount(): void
+    {
+        $transactionId = '123456';
+        $amountInCents = 15075;
+        $orderCaptureRequest = new OrderCaptureRequest($transactionId, $amountInCents);
+
+        $bodyParameters = $orderCaptureRequest->getBodyParameters();
+
+        $this->assertIsArray($bodyParameters);
+        $this->assertArrayHasKey('amount', $bodyParameters);
+        $this->assertSame($amountInCents, $bodyParameters['amount']);
     }
 
     /**
@@ -78,12 +106,35 @@ class OrderCaptureRequestTest extends TestCase
      * @throws \PHPUnit\Framework\MockObject\Exception
      * @throws \PayNL\Sdk\Exception\PayException
      */
-    public function testStartWithAmount(): void
+    public function testStartWithFloatAmount(): void
     {
         $transactionId = '123456';
         $amount = 200.00;
         $orderCaptureRequest = $this->getMockBuilder(OrderCaptureRequest::class)
             ->setConstructorArgs([$transactionId, $amount])
+            ->onlyMethods(['start'])
+            ->getMock();
+
+        $mockPayOrder = $this->createMock(PayOrder::class);
+
+        $orderCaptureRequest->method('start')->willReturn($mockPayOrder);
+
+        $result = $orderCaptureRequest->start();
+
+        $this->assertInstanceOf(PayOrder::class, $result);
+    }
+
+    /**
+     * @return void
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     * @throws \PayNL\Sdk\Exception\PayException
+     */
+    public function testStartWithIntAmount(): void
+    {
+        $transactionId = '123456';
+        $amountInCents = 20000;
+        $orderCaptureRequest = $this->getMockBuilder(OrderCaptureRequest::class)
+            ->setConstructorArgs([$transactionId, $amountInCents])
             ->onlyMethods(['start'])
             ->getMock();
 

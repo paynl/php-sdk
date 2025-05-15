@@ -124,6 +124,16 @@ class OrderCreateRequest extends RequestData
     }
 
     /**
+     * @param float $amount Whole amount in cents.
+     * @return $this
+     */
+    public function setAmountInCents(int $amountInCents): self
+    {
+        $this->amount = $amountInCents;
+        return $this;
+    }
+
+    /**
      * @param string $currency
      * @return $this
      */

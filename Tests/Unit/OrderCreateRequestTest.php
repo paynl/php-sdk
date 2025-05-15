@@ -64,6 +64,21 @@ class OrderCreateRequestTest extends TestCase
 
     /**
      * @return void
+     */
+    public function testSetAmountInCents(): void
+    {
+        $request = new OrderCreateRequest();
+        $request->setAmountInCents(12345);
+
+        $reflection = new \ReflectionClass($request);
+        $amountProperty = $reflection->getProperty('amount');
+        $amountProperty->setAccessible(true);
+
+        $this->assertEquals(12345, $amountProperty->getValue($request));
+    }
+
+    /**
+     * @return void
      * @throws \Exception
      */
     public function testSetReference(): void
