@@ -301,7 +301,7 @@ class Exchange
                     }
 
                     $action = $this->getAction();
-                    if (stripos($action, 'refund') !== false) {
+                    if (stripos($action, 'refund') !== false || $payload->isTguTransaction()) {
                         dbg('TransactionStatusRequest');
                         $request = new TransactionStatusRequest($payload->getPayOrderId());
                     } else {
