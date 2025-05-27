@@ -19,7 +19,13 @@ $request->setExpire(date('c', time() + 60));
 $request->setReturnurl($_REQUEST['returnUrl'] ?? 'https://yourdomain/finish.php');
 $request->setExchangeUrl($_REQUEST['exchangeUrl'] ?? 'https://yourdomain/exchange.php');
 $request->setPaymentMethodId((int)($_REQUEST['paymentMethodId'] ?? 10));
-$request->setIssuerId(4); # ISSUER ING
+
+# Specifically for paypal
+#$request->setPayPalOrderId('12345');
+
+## Or, for custom (and future) implementations
+#$request->setPaymentInputData(['ar' => 1]);
+
 $request->setTestmode(($_REQUEST['testmode'] ?? 1) == 1);
 
 $customer = new \PayNL\Sdk\Model\Customer();

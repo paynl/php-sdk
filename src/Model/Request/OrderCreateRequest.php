@@ -30,6 +30,8 @@ class OrderCreateRequest extends RequestData
     private string $currency = 'EUR';
     private int $paymentMethodId;
     private int $issuerId;
+    private string $paypalOrderId;
+    private array $paymentInputData = [];
     private string $terminalCode;
     private ?bool $testMode = null;
 
@@ -227,6 +229,31 @@ class OrderCreateRequest extends RequestData
     }
 
     /**
+     * Use when implementing express checkout for PayPal.
+     *
+     * @param string $orderId PayPal order ID
+     * @return $this
+     */
+    public function setPayPalOrderId(string $orderId): self
+    {
+        $this->paypalOrderId = $orderId;
+        return $this;
+    }
+
+    /**
+     * Use this to provide the payment method with custom input data.
+     * This may overwrite data previously set by other methods like setPayPalOrderId or setIssuerId.
+     *
+     * @param array $inputData
+     * @return $this
+     */
+    public function setPaymentInputData(array $inputData): self
+    {
+        $this->paymentInputData = $inputData;
+        return $this;
+    }
+
+    /**
      * @param bool $testMode
      * @return $this
      */
@@ -318,12 +345,27 @@ class OrderCreateRequest extends RequestData
         $this->_add($parameters, 'exchangeUrl', $this->exchangeUrl);
 
         if (!empty($this->paymentMethodId)) {
-            $parameters['paymentMethod'] = ['id' => $this->paymentMethodId,];
+            $parameters['paymentMethod'] = ['id' => $this->paymentMethodId];
+
+            $options = array_filter([
+                'issuerId' => $this->issuerId ?? null,
+                'terminalCode' => $this->terminalCode ?? null,
+                'paypalOrderId' => $this->paypalOrderId ?? null,
+                'paymentInputData' => !empty($this->paymentInputData) ? true : null,
+            ]);
+
+            if (count($options) > 1) {
+                throw new \Exception('Only one of: issuerId, terminalCode, paypalOrderId or paymentInputData may be set.');
+            }
 
             if (!empty($this->issuerId)) {
                 $parameters['paymentMethod']['input']['issuerId'] = $this->issuerId;
             } elseif (!empty($this->terminalCode)) {
                 $parameters['paymentMethod']['input']['terminalCode'] = $this->terminalCode;
+            } elseif (!empty($this->paypalOrderId)) {
+                $parameters['paymentMethod']['input']['orderId'] = $this->paypalOrderId;
+            } elseif (!empty($this->paymentInputData)) {
+                $parameters['paymentMethod']['input'] = $this->paymentInputData;
             }
         }
 
