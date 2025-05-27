@@ -242,7 +242,6 @@ class OrderCreateRequest extends RequestData
 
     /**
      * Use this to provide the payment method with custom input data.
-     * This may overwrite data previously set by other methods like setPayPalOrderId or setIssuerId.
      *
      * @param array $inputData
      * @return $this

@@ -27,6 +27,9 @@ class Exchange
     private mixed $headers;
     private string $gmsReferenceKey = 'extra1';
 
+    /**
+     * @return string
+     */
     public function getGmsReferenceKey(): string
     {
         return $this->gmsReferenceKey;
