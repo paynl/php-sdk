@@ -28,14 +28,18 @@ class TransactionRefundRequest extends RequestData
 
     /**
      * @param $transactionId Pay's orderid. Use EX-####-####-#### or Pay's orderID.
-     * @param float|null $amount
+     * @param int|float|null $amount Amount in *cents* (int) or *whole units* (float), e.g. `1234` or `12.34`
      * @param string $currency
      */
-    public function __construct($transactionId, float $amount = null, string $currency = '')
+    public function __construct($transactionId, float|int $amount = null, string $currency = '')
     {
         $this->transactionId = $transactionId;
         if (!empty($amount)) {
-            $this->setAmount($amount);
+            if (is_int($amount)) {
+                $this->amount = $amount;
+            } else {
+                $this->setAmount($amount);
+            }
         }
         if (!empty($currency)) {
             $this->setCurrency($currency);
@@ -100,6 +104,16 @@ class TransactionRefundRequest extends RequestData
     public function setAmount(float $amount): self
     {
         $this->amount = (int)round($amount * 100);
+        return $this;
+    }
+
+    /**
+     * @param float $amount Amount in cents.
+     * @return $this
+     */
+    public function setAmountInCents(int $amountInCents): self
+    {
+        $this->amount = amountInCents;
         return $this;
     }
 
