@@ -20,11 +20,11 @@ $request->setReturnurl($_REQUEST['returnUrl'] ?? 'https://yourdomain/finish.php'
 $request->setExchangeUrl($_REQUEST['exchangeUrl'] ?? 'https://yourdomain/exchange.php');
 $request->setPaymentMethodId((int)($_REQUEST['paymentMethodId'] ?? 10));
 
-# Specifically for paypal
-#$request->setPayPalOrderId('12345');
+# Example for specifically setting PayPal data
+#$request->setPayPalOrderId('yourPayPalOrderId');
 
-## Or, for custom (and future) implementations
-#$request->setPaymentInputData(['ar' => 1]);
+## Or for custom (and future) implementations
+#$request->setPaymentInputData($yourInputData);
 
 $request->setTestmode(($_REQUEST['testmode'] ?? 1) == 1);
 
