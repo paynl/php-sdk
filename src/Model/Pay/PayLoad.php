@@ -182,4 +182,14 @@ class PayLoad
     {
         return $this->checkoutData;
     }
+
+    /**
+     * @return bool
+     */
+    function isTguTransaction(): bool
+    {
+        $id = $this->getPayOrderId()[0] ?? null;
+        return ctype_digit($id) && (int)$id > 3;
+    }
+
 }
