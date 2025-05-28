@@ -29,23 +29,24 @@ class PayLoad
      */
     public function __construct(array $payload)
     {
-        $this->type = (string)$payload['type'];
-        $this->amount = (int)$payload['amount'];
-        $this->currency = (string)$payload['currency'];
-        $this->amountCap = (float)$payload['amount_cap'];
-        $this->amountAuth = (float)$payload['amount_auth'];
-        $this->reference = (string)$payload['reference'];
-        $this->action = (string)$payload['action'];
-        $this->paymentProfile = (int)$payload['payment_profile'];
-        $this->payOrderId = (string)$payload['pay_order_id'];
-        $this->orderId = (string)$payload['order_id'];
-        $this->internalStateId = (int)$payload['internal_state_id'];
-        $this->internalStateName = (string)$payload['internal_state_name'];
-        $this->checkoutData = (array)$payload['checkout_data'];
-        $this->fullPayLoad = (array)$payload['full_payload'];
-        $this->extra1 = (string)($payload['full_payload']['extra1'] ?? '');
-        $this->extra2 = (string)($payload['full_payload']['extra2'] ?? '');
-        $this->extra3 = (string)($payload['full_payload']['extra3'] ?? '');
+        $this->type = (string)($payload['type'] ?? '');
+        $this->amount = (int)($payload['amount'] ?? 0);
+        $this->currency = (string)($payload['currency'] ?? '');
+        $this->amountCap = (float)($payload['amount_cap'] ?? 0);
+        $this->amountAuth = (float)($payload['amount_auth'] ?? 0);
+        $this->reference = (string)($payload['reference'] ?? '');
+        $this->action = (string)($payload['action'] ?? '');
+        $this->paymentProfile = (int)($payload['payment_profile'] ?? 0);
+        $this->payOrderId = (string)($payload['pay_order_id'] ?? '');
+        $this->orderId = (string)($payload['order_id'] ?? '');
+        $this->internalStateId = (int)($payload['internal_state_id'] ?? 0);
+        $this->internalStateName = (string)($payload['internal_state_name'] ?? '');
+        $this->checkoutData = is_array($payload['checkout_data'] ?? null) ? $payload['checkout_data'] : [];
+        $this->fullPayLoad = is_array($payload['full_payload'] ?? null) ? $payload['full_payload'] : [];
+
+        $this->extra1 = (string)($this->fullPayLoad['extra1'] ?? '');
+        $this->extra2 = (string)($this->fullPayLoad['extra2'] ?? '');
+        $this->extra3 = (string)($this->fullPayLoad['extra3'] ?? '');
     }
 
     /**

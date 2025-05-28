@@ -163,4 +163,20 @@ class Misc
 
         return compact('street', 'number');
     }
+
+
+    /**
+     * Determine if a transaction ID is a TGU transaction.
+     *
+     * @param string|null $transactionId
+     * @return bool
+     */
+    public static function isTguTransaction(?string $transactionId): bool
+    {
+        $pid = trim((string)$transactionId);
+        $id = $pid[0] ?? null;
+
+        return ctype_digit($id) && (int)$id > 3;
+    }
+
 }
