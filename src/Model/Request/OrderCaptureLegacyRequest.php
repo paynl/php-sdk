@@ -5,19 +5,16 @@ declare(strict_types=1);
 namespace PayNL\Sdk\Model\Request;
 
 use PayNL\Sdk\Exception\PayException;
-use PayNL\Sdk\Model\Amount;
-use PayNL\Sdk\Model\Request\OrderCaptureLegacyRequest;
 use PayNL\Sdk\Request\RequestData;
 use PayNL\Sdk\Model\Pay\PayOrder;
 use PayNL\Sdk\Request\RequestInterface;
-use PayNL\Sdk\Util\Misc;
 
 /**
- * Class OrderCaptureRequest
+ * Class OrderCaptureLegacyRequest
  *
  * @package PayNL\Sdk\Model\Request
  */
-class OrderCaptureRequest extends RequestData
+class OrderCaptureLegacyRequest extends RequestData
 {
     private string $transactionId;
     private ?int $amount = null;
@@ -36,7 +33,7 @@ class OrderCaptureRequest extends RequestData
             $this->setAmount($amount);
         }
 
-        parent::__construct('OrderCapture', '/orders/%transactionId%/capture', RequestInterface::METHOD_PATCH);
+        parent::__construct('OrderCaptureLegacy', '/transaction/capture/json', RequestInterface::METHOD_POST);
     }
 
     /**
@@ -53,11 +50,11 @@ class OrderCaptureRequest extends RequestData
     }
 
     /**
-     * @return string[]
+     * @return array
      */
     public function getPathParameters(): array
     {
-        return ['transactionId' => $this->transactionId];
+        return [];
     }
 
     /**
@@ -65,18 +62,7 @@ class OrderCaptureRequest extends RequestData
      */
     public function getBodyParameters(): array
     {
-        $parameters = [];
-
-        if (!is_null($this->amount)) {
-            $parameters['amount'] = $this->amount;
-        }
-        if (!is_null($this->productId)) {
-            $parameters['products'][] = [
-              'id' => $this->productId,
-              'quantity' => $this->quantity,
-            ];
-        }
-        return $parameters;
+        return ['transactionId' => $this->transactionId];
     }
 
     /**
@@ -96,22 +82,9 @@ class OrderCaptureRequest extends RequestData
      */
     public function start(): PayOrder
     {
-        if ($this->mode == 'amount') {
-            $this->uri = '/orders/%transactionId%/capture/amount';
-        } elseif ($this->mode == 'product') {
-            $this->uri = '/orders/%transactionId%/capture/products';
-        }
-
-        if (!Misc::isTguTransaction($this->transactionId)) {
-            $payOrder = (new OrderCaptureLegacyRequest($this->transactionId))
-                ->setConfig($this->config)
-                ->start();
-            $payOrder->setOrderId($this->transactionId);
-            $payOrder->setDescription($this->transactionId);
-            $payOrder->setAmount(new Amount($this->amount));
-            return $payOrder;
-        }
-
+        $this->config->setCore('https://rest-api.pay.nl');
+        $this->config->setVersion(18);
         return parent::start();
     }
+
 }
