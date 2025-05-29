@@ -145,7 +145,7 @@ class PayOrder implements ModelInterface
      */
     public function __construct(array $payload = null)
     {
-        if (!empty($payload['object'])) {
+        if (!empty($payload['object']) && is_array($payload['object'])) {
             foreach ($payload['object'] as $_key => $_val) {
                 if (in_array($_key, ['amount', 'capturedAmount', 'authorizedAmount'])) {
                     continue;
