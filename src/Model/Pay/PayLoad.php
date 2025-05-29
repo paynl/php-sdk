@@ -185,6 +185,15 @@ class PayLoad
     }
 
     /**
+     * @return boolean
+     */
+    public function isFastCheckout(): bool
+    {
+        return strtolower($this->getType()) === 'payment_based_checkout';
+    }
+
+    
+    /**
      * @return bool
      */
     function isTguTransaction(): bool
