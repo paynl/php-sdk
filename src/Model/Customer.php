@@ -79,13 +79,30 @@ class Customer implements ModelInterface, JsonSerializable
     }
 
     /**
-     * @param string $birthDate
-     *
-     * @return Customer
+     * @param string|null $birthDate
+     * @return $this
      */
-    public function setBirthDate(string $birthDate): self
+    public function setBirthDate(?string $birthDate): self
     {
-        $this->birthDate = $birthDate;
+        if ($birthDate === null || trim($birthDate) === '') {
+            return $this;
+        }
+
+        $birthDate = trim($birthDate);
+        $dateFormats = ['Y-m-d', 'd-m-Y', \DateTime::ATOM];
+
+        foreach ($dateFormats as $format)
+        {
+            $dt = \DateTime::createFromFormat($format, $birthDate);
+            if ($dt && $dt->format($format) === $birthDate)
+            {
+                $this->birthDate = $dt->format('Y-m-d');
+                return $this;
+            }
+        }
+
+        dbg("Skipping invalid birthDate format: $birthDate");
+
         return $this;
     }
 
