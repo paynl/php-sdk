@@ -302,7 +302,7 @@ class Exchange
             $signingResult = $this->checkSignExchange($config->getUsername(), $config->getPassword());
 
             if ($signingResult === true) {
-                dbg('signingResult true');
+                paydbg('signingResult true');
                 $payOrder = new PayOrder($payload->getFullPayLoad());
                 $payOrder->setReference($payload->getReference());
                 $payOrder->setOrderId($payload->getPayOrderId());
@@ -396,7 +396,7 @@ class Exchange
                 throw new Exception('Signature failed');
             }
         } catch (Exception $e) {
-            dbg('checkSignExchange: ' . $e->getMessage());
+            paydbg('checkSignExchange: ' . $e->getMessage());
             return false;
         }
         return true;

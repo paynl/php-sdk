@@ -91,18 +91,15 @@ class Customer implements ModelInterface, JsonSerializable
         $birthDate = trim($birthDate);
         $dateFormats = ['Y-m-d', 'd-m-Y', \DateTime::ATOM];
 
-        foreach ($dateFormats as $format)
-        {
+        foreach ($dateFormats as $format) {
             $dt = \DateTime::createFromFormat($format, $birthDate);
-            if ($dt && $dt->format($format) === $birthDate)
-            {
+            if ($dt && $dt->format($format) === $birthDate) {
                 $this->birthDate = $dt->format('Y-m-d');
                 return $this;
             }
         }
 
-        dbg("Skipping invalid birthDate format: $birthDate");
-
+        paydbg("Skipping invalid birthDate format: $birthDate");
         return $this;
     }
 
