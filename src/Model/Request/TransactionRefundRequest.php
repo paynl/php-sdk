@@ -31,7 +31,7 @@ class TransactionRefundRequest extends RequestData
      * @param float|null $amount
      * @param string $currency
      */
-    public function __construct($transactionId, float $amount = null, string $currency = '')
+    public function __construct($transactionId, ?float $amount = null, string $currency = '')
     {
         $this->transactionId = $transactionId;
         if (!empty($amount)) {
