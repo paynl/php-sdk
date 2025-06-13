@@ -22,7 +22,7 @@ class Factory implements FactoryInterface
      *
      * @return Application
      */
-    public function __invoke(ContainerInterface $container, string $requestedName, array $options = null): Application
+    public function __invoke(ContainerInterface $container, string $requestedName, ?array $options = null): Application
     {
         # Init "default" response
         $response = $container->get('Response');

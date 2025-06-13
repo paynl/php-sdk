@@ -32,7 +32,7 @@ class Amount implements ModelInterface, JsonSerializable
      * @param int|null $value
      * @param string|null $currency
      */
-    public function __construct(int $value = null, string $currency = null)
+    public function __construct(?int $value = null, ?string $currency = null)
     {
         if (!is_null($value)) {
             $this->setValue($value);

@@ -26,7 +26,7 @@ class Factory implements FactoryInterface
      *
      * @return AbstractHydrator
      */
-    public function __invoke(ContainerInterface $container, string $requestedName, array $options = null): AbstractHydrator
+    public function __invoke(ContainerInterface $container, string $requestedName, ?array $options = null): AbstractHydrator
     {
         if (false === $container->has('modelManager')) {
             throw new ServiceNotFoundException(

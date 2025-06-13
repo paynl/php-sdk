@@ -176,7 +176,8 @@ class Misc
         $pid = trim((string)$transactionId);
         $id = $pid[0] ?? null;
 
-        return ctype_digit($id) && (int)$id > 3;
+        return $id !== null && ctype_digit($id) && (int)$id > 3;
     }
+
 
 }

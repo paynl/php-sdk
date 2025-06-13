@@ -2,6 +2,14 @@
 
 declare(strict_types=1);
 
+//set_error_handler(function ($errno, $errstr, $errfile, $errline) {
+//    if (in_array($errno, [E_DEPRECATED, E_USER_DEPRECATED])) {
+//        throw new \ErrorException($errstr, 0, $errno, $errfile, $errline);
+//    }
+//});
+//error_reporting(E_ALL);
+//ini_set('display_errors', '1');
+
 /* You might need to adjust this mapping */
 require '../../../../vendor/autoload.php';
 

@@ -146,7 +146,7 @@ class Application
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
-    public function setRequest($request, array $params = null, array $filters = null, $body = null): self
+    public function setRequest($request, ?array $params = null, ?array $filters = null, $body = null): self
     {
         if (true === is_string($request)) {
             $body = (false === empty($body) ? $body : null);
