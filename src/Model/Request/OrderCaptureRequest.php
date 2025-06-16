@@ -26,10 +26,10 @@ class OrderCaptureRequest extends RequestData
     private $mode;
 
     /**
-     * @param $transactionId
+     * @param string $transactionId
      * @param float|null $amount
      */
-    public function __construct($transactionId, ?float $amount = null)
+    public function __construct(string $transactionId, ?float $amount = null)
     {
         $this->transactionId = $transactionId;
         if (!empty($amount)) {

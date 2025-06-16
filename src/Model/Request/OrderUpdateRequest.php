@@ -23,7 +23,7 @@ class OrderUpdateRequest extends RequestData
     /**
      * @param $transactionId
      */
-    public function __construct($transactionId)
+    public function __construct(string $transactionId)
     {
         $this->transactionId = $transactionId;
         $this->description = '';

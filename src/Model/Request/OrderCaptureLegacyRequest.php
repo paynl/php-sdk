@@ -23,10 +23,10 @@ class OrderCaptureLegacyRequest extends RequestData
     private $mode;
 
     /**
-     * @param $transactionId
+     * @param string $transactionId
      * @param float|null $amount
      */
-    public function __construct($transactionId, float $amount = null)
+    public function __construct(string $transactionId, ?float $amount = null)
     {
         $this->transactionId = $transactionId;
         if (!empty($amount)) {
@@ -37,11 +37,11 @@ class OrderCaptureLegacyRequest extends RequestData
     }
 
     /**
-     * @param $productId
-     * @param $quantity
+     * @param int|string $productId
+     * @param int $quantity
      * @return $this
      */
-    public function setProduct($productId, $quantity): self
+    public function setProduct(int|string $productId, int $quantity): self
     {
         $this->mode = 'product';
         $this->productId = $productId;

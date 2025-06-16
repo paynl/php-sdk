@@ -110,12 +110,10 @@ class Misc
 
     /**
      * Get the IP of the user
-     *
-     * @return mixed
+     * @return string|false
      */
-    public function getIp()
+    public function getIp(): string|false
     {
-        // Use $_SERVER or get the headers if we can
         $headers = $_SERVER;
         if (function_exists('apache_request_headers')) {
             $headers = apache_request_headers();
