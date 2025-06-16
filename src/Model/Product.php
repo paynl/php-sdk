@@ -73,8 +73,8 @@ class Product implements ModelInterface, JsonSerializable
      * @param $currency
      * @param $type
      * @param $quantity
-     * @param string $vatCode
-     * @param float $vatPercentage
+     * @param string|null $vatCode
+     * @param float|null $vatPercentage
      */
     public function __construct(
         $id = null,
