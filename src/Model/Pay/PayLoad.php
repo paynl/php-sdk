@@ -129,14 +129,6 @@ class PayLoad
     }
 
     /**
-     * @return string
-     */
-    public function nce(): string
-    {
-        return $this->reference;
-    }
-
-    /**
      * @return integer
      */
     public function getAmount(): int

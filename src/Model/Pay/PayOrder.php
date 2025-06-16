@@ -141,9 +141,9 @@ class PayOrder implements ModelInterface
     protected $links;
 
     /**
-     * @param array $payload
+     * @param array|null $payload
      */
-    public function __construct(array $payload = null)
+    public function __construct(?array $payload = null)
     {
         if (!empty($payload['object']) && is_array($payload['object'])) {
             foreach ($payload['object'] as $_key => $_val) {

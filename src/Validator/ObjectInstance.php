@@ -31,7 +31,7 @@ class ObjectInstance extends AbstractValidator
      * @inheritDoc
      * @param string|null $className
      */
-    public function isValid($value, string $className = null): bool
+    public function isValid($value, ?string $className = null): bool
     {
         if (null === $className) {
             $this->error(self::MSG_NO_CLASS_NAME);

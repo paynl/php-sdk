@@ -30,7 +30,7 @@ class Manager extends AbstractPluginManager
      *
      * @inheritDoc
      */
-    public function __construct($parentLocator = null, array $config = [])
+    public function __construct(?ContainerInterface $parentLocator = null, array $config = [])
     {
         $this->addInitializer([$this, 'injectValidatorManager']);
         parent::__construct($parentLocator, $config);

@@ -49,7 +49,7 @@ class Exchange
     /**
      * @param array|null $payload
      */
-    public function __construct(array $payload = null)
+    public function __construct(?array $payload = null)
     {
         $this->custom_payload = $payload;
     }

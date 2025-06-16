@@ -22,7 +22,7 @@ class Factory implements FactoryInterface
      *
      * @return Config
      */
-    public function __invoke(ContainerInterface $container, string $requestedName, array $options = null): Config
+    public function __invoke(ContainerInterface $container, string $requestedName, ?array $options = null): Config
     {
         /** @var ConfigLoader $configLoader */
         $configLoader = $container->get('configLoader');
