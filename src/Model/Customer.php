@@ -31,6 +31,7 @@ class Customer implements ModelInterface, JsonSerializable
     protected int $trust = 0;
     protected string $reference = '';
     protected ?Company $company = null;
+    protected string $locale = '';
 
     /**
      * @return string
@@ -38,6 +39,24 @@ class Customer implements ModelInterface, JsonSerializable
     public function getLastName(): string
     {
         return (string)$this->lastName;
+    }
+
+    /**
+     * @param string $locale
+     * @return Customer
+     */
+    public function setLocale(string $locale): self
+    {
+        $this->locale = $locale;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLocale(): string
+    {
+        return $this->locale;
     }
 
     /**
