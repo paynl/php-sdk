@@ -38,7 +38,7 @@ $customer->setPhone('0612345678');
 $customer->setEmail('testbetaling@pay.nl');
 $customer->setLanguage('NL');
 $customer->setTrust('1');
-$customer->setLocale('en_EN');
+$customer->setLocale('en_GB');
 
 $company = new \PayNL\Sdk\Model\Company();
 $company->setName('CompanyName');
