@@ -249,12 +249,26 @@ class ServiceGetConfigResponse implements ModelInterface
      */
     public function getPaymentMethods(): array
     {
+        $methods = [];
         foreach ($this->getCheckoutOptions() as $checkoutOption) {
-            foreach ($checkoutOption->getPaymentMethods() as $method) {
-                $methods[] = $method;
+            $tag = $checkoutOption->getTag();
+            if (str_starts_with($tag, 'PG')) {
+                $groupMethod = new Method();
+                $groupMethod->setId($checkoutOption->getId());
+                $groupMethod->setName($checkoutOption->getName());
+                $groupMethod->setDescription($checkoutOption->getName());
+                $groupMethod->setTranslations($checkoutOption->getTranslations());
+                $groupMethod->setImage($checkoutOption->getImage());
+                $groupMethod->setMinAmount(0);
+                $groupMethod->setMaxAmount(0);
+                $methods[] = $groupMethod;
+            } else {
+                foreach ($checkoutOption->getPaymentMethods() as $method) {
+                    $methods[] = $method;
+                }
             }
         }
-        return $methods ?? [];
+        return $methods;
     }
 
     /**
