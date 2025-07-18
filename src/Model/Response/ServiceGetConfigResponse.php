@@ -253,6 +253,7 @@ class ServiceGetConfigResponse implements ModelInterface
         foreach ($this->getCheckoutOptions() as $checkoutOption) {
             $tag = $checkoutOption->getTag();
             if (str_starts_with($tag, 'PG')) {
+                # Methods are "grouped" so only return the group "methodd"
                 $groupMethod = new Method();
                 $groupMethod->setId($checkoutOption->getId());
                 $groupMethod->setName($checkoutOption->getName());
