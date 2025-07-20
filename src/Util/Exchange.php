@@ -139,7 +139,7 @@ class Exchange
         try {
             return $this->getPayload();
         } catch (\Throwable $e) {
-            throw new PayException('Could not retrieve payload: ' . $e->getMessage(), 0);
+            throw new PayException('Could not retrieve payload: ' . $e->getMessage(), 0, 0);
         }
     }
     /**
