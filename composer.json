@@ -1,7 +1,7 @@
 {
     "name": "paynl/php-sdk",
     "description": "Software Development Kit for implementing Pay.'s API version 3",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "type": "library",
     "require": {
         "php": "^8.1",
