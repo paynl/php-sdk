@@ -11,6 +11,12 @@ namespace PayNL\Sdk\Model;
  */
 class CheckoutOption implements ModelInterface
 {
+
+    /**
+     * @var int
+     */
+    protected $id;
+
     /**
      * @var string
      */
@@ -40,6 +46,25 @@ class CheckoutOption implements ModelInterface
      * @var array
      */
     protected $requiredFields;
+
+
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     * @return $this
+     */
+    public function setId(int $id): self
+    {
+        $this->id = $id;
+        return $this;
+    }
 
     /**
      * @return string

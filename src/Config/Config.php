@@ -23,6 +23,7 @@ class Config implements Countable, Iterator, ArrayAccess
 
     protected array $data = [];
     private static Config $configObject;
+    private string $serviceId;
 
     /**
      * Config constructor.
@@ -395,6 +396,24 @@ class Config implements Countable, Iterator, ArrayAccess
     {
         $this->data['authentication']['password'] = trim($password);
         return $this;
+    }
+
+    /**
+     * @param string $serviceId
+     * @return $this
+     */
+    public function setServiceId(string $serviceId): self
+    {
+        $this->serviceId = trim($serviceId);
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getServiceId(): string
+    {
+        return (string)$this->serviceId;
     }
 
     /**
