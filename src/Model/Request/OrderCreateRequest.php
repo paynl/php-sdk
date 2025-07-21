@@ -386,6 +386,7 @@ class OrderCreateRequest extends RequestData
             $this->_add($custParameters, 'language', $this->customer->getLanguage());
             $this->_add($custParameters, 'trust', $this->customer->getTrust());
             $this->_add($custParameters, 'reference', $this->customer->getReference());
+            $this->_add($custParameters, 'locale', $this->customer->getLocale());
 
             $compParameters = [];
             $this->_add($compParameters, 'name', $this->customer->getCompany()->getName());
