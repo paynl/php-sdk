@@ -177,11 +177,11 @@ class Product implements ModelInterface, JsonSerializable
 
     /**
      * @param string $description
-     *
-     * @return Product
+     * @return $this
      */
     public function setDescription(string $description): self
     {
+        $description = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $description);
         $this->description = $description;
         return $this;
     }
