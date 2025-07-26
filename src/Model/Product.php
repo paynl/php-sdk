@@ -62,9 +62,9 @@ class Product implements ModelInterface, JsonSerializable
     protected string $vatCode;
 
     /**
-     * @var float
+     * @var float|null
      */
-    protected float $vatPercentage = 0;
+    protected ?float $vatPercentage = null;
 
     /**
      * @param $id
@@ -248,7 +248,7 @@ class Product implements ModelInterface, JsonSerializable
     /**
      * @return null|float
      */
-    public function getVatPercentage()
+    public function getVatPercentage(): ?float
     {
         return $this->vatPercentage;
     }
