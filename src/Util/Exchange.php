@@ -298,6 +298,10 @@ class Exchange
             $config = Config::getConfig();
         }
 
+        if (empty($config->getUsername()) || empty($config->getPassword())) {
+            throw new Exception('Process failed, config not set', 8003);
+        }
+
         if ($this->isSignExchange()) {
             $signingResult = $this->checkSignExchange($config->getUsername(), $config->getPassword());
 
@@ -341,7 +345,7 @@ class Exchange
 
                 $payOrder = $request->setConfig($config)->start();
             } catch (PayException $e) {
-                throw new Exception('API Retrieval error: ' . $e->getFriendlyMessage());
+                throw new Exception('API Retrieval error: ' . $payload->getPayOrderId() . ' - ' . $e->getFriendlyMessage());
             }
         }
 
