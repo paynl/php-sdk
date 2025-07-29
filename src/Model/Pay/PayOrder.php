@@ -543,7 +543,7 @@ class PayOrder implements ModelInterface
      */
     public function getPayments(): array
     {
-        return $this->payments;
+        return $this->payments ?? [];
     }
 
     /**
