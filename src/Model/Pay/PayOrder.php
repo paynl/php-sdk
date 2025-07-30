@@ -473,7 +473,22 @@ class PayOrder implements ModelInterface
         return $this->payments[0]['paymentMethod']['id'] ?? null;
     }
 
+    /**
+     * @return string|null
+     */
+    public function getCustomerId(): ?string
+    {
+        return $this->payments[0]['customerId'] ?? null;
+    }
 
+    /**
+     * @return string|null
+     */
+    public function getCustomerName(): ?string
+    {
+        return $this->payments[0]['customerName'] ?? null;
+    }
+    
     /**
      * @param Amount $amount
      * @return $this
