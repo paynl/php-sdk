@@ -762,6 +762,15 @@ class PayOrder implements ModelInterface
      * @return boolean
      * @throws Exception
      */
+    public function isDenied(): bool
+    {
+        return (new PayStatus())->get($this->getStatusCode()) === PayStatus::DENIED;
+    }
+    
+    /**
+     * @return boolean
+     * @throws Exception
+     */
     public function isRefundedFully(): bool
     {
         return (new PayStatus())->get($this->getStatusCode()) === PayStatus::REFUND;
