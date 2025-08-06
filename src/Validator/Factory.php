@@ -6,7 +6,7 @@ namespace PayNL\Sdk\Validator;
 
 use PayNL\Sdk\Common\FactoryInterface;
 use Psr\Container\ContainerInterface;
-use PayNL\Sdk\Hydrator\HydratorAwareInterface;
+use PayNL\Sdk\Packages\Laminas\Hydrator\HydratorAwareInterface;
 
 /**
  * Class Factory
@@ -16,9 +16,12 @@ use PayNL\Sdk\Hydrator\HydratorAwareInterface;
 class Factory implements FactoryInterface
 {
     /**
-     * @inheritDoc
-     *
+     * @param ContainerInterface $container
+     * @param string $requestedName
+     * @param array|null $options
      * @return ValidatorInterface
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
      */
     public function __invoke(ContainerInterface $container, string $requestedName, ?array $options = null): ValidatorInterface
     {
