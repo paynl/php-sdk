@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PayNL\Sdk\Model\Request;
 
 use PayNL\Sdk\Exception\PayException;
+use PayNL\Sdk\Model\Amount;
 use PayNL\Sdk\Request\RequestData;
 use PayNL\Sdk\Model\Response\TransactionRefundResponse;
 use PayNL\Sdk\Request\RequestInterface;
@@ -94,11 +95,17 @@ class TransactionRefundRequest extends RequestData
     }
 
     /**
-     * @param float $amount
+     * @param float|Amount $amount
      * @return $this
      */
-    public function setAmount(float $amount): self
+    public function setAmount(float|Amount $amount): self
     {
+        if($amount instanceof Amount) {
+            $this->amount = $amount->getValue();
+            $this->currency = $amount->getCurrency();
+            return $this;
+        }
+
         $this->amount = (int)round($amount * 100);
         return $this;
     }
