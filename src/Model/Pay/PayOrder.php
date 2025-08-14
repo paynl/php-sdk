@@ -21,7 +21,7 @@ class PayOrder implements ModelInterface
     protected string $id;
 
     /**
-     * @var string|null
+     * @var string
      */
     private ?string $type = null;
 
