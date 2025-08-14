@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit;
 
+use PayNL\Sdk\Model\Amount;
 use PayNL\Sdk\Model\Customer;
 use PayNL\Sdk\Model\Order;
 use PayNL\Sdk\Model\Request\OrderCreateRequest;
@@ -60,6 +61,25 @@ class OrderCreateRequestTest extends TestCase
         $amountProperty->setAccessible(true);
 
         $this->assertEquals(12345, $amountProperty->getValue($request));
+    }
+
+    /**
+     * @return void
+     */
+    public function testSetAmountUsingObject(): void
+    {
+        $request = new OrderCreateRequest();
+        $request->setAmount(new Amount(12345, 'EUR'));
+
+        $reflection = new \ReflectionClass($request);
+        $amountProperty = $reflection->getProperty('amount');
+        $amountProperty->setAccessible(true);
+
+        $currencyProperty = $reflection->getProperty('currency');
+        $currencyProperty->setAccessible(true);
+
+        $this->assertEquals(12345, $amountProperty->getValue($request));
+        $this->assertEquals('EUR', $currencyProperty->getValue($request));
     }
 
     /**

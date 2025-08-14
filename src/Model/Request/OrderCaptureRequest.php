@@ -80,12 +80,15 @@ class OrderCaptureRequest extends RequestData
     }
 
     /**
-     * @param float $amount
+     * @param float|Amount $amount
      * @return $this
      */
-    public function setAmount(float $amount): self
+    public function setAmount(float|Amount $amount): self
     {
         $this->mode = 'amount';
+        if ($amount instanceof Amount) {
+            $amount = $amount->getValue();
+        }
         $this->amount = (int)round($amount * 100);
         return $this;
     }
