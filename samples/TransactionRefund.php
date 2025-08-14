@@ -13,6 +13,10 @@ $transactionId = $_REQUEST['pay_order_id'] ?? exit('expected pay_order_id');
 
 $transactionRefundRequest = new TransactionRefundRequest($transactionId);
 
+if (!empty($_REQUEST['refundamount'])) {
+    $transactionRefundRequest->setAmount((float)$_REQUEST['refundamount']);
+}
+
 # $transactionRefundRequest->addProduct('p1',1);
 # $transactionRefundRequest->addProduct('p2',2);
 # $transactionRefundRequest->setAmount(5.3);

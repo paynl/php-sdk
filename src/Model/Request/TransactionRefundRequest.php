@@ -94,7 +94,7 @@ class TransactionRefundRequest extends RequestData
     }
 
     /**
-     * @param float $amount
+     * @param float $amount Whole amount. Not in cents.
      * @return $this
      */
     public function setAmount(float $amount): self
