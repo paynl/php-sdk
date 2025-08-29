@@ -59,7 +59,7 @@ class Product implements ModelInterface, JsonSerializable
     /**
      * @var string
      */
-    protected string $vatCode;
+    protected ?string $vatCode = null;
 
     /**
      * @var float|null
