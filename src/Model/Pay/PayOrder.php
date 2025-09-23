@@ -98,7 +98,7 @@ class PayOrder implements ModelInterface
     /**
      * @var array
      */
-    protected $payments;
+    private ?array $payments = null;
 
     /**
      * @var string
@@ -558,7 +558,7 @@ class PayOrder implements ModelInterface
      */
     public function getPayments(): array
     {
-        return $this->payments ?? [];
+        return (array)$this->payments;
     }
 
     /**
