@@ -156,7 +156,7 @@ class Exchange
      */
     public function getAction(): string
     {
-        return $this->getSafePayload()->getAction();
+        return strtolower($this->getSafePayload()->getAction());
     }
 
     /**
@@ -336,14 +336,20 @@ class Exchange
                 }
 
                 $action = $this->getAction();
+
                 # Using TransactionStatusRequest for backwards compatibility, and refunds.
-                if (stripos($action, 'refund') !== false || !$payload->isTguTransaction()) {
-                    $request = new TransactionStatusRequest($payload->getPayOrderId());
-                } else {
-                    $request = new OrderStatusRequest($payload->getPayOrderId());
-                }
+                $useLegacy = (stripos($action, 'refund') !== false || !$payload->isTguTransaction());
+                $request = $useLegacy ? new TransactionStatusRequest($payload->getPayOrderId()) : new OrderStatusRequest($payload->getPayOrderId());
 
                 $payOrder = $request->setConfig($config)->start();
+
+                if (!$useLegacy && $action == 'new_ppt' && $payOrder->isCancelled()) {
+                    // force retrieving status - paylink fix
+                    paydbg('retrieve status through TransactionStatusRequest');
+                    $request = new TransactionStatusRequest($payload->getPayOrderId());
+                    $payOrder = $request->setConfig($config)->start();
+                }
+
             } catch (PayException $e) {
                 throw new Exception('API Retrieval error: ' . $payload->getPayOrderId() . ' - ' . $e->getFriendlyMessage());
             }
