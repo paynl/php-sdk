@@ -44,7 +44,7 @@ class PayLoad
         $this->checkoutData = is_array($payload['checkout_data'] ?? null) ? $payload['checkout_data'] : [];
         $this->fullPayLoad = is_array($payload['full_payload'] ?? null) ? $payload['full_payload'] : [];
 
-        $payload = $this->isTguLoad($this->fullPayLoad) ? $this->fullPayLoad['object'] : $this->fullPayLoad;
+        $payload = $this->isTguLoad() ? $this->fullPayLoad['object'] : $this->fullPayLoad;
 
         $this->extra1 = (string)($payload['extra1'] ?? $payload['stats']['extra1'] ?? '');
         $this->extra2 = (string)($payload['extra2'] ?? $payload['stats']['extra2'] ?? '');
@@ -52,12 +52,19 @@ class PayLoad
     }
 
     /**
-     * @param array $payload
      * @return bool
      */
-    public function isTguLoad(array $payload): bool
+    public function isTguLoad(): bool
     {
-        return isset($payload['object']) && is_array($payload['object']);
+        return !isset($this->fullPayLoad['action']);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isLegacyPayLoad(): bool
+    {
+        return !$this->isTguLoad();
     }
 
     /**

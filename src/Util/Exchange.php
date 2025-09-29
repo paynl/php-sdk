@@ -337,11 +337,15 @@ class Exchange
 
                 $action = $this->getAction();
                 # Using TransactionStatusRequest for backwards compatibility, and refunds.
-                if (stripos($action, 'refund') !== false || !$payload->isTguTransaction()) {
+                if (stripos($action, 'refund') !== false || !$payload->isTguTransaction() ||
+                   (stripos($action, 'new_ppt') !== false && $payload->isLegacyPayLoad())) // *1
+                {
                     $request = new TransactionStatusRequest($payload->getPayOrderId());
                 } else {
                     $request = new OrderStatusRequest($payload->getPayOrderId());
                 }
+
+                # 1: paylink's are created on legacy platform, therefor, status should be retrieved on legacy platform
 
                 $payOrder = $request->setConfig($config)->start();
             } catch (PayException $e) {
