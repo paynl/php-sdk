@@ -343,7 +343,7 @@ class Exchange
 
                 $payOrder = $request->setConfig($config)->start();
 
-                if (!$useLegacy && $action == 'new_ppt' && $payOrder->isCancelled()) {
+                if (!$useLegacy && (in_array($action, ['new_ppt', 'cancel'])) && $payOrder->isCancelled()) {
                     // force retrieving status - paylink fix
                     paydbg('retrieve status through TransactionStatusRequest');
                     $request = new TransactionStatusRequest($payload->getPayOrderId());
