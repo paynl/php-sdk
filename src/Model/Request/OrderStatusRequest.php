@@ -10,6 +10,7 @@ use PayNL\Sdk\Model\Pay\PayOrder;
 use PayNL\Sdk\Request\RequestInterface;
 use PayNL\Sdk\Config\Config;
 use PayNL\Sdk\Helpers\StaticCacheTrait;
+use PayNL\Sdk\Util\Misc;
 use PayNL\Sdk\Util\PayCache;
 
 /**
@@ -57,6 +58,10 @@ class OrderStatusRequest extends RequestData
      */
     public function start(): PayOrder
     {
+        if (!Misc::isTguTransaction($this->orderId)) {
+            return (new TransactionStatusRequest($this->orderId))->setConfig($this->config)->start();
+        }
+
         $cacheKey = 'order_status_' . md5(json_encode([$this->config->getUsername(), $this->orderId]));
         $this->config->setCore(Config::TGU1);
 

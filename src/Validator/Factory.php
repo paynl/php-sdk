@@ -20,7 +20,7 @@ class Factory implements FactoryInterface
      *
      * @return ValidatorInterface
      */
-    public function __invoke(ContainerInterface $container, string $requestedName, array $options = null): ValidatorInterface
+    public function __invoke(ContainerInterface $container, string $requestedName, ?array $options = null): ValidatorInterface
     {
         /** @var ValidatorInterface $validator */
         $validator = new $requestedName();

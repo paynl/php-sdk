@@ -40,7 +40,7 @@ class Loader
      * @param Manager $defaultServiceManager
      * @param ServiceConfig|null $configuration
      */
-    public function __construct(ServiceManager $defaultServiceManager, ServiceConfig $configuration = null)
+    public function __construct(ServiceManager $defaultServiceManager, ?ServiceConfig $configuration = null)
     {
         $this->defaultServiceManager = $defaultServiceManager;
 

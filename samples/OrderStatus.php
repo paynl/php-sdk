@@ -29,8 +29,9 @@ try {
 
 echo '<pre>';
 echo 'Success, values:' . PHP_EOL . PHP_EOL;
-
 echo 'type: ' . $payOrder->getType() . PHP_EOL;
+echo 'getCustomerId: ' . $payOrder->getCustomerId() . PHP_EOL;
+echo 'getCustomerName: ' . $payOrder->getCustomerName() . PHP_EOL;
 echo 'isPending: ' . ($payOrder->isPending() ? 'YES' : 'no') . PHP_EOL;
 echo 'isPaid: ' . ($payOrder->isPaid() ? 'YES' : 'no') . PHP_EOL;
 echo 'isAuthorized: ' . ($payOrder->isAuthorized() ? 'YES' : 'no') . PHP_EOL;

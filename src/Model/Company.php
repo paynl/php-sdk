@@ -17,7 +17,7 @@ class Company implements ModelInterface, JsonSerializable
     use JsonSerializeTrait;
 
     protected string $name = '';
-    protected string $coc = '';
+    protected ?string $coc = '';
     protected string $vat = '';
     protected string $countryCode = '';
 
@@ -49,13 +49,12 @@ class Company implements ModelInterface, JsonSerializable
     }
 
     /**
-     * @param string $coc
-     *
-     * @return Company
+     * @param string|null $coc
+     * @return $this
      */
-    public function setCoc(string $coc): self
+    public function setCoc(?string $coc): self
     {
-        $this->coc = $coc;
+        $this->coc = (string)$coc;
         return $this;
     }
 

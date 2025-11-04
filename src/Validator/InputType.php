@@ -31,7 +31,7 @@ class InputType extends AbstractValidator
      * @inheritDoc
      * @param string|null $type
      */
-    public function isValid($value, string $type = null): bool
+    public function isValid($value, ?string $type = null): bool
     {
         if (null === $type) {
             $this->error(self::MSG_NO_TYPE);

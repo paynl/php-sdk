@@ -24,7 +24,7 @@ class Factory implements FactoryInterface
      *
      * @return AbstractMapper
      */
-    public function __invoke(ContainerInterface $container, string $requestedName, array $options = null): AbstractMapper
+    public function __invoke(ContainerInterface $container, string $requestedName, ?array $options = null): AbstractMapper
     {
         $mapConfig = $container->get('mapperManager')->getMapping();
 

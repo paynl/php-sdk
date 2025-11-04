@@ -126,7 +126,7 @@ abstract class AbstractPluginManager extends Manager
      *
      * @param array|null $options
      */
-    public function get($name, array $options = null)
+    public function get($name, ?array $options = null)
     {
         if (false === $this->has($name)) {
             $name = $this->resolvedAliases[$name] ?? $name;
@@ -154,7 +154,7 @@ abstract class AbstractPluginManager extends Manager
      *
      * @inheritDoc
      */
-    public function build(string $name, array $options = null)
+    public function build(string $name, ?array $options = null)
     {
         $instance = parent::build($name, $options);
         $this->validate($instance);

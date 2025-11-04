@@ -19,7 +19,7 @@ class Factory implements FactoryInterface
      *
      * @return FilterInterface
      */
-    public function __invoke(ContainerInterface $container, string $requestedName, array $options = null): FilterInterface
+    public function __invoke(ContainerInterface $container, string $requestedName, ?array $options = null): FilterInterface
     {
         return (new $requestedName())
             ->setValue($options['value'] ?? '')

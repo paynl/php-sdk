@@ -23,7 +23,7 @@ class TerminalsBrowseRequest extends RequestData
      * @param string $merchantCode
      * @param string $excludeMerchantCode
      */
-    public function __construct(string $merchantCode = '', string $excludeMerchantCode = '')
+    public function __construct(?string $merchantCode = '', ?string $excludeMerchantCode = '')
     {
         $this->setMerchantCode($merchantCode);
         $this->setExcludeMerchantCode($excludeMerchantCode);

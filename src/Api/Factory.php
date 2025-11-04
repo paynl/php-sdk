@@ -28,7 +28,7 @@ class Factory implements FactoryInterface
      * @param array|null $options
      * @return Api|Service
      */
-    public function __invoke(ContainerInterface $container, string $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, string $requestedName, ?array $options = null)
     {
         switch ($requestedName) {
             case Api::class:

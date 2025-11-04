@@ -5,9 +5,12 @@ declare(strict_types=1);
 namespace PayNL\Sdk\Model\Request;
 
 use PayNL\Sdk\Exception\PayException;
+use PayNL\Sdk\Model\Amount;
+use PayNL\Sdk\Model\Request\OrderCaptureLegacyRequest;
 use PayNL\Sdk\Request\RequestData;
 use PayNL\Sdk\Model\Pay\PayOrder;
 use PayNL\Sdk\Request\RequestInterface;
+use PayNL\Sdk\Util\Misc;
 
 /**
  * Class OrderCaptureRequest
@@ -23,10 +26,10 @@ class OrderCaptureRequest extends RequestData
     private $mode;
 
     /**
-     * @param $transactionId
+     * @param string $transactionId
      * @param float|null $amount
      */
-    public function __construct($transactionId, float $amount = null)
+    public function __construct(string $transactionId, ?float $amount = null)
     {
         $this->transactionId = $transactionId;
         if (!empty($amount)) {
@@ -98,6 +101,17 @@ class OrderCaptureRequest extends RequestData
         } elseif ($this->mode == 'product') {
             $this->uri = '/orders/%transactionId%/capture/products';
         }
+
+        if (!Misc::isTguTransaction($this->transactionId)) {
+            $payOrder = (new OrderCaptureLegacyRequest($this->transactionId))
+                ->setConfig($this->config)
+                ->start();
+            $payOrder->setOrderId($this->transactionId);
+            $payOrder->setDescription($this->transactionId);
+            $payOrder->setAmount(new Amount($this->amount));
+            return $payOrder;
+        }
+
         return parent::start();
     }
 }

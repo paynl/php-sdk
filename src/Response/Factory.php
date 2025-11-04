@@ -14,7 +14,7 @@ use Psr\Container\ContainerInterface;
  */
 class Factory implements FactoryInterface
 {
-    public function __invoke(ContainerInterface $container, string $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, string $requestedName, ?array $options = null)
     {
         $config = $container->get('config');
         $responseFormat = $config['response']['format'] ?? ResponseInterface::FORMAT_OBJECTS;

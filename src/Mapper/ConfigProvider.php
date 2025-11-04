@@ -87,6 +87,7 @@ class ConfigProvider implements ProviderInterface
                 'TransactionStatus'             => 'PayOrder',
                 'OrderCreate'                   => 'PayOrder',
                 'OrderCapture'                  => 'PayOrder',
+                'OrderCaptureLegacy'            => 'PayOrder',
                 'OrderVoid'                     => 'PayOrder',
                 'OrderAbort'                    => 'PayOrder',
                 'OrderStatus'                   => 'PayOrder',

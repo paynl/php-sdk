@@ -31,7 +31,7 @@ class ManagerFactory implements FactoryInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function __invoke(ContainerInterface $container, string $requestedName, array $options = null): AbstractPluginManager
+    public function __invoke(ContainerInterface $container, string $requestedName, ?array $options = null): AbstractPluginManager
     {
         $options = $options ?? [];
         if (true === $container->has('config') &&

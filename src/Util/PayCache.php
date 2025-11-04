@@ -12,7 +12,7 @@ class PayCache
      * @param string|null $cacheDir
      * @param integer $defaultTtl
      */
-    public function __construct(string $cacheDir = null, int $defaultTtl = 600)
+    public function __construct(?string $cacheDir = null, int $defaultTtl = 600)
     {
         $this->cacheDir = $cacheDir ?? sys_get_temp_dir() . '/cache_pay_phpsdk';
         $this->defaultTtl = $defaultTtl;
@@ -35,7 +35,7 @@ class PayCache
      * @param integer|null $ttl
      * @return mixed|null
      */
-    public function get(string $key, callable $callback = null, int $ttl = null): mixed
+    public function get(string $key, ?callable $callback = null, ?int $ttl = null): mixed
     {
         if (!$this->enabled) {
             return $callback ? $callback() : null;
@@ -71,7 +71,7 @@ class PayCache
      * @param integer|null $ttl
      * @return void
      */
-    public function set(string $key, mixed $value, int $ttl = null): void
+    public function set(string $key, mixed $value,?int $ttl = null): void
     {
         if (!$this->enabled) {
             return;

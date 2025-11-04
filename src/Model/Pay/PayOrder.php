@@ -23,7 +23,7 @@ class PayOrder implements ModelInterface
     /**
      * @var string
      */
-    protected string $type;
+    private ?string $type = null;
 
     /**
      * @var string
@@ -98,7 +98,7 @@ class PayOrder implements ModelInterface
     /**
      * @var array
      */
-    protected $payments;
+    private ?array $payments = null;
 
     /**
      * @var string
@@ -141,11 +141,11 @@ class PayOrder implements ModelInterface
     protected $links;
 
     /**
-     * @param array $payload
+     * @param array|null $payload
      */
-    public function __construct(array $payload = null)
+    public function __construct(?array $payload = null)
     {
-        if (!empty($payload['object'])) {
+        if (!empty($payload['object']) && is_array($payload['object'])) {
             foreach ($payload['object'] as $_key => $_val) {
                 if (in_array($_key, ['amount', 'capturedAmount', 'authorizedAmount'])) {
                     continue;
@@ -473,7 +473,22 @@ class PayOrder implements ModelInterface
         return $this->payments[0]['paymentMethod']['id'] ?? null;
     }
 
+    /**
+     * @return string|null
+     */
+    public function getCustomerId(): ?string
+    {
+        return $this->payments[0]['customerId'] ?? null;
+    }
 
+    /**
+     * @return string|null
+     */
+    public function getCustomerName(): ?string
+    {
+        return $this->payments[0]['customerName'] ?? null;
+    }
+    
     /**
      * @param Amount $amount
      * @return $this
@@ -543,7 +558,7 @@ class PayOrder implements ModelInterface
      */
     public function getPayments(): array
     {
-        return $this->payments;
+        return (array)$this->payments;
     }
 
     /**
@@ -743,6 +758,15 @@ class PayOrder implements ModelInterface
         return (new PayStatus())->get($this->getStatusCode()) === PayStatus::AUTHORIZE;
     }
 
+    /**
+     * @return boolean
+     * @throws Exception
+     */
+    public function isDenied(): bool
+    {
+        return (new PayStatus())->get($this->getStatusCode()) === PayStatus::DENIED;
+    }
+    
     /**
      * @return boolean
      * @throws Exception

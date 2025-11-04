@@ -324,7 +324,7 @@ class Manager implements ContainerInterface
      *
      * @return mixed
      */
-    public function build(string $name, array $options = null)
+    public function build(string $name, ?array $options = null)
     {
         // do not "cache" because of context specific options
         $name = $this->resolvedAliases[$name] ?? $name;
@@ -362,7 +362,7 @@ class Manager implements ContainerInterface
      *
      * @return mixed
      */
-    public function doCreate(string $resolvedName, array $options = null)
+    public function doCreate(string $resolvedName, ?array $options = null)
     {
         try {
             $factory = $this->getFactory($resolvedName);

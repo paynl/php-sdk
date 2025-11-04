@@ -215,6 +215,12 @@ class ConfigProvider implements ConfigProviderInterface
               'transactionId' => '',
             ],
           ],
+            'OrderCaptureLegacy' => [
+                'uri' => '',
+                'requiredParams' => [
+                    'transactionId' => '',
+                ],
+            ],
           'TransactionVoid' => [
             'uri' => '',
             'requiredParams' => [

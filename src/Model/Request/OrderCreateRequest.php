@@ -30,6 +30,8 @@ class OrderCreateRequest extends RequestData
     private string $currency = 'EUR';
     private int $paymentMethodId;
     private int $issuerId;
+    private string $paypalOrderId;
+    private array $paymentInputData = [];
     private string $terminalCode;
     private ?bool $testMode = null;
 
@@ -227,6 +229,30 @@ class OrderCreateRequest extends RequestData
     }
 
     /**
+     * Use when implementing express checkout for PayPal.
+     *
+     * @param string $orderId PayPal order ID
+     * @return $this
+     */
+    public function setPayPalOrderId(string $orderId): self
+    {
+        $this->paypalOrderId = $orderId;
+        return $this;
+    }
+
+    /**
+     * Use this to provide the payment method with custom input data.
+     *
+     * @param array $inputData
+     * @return $this
+     */
+    public function setPaymentInputData(array $inputData): self
+    {
+        $this->paymentInputData = $inputData;
+        return $this;
+    }
+
+    /**
      * @param bool $testMode
      * @return $this
      */
@@ -304,12 +330,27 @@ class OrderCreateRequest extends RequestData
         $this->_add($parameters, 'exchangeUrl', $this->exchangeUrl);
 
         if (!empty($this->paymentMethodId)) {
-            $parameters['paymentMethod'] = ['id' => $this->paymentMethodId,];
+            $parameters['paymentMethod'] = ['id' => $this->paymentMethodId];
+
+            $options = array_filter([
+                'issuerId' => $this->issuerId ?? null,
+                'terminalCode' => $this->terminalCode ?? null,
+                'paypalOrderId' => $this->paypalOrderId ?? null,
+                'paymentInputData' => !empty($this->paymentInputData) ? true : null,
+            ]);
+
+            if (count($options) > 1) {
+                throw new \Exception('Only one of: issuerId, terminalCode, paypalOrderId or paymentInputData may be set.');
+            }
 
             if (!empty($this->issuerId)) {
                 $parameters['paymentMethod']['input']['issuerId'] = $this->issuerId;
             } elseif (!empty($this->terminalCode)) {
                 $parameters['paymentMethod']['input']['terminalCode'] = $this->terminalCode;
+            } elseif (!empty($this->paypalOrderId)) {
+                $parameters['paymentMethod']['input']['orderId'] = $this->paypalOrderId;
+            } elseif (!empty($this->paymentInputData)) {
+                $parameters['paymentMethod']['input'] = $this->paymentInputData;
             }
         }
 
@@ -331,6 +372,7 @@ class OrderCreateRequest extends RequestData
             $this->_add($custParameters, 'language', $this->customer->getLanguage());
             $this->_add($custParameters, 'trust', $this->customer->getTrust());
             $this->_add($custParameters, 'reference', $this->customer->getReference());
+            $this->_add($custParameters, 'locale', $this->customer->getLocale());
 
             $compParameters = [];
             $this->_add($compParameters, 'name', $this->customer->getCompany()->getName());
@@ -377,7 +419,7 @@ class OrderCreateRequest extends RequestData
             $stats = [];
             $this->_add($stats, 'info', $this->stats->getInfo());
             $this->_add($stats, 'tool', $this->stats->getTool());
-            $this->_add($stats, 'object', $this->stats->getObject());
+            $this->_add($stats, 'object', $this->getSdkObject($this->stats));
             $this->_add($stats, 'extra1', $this->stats->getExtra1());
             $this->_add($stats, 'extra2', $this->stats->getExtra2());
             $this->_add($stats, 'extra3', $this->stats->getExtra3());
@@ -395,6 +437,30 @@ class OrderCreateRequest extends RequestData
         $this->_add($parameters, 'transferData', $this->transferData);
 
         return $parameters;
+    }
+
+    /**
+     * @param Stats $stats
+     * @return string
+     */
+    private function getSdkObject(Stats $stats)
+    {
+        $__object = $this->stats->getObject();
+
+        if (empty($__object)) {
+            $composerFilePath = sprintf('%s/%s', rtrim(__DIR__, '/'), '../../../composer.json');
+
+            if (file_exists($composerFilePath)) {
+                $composer = json_decode(file_get_contents($composerFilePath), true);
+
+                if (isset($composer['version'])) {
+                    $composerVersion = $composer['version'];
+                }
+            }
+
+            $__object = 'PHP-SDK ' . ($composerVersion ?? 'unknown');
+        }
+        return $__object;
     }
 
     /**

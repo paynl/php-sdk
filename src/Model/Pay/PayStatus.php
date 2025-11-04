@@ -19,6 +19,7 @@ class PayStatus
     public const AUTHORIZE = 95;
     public const CANCEL = -1;
     public const VOID = -61;
+    public const DENIED = -63;
     public const REFUND = -81;
     public const VERIFY = 85;
     public const PARTIAL_PAYMENT = 80;
@@ -50,6 +51,8 @@ class PayStatus
         $mapper[-81] = self::REFUND;
         $mapper[-82] = self::PARTIAL_REFUND;
         $mapper[-61] = self::VOID;
+        $mapper[-63] = self::DENIED;
+        $mapper[-64] = self::DENIED;
         $mapper[20] = self::PENDING;
         $mapper[25] = self::PENDING;
         $mapper[50] = self::PENDING;

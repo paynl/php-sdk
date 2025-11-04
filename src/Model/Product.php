@@ -59,12 +59,12 @@ class Product implements ModelInterface, JsonSerializable
     /**
      * @var string
      */
-    protected string $vatCode;
+    protected ?string $vatCode = null;
 
     /**
-     * @var float
+     * @var float|null
      */
-    protected float $vatPercentage = 0;
+    protected ?float $vatPercentage = null;
 
     /**
      * @param $id
@@ -73,8 +73,8 @@ class Product implements ModelInterface, JsonSerializable
      * @param $currency
      * @param $type
      * @param $quantity
-     * @param string $vatCode
-     * @param float $vatPercentage
+     * @param string|null $vatCode
+     * @param float|null $vatPercentage
      */
     public function __construct(
         $id = null,
@@ -83,8 +83,8 @@ class Product implements ModelInterface, JsonSerializable
         $currency = null,
         $type = null,
         $quantity = null,
-        string $vatCode = null,
-        float $vatPercentage = null
+        ?string $vatCode = null,
+        ?float $vatPercentage = null
     )
     {
         if (!is_null($id)) {
@@ -177,11 +177,11 @@ class Product implements ModelInterface, JsonSerializable
 
     /**
      * @param string $description
-     *
-     * @return Product
+     * @return $this
      */
     public function setDescription(string $description): self
     {
+        $description = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $description);
         $this->description = $description;
         return $this;
     }
@@ -248,7 +248,7 @@ class Product implements ModelInterface, JsonSerializable
     /**
      * @return null|float
      */
-    public function getVatPercentage()
+    public function getVatPercentage(): ?float
     {
         return $this->vatPercentage;
     }

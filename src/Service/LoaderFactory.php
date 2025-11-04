@@ -56,7 +56,7 @@ class LoaderFactory implements FactoryInterface
      *
      * @return ServiceLoader
      */
-    public function __invoke(ContainerInterface $container, string $requestedName, array $options = null): ServiceLoader
+    public function __invoke(ContainerInterface $container, string $requestedName, ?array $options = null): ServiceLoader
     {
         /**
          * @var Config $configuration

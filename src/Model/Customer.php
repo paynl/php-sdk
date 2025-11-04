@@ -31,6 +31,7 @@ class Customer implements ModelInterface, JsonSerializable
     protected int $trust = 0;
     protected string $reference = '';
     protected ?Company $company = null;
+    protected string $locale = '';
 
     /**
      * @return string
@@ -38,6 +39,24 @@ class Customer implements ModelInterface, JsonSerializable
     public function getLastName(): string
     {
         return (string)$this->lastName;
+    }
+
+    /**
+     * @param string $locale
+     * @return Customer
+     */
+    public function setLocale(string $locale): self
+    {
+        $this->locale = $locale;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLocale(): string
+    {
+        return $this->locale;
     }
 
     /**
@@ -79,13 +98,27 @@ class Customer implements ModelInterface, JsonSerializable
     }
 
     /**
-     * @param string $birthDate
-     *
-     * @return Customer
+     * @param string|null $birthDate
+     * @return $this
      */
-    public function setBirthDate(string $birthDate): self
+    public function setBirthDate(?string $birthDate): self
     {
-        $this->birthDate = $birthDate;
+        if ($birthDate === null || trim($birthDate) === '') {
+            return $this;
+        }
+
+        $birthDate = trim($birthDate);
+        $dateFormats = ['Y-m-d', 'd-m-Y', \DateTime::ATOM];
+
+        foreach ($dateFormats as $format) {
+            $dt = \DateTime::createFromFormat($format, $birthDate);
+            if ($dt && $dt->format($format) === $birthDate) {
+                $this->birthDate = $dt->format('Y-m-d');
+                return $this;
+            }
+        }
+
+        paydbg("Skipping invalid birthDate format: $birthDate");
         return $this;
     }
 

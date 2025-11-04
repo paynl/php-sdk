@@ -83,7 +83,7 @@ class Method implements ModelInterface
      * @param string|null $language
      * @return string
      */
-    public function getName(string $language = null): string
+    public function getName(?string $language = null): string
     {
         if (!empty($language) && isset($this->translations['name'][$language])) {
             return $this->translations['name'][$language];
@@ -185,7 +185,7 @@ class Method implements ModelInterface
      * @param string|null $language
      * @return string
      */
-    public function getDescription(string $language = null): string
+    public function getDescription(?string $language = null): string
     {
         if (!empty($language)) {
             if (isset($this->translations['description'][$language])) {
