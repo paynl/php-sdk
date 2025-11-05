@@ -359,7 +359,10 @@ class Exchange
                 }
 
             } catch (PayException $e) {
-                throw new Exception('API Retrieval error: ' . $payload->getPayOrderId() . ' - ' . $config->getServiceId() . '. ' . $e->getFriendlyMessage());
+                throw new Exception('API Retrieval error: ' . $payload->getPayOrderId() . ' - ' . $e->getFriendlyMessage());
+
+            } catch (Exception $e) {
+                throw new Exception('API-Retrieval error: ' . $payload->getPayOrderId() . ' - ' . $e->getMessage());
             }
         }
 

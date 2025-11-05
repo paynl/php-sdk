@@ -127,7 +127,7 @@ try {
 
 echo '<pre>';
 echo 'Success, values:' . PHP_EOL;
-echo 'getOrderId: <b>' . $payOrder->getOrderId() . '</b>'.PHP_EOL;
+echo 'getOrderId: <b>' . $payOrder->getOrderId() . '</b>' . PHP_EOL;
 
 echo 'getId: ' . $payOrder->getId() . PHP_EOL;
 echo 'getServiceId: ' . $payOrder->getServiceId() . PHP_EOL;
