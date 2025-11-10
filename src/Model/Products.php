@@ -55,7 +55,7 @@ class Products extends ArrayCollection implements ModelInterface, CollectionInte
      */
     public function addProduct(Product $product): self
     {
-        $this->set($product->getId(), $product);
+        $this->add($product);
         return $this;
     }
 

@@ -4,16 +4,15 @@ declare(strict_types=1);
 
 namespace PayNL\Sdk\Response;
 
-use PayNL\Sdk\{
-    Common\DebugAwareInterface,
+use PayNL\Sdk\{Common\DebugAwareInterface,
     Common\DebugAwareTrait,
     Common\FormatAwareTrait,
     Exception\InvalidArgumentException,
+    Exception\PayException,
     Model\Error,
     Model\Errors,
     Transformer\TransformerAwareInterface,
-    Transformer\TransformerAwareTrait
-};
+    Transformer\TransformerAwareTrait};
 
 /**
  * Class Response
@@ -103,9 +102,9 @@ class Response implements ResponseInterface, TransformerAwareInterface, DebugAwa
     }
 
     /**
-     * @param mixed $body
-     *
-     * @return Response
+     * @param $body
+     * @return Response|$this
+     * @throws \Exception
      */
     public function setBody($body): Response
     {
@@ -114,11 +113,12 @@ class Response implements ResponseInterface, TransformerAwareInterface, DebugAwa
             return $this->setBody(self::HTTP_STATUS_CODES[$this->getStatusCode()]);
         }
 
-        // initiate transformer (... more than meets the eye ;-) )
+        # initiate transformer (... more than meets the eye ;-) )
         if (true === $this->isFormat(static::FORMAT_OBJECTS) && null !== $this->getTransformer()) {
             try {
                 $body = $this->getTransformer()->transform($body);
             } catch (\Exception $e) {
+                throw new \Exception('Could not parse response: ' . $e->getMessage() . ', Response: ' . print_r($body, true));
             }
         }
 

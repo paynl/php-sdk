@@ -329,29 +329,40 @@ class Exchange
             $payOrder->setType($payload->getType());
             $payOrder->setStatusCodeName(PayStatus::PENDING, 'PENDING');
         } else {
-            # Continue to check the order status manually
+
             try {
-                if (empty($payload->getPayOrderId())) {
+                $payOrderId = $payload->getPayOrderId();
+                if (empty($payOrderId)) {
                     throw new Exception('Missing pay order id in payload');
                 }
 
                 $action = $this->getAction();
 
-                # Using TransactionStatusRequest for backwards compatibility, and refunds.
                 $useLegacy = (stripos($action, 'refund') !== false || !$payload->isTguTransaction());
-                $request = $useLegacy ? new TransactionStatusRequest($payload->getPayOrderId()) : new OrderStatusRequest($payload->getPayOrderId());
 
-                $payOrder = $request->setConfig($config)->start();
+                $request = $useLegacy
+                    ? new TransactionStatusRequest($payOrderId) # Using TransactionStatusRequest for refunds and backwards compatibility
+                    : new OrderStatusRequest($payOrderId);
 
-                if (!$useLegacy && (in_array($action, ['new_ppt', 'cancel'])) && $payOrder->isCancelled()) {
-                    // force retrieving status - paylink fix
-                    paydbg('retrieve status through TransactionStatusRequest');
-                    $request = new TransactionStatusRequest($payload->getPayOrderId());
+                try {
                     $payOrder = $request->setConfig($config)->start();
+
+                    if (!$useLegacy && $action === 'new_ppt' && $payOrder->isCancelled()) {
+                        # Rely on on legacy platform when retrieved status is cancelled, and request-status(action) is auth/paid
+                        # ..and TransactionStatusRequest above, wasn't used.
+                        $payOrder = (new TransactionStatusRequest($payOrderId))->setConfig($config)->start();
+                    }
+
+                } catch (Exception $exception) {
+                    paydbg('Exchange process exception: ' . $exception . '. Trying legacy platform for: ' . $payOrderId);
+                    $payOrder = (new TransactionStatusRequest($payOrderId))->setConfig($config)->start();
                 }
 
             } catch (PayException $e) {
                 throw new Exception('API Retrieval error: ' . $payload->getPayOrderId() . ' - ' . $e->getFriendlyMessage());
+
+            } catch (Exception $e) {
+                throw new Exception('API-Retrieval error: ' . $payload->getPayOrderId() . ' - ' . $e->getMessage());
             }
         }
 

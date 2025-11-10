@@ -127,12 +127,13 @@ try {
 
 echo '<pre>';
 echo 'Success, values:' . PHP_EOL;
+echo 'getOrderId: <b>' . $payOrder->getOrderId() . '</b>' . PHP_EOL;
+
 echo 'getId: ' . $payOrder->getId() . PHP_EOL;
 echo 'getServiceId: ' . $payOrder->getServiceId() . PHP_EOL;
 echo 'getDescription: ' . $payOrder->getDescription() . PHP_EOL;
 echo 'getReference: ' . $payOrder->getReference() . PHP_EOL;
 echo 'getManualTransferCode: ' . $payOrder->getManualTransferCode() . PHP_EOL;
-echo 'getOrderId: ' . $payOrder->getOrderId() . PHP_EOL;
 echo 'getPaymentUrl: ' . '<a target="_blank" href="' . $payOrder->getPaymentUrl() . '">' . $payOrder->getPaymentUrl() . '</a>' . PHP_EOL;
 echo 'getStatusUrl: ' . $payOrder->getStatusUrl() . PHP_EOL;
 echo 'getAmount value: ' . $payOrder->getAmount() . PHP_EOL;
