@@ -157,7 +157,7 @@ class Misc
             }
         }
 
-        $number = substr($number, 0, 45);
+        $number = mb_substr($number, 0, 45);
 
         return compact('street', 'number');
     }
