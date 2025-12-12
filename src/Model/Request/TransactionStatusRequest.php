@@ -61,11 +61,12 @@ class TransactionStatusRequest extends RequestData
 
         $this->config->setCore('https://rest.pay.nl');
 
-        if ($this->hasStaticCache($cacheKey)) {
-            return $this->getStaticCacheValue($cacheKey);
-        }
-
         if ($this->config->isCacheEnabled()) {
+
+            if ($this->hasStaticCache($cacheKey)) {
+                return $this->getStaticCacheValue($cacheKey);
+            }
+
             $result = (new PayCache())->get($cacheKey, function () {
                 return parent::start();
             }, 3); // 3 seconds file caching
