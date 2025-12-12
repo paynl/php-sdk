@@ -63,11 +63,12 @@ class ServiceGetConfigRequest extends RequestData
     {
         $cacheKey = 'service_getconfig_' . md5(json_encode([$this->config->getUsername(), $this->config->getPassword(), $this->serviceId]));
 
-        if ($this->hasStaticCache($cacheKey)) {
-            return $this->getStaticCacheValue($cacheKey);
-        }
-
         if ($this->config->isCacheEnabled()) {
+
+            if ($this->hasStaticCache($cacheKey)) {
+                return $this->getStaticCacheValue($cacheKey);
+            }
+
             $result = (new PayCache())->get($cacheKey, function () {
                 return $this->startAPI();
             }, 5);
