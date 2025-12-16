@@ -279,6 +279,13 @@ class ConfigProvider implements ConfigProviderInterface
             'requiredParams' => [
               'transactionId' => '',
             ],
+          ],
+          'VoucherCapture' => [
+            'uri' => '/vouchers/transaction',
+            'method' => RequestInterface::METHOD_POST,
+            'requiredParams' => [
+              'transactionId' => '',
+            ],
           ]
         ];
     }

@@ -94,8 +94,9 @@ class ConfigProvider implements ProviderInterface
                 'OrderUpdate'                   => 'PayOrder',
                 'OrderApprove'                  => 'PayOrder',
                 'OrderDecline'                  => 'PayOrder',
-                'TerminalsGet'                   => 'Terminal',
-                'TerminalsBrowse'                => 'Terminals'
+                'TerminalsGet'                  => 'Terminal',
+                'TerminalsBrowse'               => 'Terminals',
+                'VoucherCapture'                 => 'VoucherCaptureResponse',
             ],
         ];
     }
