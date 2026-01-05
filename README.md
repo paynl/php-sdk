@@ -19,6 +19,11 @@ If requirements are met, go ahead with the [installation and set-up](https://git
 
 To get you started, you should check these [Samples](https://github.com/paynl/SDK-PHP/blob/main/samples).
 
+
+<br>
+
+If you are upgrading from the [old SDK](https://github.com/paynl/sdk), please follow the [SDK Migration Guide](https://github.com/paynl/php-sdk/wiki/SDK-Migration-guide).
+
 <br>
 
 For more detailed information, have a look at the [Wiki](https://github.com/paynl/php-sdk/wiki/) page.
