@@ -1,6 +1,11 @@
 name: PHPCS
 
-on: [pull_request, workflow_dispatch, release]
+on:
+  pull_request:
+  workflow_dispatch:
+  release:
+    types: [published]
+
 
 jobs:
   phpcs:
