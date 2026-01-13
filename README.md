@@ -1,7 +1,3 @@
-
-
-[//]: # ([![codecov]&#40;https://codecov.io/github/paynl/php-sdk---private/graph/badge.svg?token=VISPWF28PW&#41;]&#40;https://codecov.io/github/paynl/php-sdk---private&#41;)
-
 <img src="https://www.pay.nl/uploads/1/brands/main_logo.png" width="100px" style="margin-bottom: -30px"/> <h1 style="position:relative;top:-6px;padding-left:10px;display: inline-block">PHP SDK</h1>
 
 
