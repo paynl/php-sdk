@@ -86,9 +86,9 @@ class PayOrder implements ModelInterface
     protected $authorizedAmount;
 
     /**
-     * @var Amount
+     * @var Amount|null 
      */
-    protected $capturedAmount;
+    protected ?Amount $capturedAmount;
 
     /**
      * @var array
