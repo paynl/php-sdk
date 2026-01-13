@@ -81,7 +81,7 @@ class ServiceGetConfigResponse implements ModelInterface
     /**
      * @var array
      */
-    protected $tguList;
+    protected ?array $tguList;
 
     /**
      * @return string
@@ -111,8 +111,7 @@ class ServiceGetConfigResponse implements ModelInterface
 
     /**
      * @param string $name
-     *
-     * @return Config
+     * @return $this
      */
     public function setName(string $name): self
     {
@@ -129,11 +128,8 @@ class ServiceGetConfigResponse implements ModelInterface
     }
 
     /**
-     * @param boolean $testMode
-     *
-     * @throws InvalidArgumentException when given test mode is invalid
-     *
-     * @return Config
+     * @param bool $testMode
+     * @return $this
      */
     public function setTestMode(bool $testMode): self
     {
@@ -151,8 +147,7 @@ class ServiceGetConfigResponse implements ModelInterface
 
     /**
      * @param string $secret
-     *
-     * @return Config
+     * @return $this
      */
     public function setSecret(string $secret): self
     {

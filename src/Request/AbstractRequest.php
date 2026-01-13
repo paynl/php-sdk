@@ -38,8 +38,6 @@ use PayNL\Sdk\Packages\Symfony\Serializer\Exception\NotEncodableValueException;
  *
  * @package PayNL\Sdk\Request
  *
- * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractRequest implements
     RequestInterface,
@@ -494,7 +492,7 @@ abstract class AbstractRequest implements
             $errorMessages = '';
             $rawBody = $re->getMessage();
 
-            if (true === method_exists($re, 'getResponse') && null !== $re->getResponse()) {
+            if (null !== $re->getResponse()) {
                 $guzzleExceptionBody = $re->getResponse()->getBody();
                 $size = $guzzleExceptionBody->isSeekable() === true ? (int)$guzzleExceptionBody->getSize() : 0;
 
@@ -514,13 +512,13 @@ abstract class AbstractRequest implements
                 $body = $this->getErrorsString($response->getFormat(), (int)$statusCode, $errorMessages);
             }
         } catch (GuzzleException | ExceptionInterface $e) {
-            $statusCode = $e->getCode() ?? 500;
+            $statusCode = $e->getCode() ?: 500;
             $rawBody = 'Error: ' . $e->getMessage() . ' (' . $statusCode . ')';
             $body = $this->getErrorsString($response->getFormat(), (int)$statusCode, $rawBody);
         }
 
         if (function_exists('displayPayRequest')) {
-            displayPayRequest($guzzleClient->getConfig('base_uri') . $uri, $requestBody, $rawBody, $curlRequest);
+            displayPayRequest($guzzleClient->getConfig('base_uri') . $uri, $requestBody ?? '', $rawBody, $curlRequest ?? '');
         }
 
         $response->setStatusCode($statusCode)->setRawBody($rawBody)->setBody($body);
@@ -558,11 +556,8 @@ abstract class AbstractRequest implements
                 ]
             ]
         ];
-        // if given raw body already is Json return that
-        if (true === array_key_exists('errors', $errors)) {
-            // reformat the errors
-            $errors['errors'] = $this->flattenErrors($errors['errors']);
-        }
+
+        $errors['errors'] = $this->flattenErrors($errors['errors']);
 
         return (string)$encoder->encode($errors, $responseFormat);
     }

@@ -141,19 +141,20 @@ class Application
      * @param $request
      * @param array|null $params
      * @param array|null $filters
-     * @param null $body
+     * @param mixed|null $body
      * @return $this
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
-    public function setRequest($request, ?array $params = null, ?array $filters = null, $body = null): self
+    public function setRequest($request, ?array $params = null, ?array $filters = null, mixed $body = null): self
     {
         if (true === is_string($request)) {
-            $body = (false === empty($body) ? $body : null);
+            $body = $body ?: null;
 
             # Do we've got a body given? And if yes, is it correct?
             if ($body !== null) {
-                if (true === is_array($body)) {
+                if (true === is_array($body))
+                {
                     $modelType = current(array_keys($body));
                     /** @var ModelInterface $model */
                     $model = $this->getServiceManager()->get('modelManager')->build($modelType);
@@ -208,7 +209,6 @@ class Application
         $method = $request->getMethodName();
 
         # Get the request from its manager with the given options
-        /** @var AbstractRequest $method */
         $newRequest = $this->serviceManager->get('requestManager')->get($method);
         $newRequest->setUri($request->getUri());
         $newRequest->setMethod($request->getRequestMethod());

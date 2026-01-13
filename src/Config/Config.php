@@ -13,7 +13,6 @@ use ArrayAccess;
  *
  * @package PayNL\Sdk
  *
- * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 class Config implements Countable, Iterator, ArrayAccess
 {

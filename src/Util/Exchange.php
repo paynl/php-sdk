@@ -61,7 +61,13 @@ class Exchange
      */
     public function eventPaid(bool $includeAuth = false): bool
     {
-        return $this->getAction() === PayStatus::EVENT_PAID || ($includeAuth == true && $this->getAction() === PayStatus::AUTHORIZE);
+        $action = $this->getAction();
+
+        if ($action === PayStatus::EVENT_PAID) {
+            return true;
+        }
+
+        return $includeAuth && $action === PayStatus::EVENT_AUTHORISED;
     }
 
     /**
@@ -208,8 +214,8 @@ class Exchange
             # In case a payload has been provided, use that one.
             $request = $this->custom_payload;
         } else {
-            $request = $_REQUEST ?? false;
-            if ($request === false) {
+            $request = $_REQUEST;
+            if (empty($request)) {
                 throw new Exception('Empty payload', 8001);
             }
         }
@@ -364,6 +370,10 @@ class Exchange
             } catch (Exception $e) {
                 throw new Exception('API-Retrieval error: ' . $payload->getPayOrderId() . ' - ' . $e->getMessage());
             }
+
+            if ($payOrder->isPending() && $action != PayStatus::EVENT_PENDING) {
+                throw new Exception('Unexpected API status `' . $payOrder->getStatusName() . '`. Action: ' . $action);
+            }
         }
 
         return $payOrder;
@@ -434,7 +444,7 @@ class Exchange
     }
 
     /**
-     * @return array|false|string
+     * @return bool|array|string
      */
     private function getRequestHeaders(): bool|array|string
     {

@@ -8,6 +8,7 @@ use PayNL\Sdk\Exception\PayException;
 use PayNL\Sdk\Request\RequestData;
 use PayNL\Sdk\Model\Response\TransactionRefundResponse;
 use PayNL\Sdk\Request\RequestInterface;
+use Exception;
 
 /**
  * Class TransactionRefundRequest

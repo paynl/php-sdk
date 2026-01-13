@@ -59,7 +59,7 @@ abstract class RequestData implements RequestDataInterface
 
 
     /**
-     * @return Config|null
+     * @return Config
      * @throws PayException
      */
     private function getConfig(): Config

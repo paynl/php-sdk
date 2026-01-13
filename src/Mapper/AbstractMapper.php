@@ -40,20 +40,11 @@ abstract class AbstractMapper implements MapperInterface
      * @param string|object $target
      *
      * @throws InvalidArgumentException
-     *
-     * @return string
      */
-    public function getSource($target): string
+    public function getSource(string|object $target): string
     {
-        if (true === is_object($target)) {
+        if (is_object($target)) {
             $target = get_class($target);
-        } elseif (false === is_string($target)) {
-            throw new InvalidArgumentException(
-                sprintf(
-                    'Given target must be a string or an object, %s given',
-                    gettype($target)
-                )
-            );
         }
 
         return array_search($target, $this->map, true) ?: '';
@@ -66,19 +57,13 @@ abstract class AbstractMapper implements MapperInterface
      *
      * @return string
      */
-    public function getTarget($source): string
+    public function getTarget(string|object $source): string
     {
-        if (true === is_object($source)) {
+        if (is_object($source)) {
             $source = get_class($source);
-        } elseif (false === is_string($source)) {
-            throw new InvalidArgumentException(
-                sprintf(
-                    'Given source must be a string or an object, %s given',
-                    gettype($source)
-                )
-            );
         }
 
         return $this->map[$source] ?? '';
     }
+
 }

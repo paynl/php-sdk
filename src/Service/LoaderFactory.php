@@ -136,7 +136,6 @@ class LoaderFactory implements FactoryInterface
             'class_method',
         ];
 
-        /** @var Config $options */
         foreach ($mandatoryManagerConfigKeys as $managerConfigKey) {
             if (false === $options->has($managerConfigKey)) {
                 throw new Exception\ServiceNotCreatedException(

@@ -28,8 +28,8 @@ class ManagerFactory implements FactoryInterface
      *
      * @return AbstractPluginManager
      *
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings("PHPMD.CyclomaticComplexity")
+     * @SuppressWarnings("PHPMD.NPathComplexity")
      */
     public function __invoke(ContainerInterface $container, string $requestedName, ?array $options = null): AbstractPluginManager
     {
@@ -49,10 +49,9 @@ class ManagerFactory implements FactoryInterface
             );
         }
 
-        /** @var AbstractPluginManager $manager */
         $manager = new $requestedName($container, $options);
 
-        if (false === ($manager instanceof AbstractPluginManager)) {
+        if (!($manager instanceof AbstractPluginManager)) {
             throw new ServiceNotCreatedException(
                 sprintf(
                     'Manager "%s" must extend %s',

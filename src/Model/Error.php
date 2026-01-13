@@ -21,7 +21,7 @@ class Error implements ModelInterface
     /**
      * @var int
      */
-    protected $code;
+    protected ?int $code;
 
     /**
      * @var string
