@@ -28,17 +28,6 @@ try {
 
 echo '<pre>';
 echo 'Success, values:' . PHP_EOL . PHP_EOL;
-
-$x = $payOrder->getTransferData();
-var_dump($x);
-$x = $payOrder->getModifiedAt();
-$x = $payOrder->getExpiresAt();
-$x = $payOrder->getCompletedAt();
-$x = $payOrder->getLinks();
-$x = $payOrder->getPaymentUrl();
-$x = $payOrder->getStatusUrl();
-$x = $payOrder->getCreatedBy();
-
 echo 'isPending: ' . ($payOrder->isPending() ? 'YES' : 'no') . PHP_EOL;
 echo 'isPaid: ' . ($payOrder->isPaid() ? 'YES' : 'no') . PHP_EOL;
 echo 'isAuthorized: ' . ($payOrder->isAuthorized() ? 'YES' : 'no') . PHP_EOL;
