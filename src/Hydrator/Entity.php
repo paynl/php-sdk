@@ -136,8 +136,8 @@ class Entity extends AbstractHydrator implements OptionsAwareInterface
                     $param = $params[0];
                     $paramType = $param->getType();
 
-                    if ($paramType && !$paramType->isBuiltin()) {
-                        # Example: PayOrder::setAmount(Amount $amount)
+                    if ($paramType instanceof \ReflectionNamedType && !$paramType->isBuiltin()) {
+                        // Example: PayOrder::setAmount(Amount $amount)
                         $propertyInfo[$property->getName()] = $paramType->getName();
                     }
                 }

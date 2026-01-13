@@ -42,7 +42,7 @@ class TransactionStatusResponse implements ModelInterface
     /**
      * @var string
      */
-    protected $ipAddress;
+    protected ?string $ipAddress;
 
     /**
      * @var Amount
@@ -215,7 +215,7 @@ class TransactionStatusResponse implements ModelInterface
      */
     public function getIpAddress(): string
     {
-        return (string) $this->ipAddress ?? '';
+        return $this->ipAddress ?: '';
     }
 
     /**

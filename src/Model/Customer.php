@@ -188,11 +188,8 @@ class Customer implements ModelInterface, JsonSerializable
     }
 
     /**
-     * @param string $trust
-     *
-     * @throws InvalidArgumentException
-     *
-     * @return Customer
+     * @param string $trustLevel
+     * @return $this
      */
     public function setTrust(string $trustLevel): self
     {

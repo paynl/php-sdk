@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<ruleset name="PayNL PHP SDK">
+    <!-- Coding standard -->
+    <rule ref="PSR12"/>
+
+    <!-- What to scan -->
+    <file>src</file>
+
+    <!-- What to exclude -->
+    <exclude-pattern>vendor/*</exclude-pattern>
+    <exclude-pattern>src/Packages/*</exclude-pattern>
+</ruleset>

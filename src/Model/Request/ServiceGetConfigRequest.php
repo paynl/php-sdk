@@ -23,7 +23,7 @@ class ServiceGetConfigRequest extends RequestData
     use StaticCacheTrait;
 
     /**
-     * @var string|mixed
+     * @var string
      */
     private string $serviceId;
 

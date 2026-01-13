@@ -154,7 +154,6 @@ class Loader
                     continue;
                 }
 
-                /** @var ServiceManager $instance */
                 $instance = $this->defaultServiceManager->get($sm['service_manager']);
                 if (($instance instanceof ServiceManager) === false) {
                     throw new Exception\ServiceNotFoundException(

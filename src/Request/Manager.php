@@ -59,23 +59,23 @@ class Manager extends AbstractPluginManager
         parent::configure(['services' => $services]);
         return $this;
     }
+ 
 
     /**
-     * Set the validator manager to the request instance if its
-     * validator manager aware
-     *
      * @param ContainerInterface $container
      * @param RequestInterface $instance
-     *
      * @return void
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
      */
     public function injectValidatorManager(ContainerInterface $container, RequestInterface $instance): void
     {
-        if (false === ($instance instanceof ValidatorManagerAwareInterface)) {
+        if (!$instance instanceof ValidatorManagerAwareInterface) {
             return;
         }
 
-        /** @var ValidatorManagerAwareInterface $instance */
         $instance->setValidatorManager($container->get('validatorManager'));
     }
+
+    
 }

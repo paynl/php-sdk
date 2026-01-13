@@ -51,11 +51,9 @@ abstract class AbstractTotalCollection extends ArrayCollection implements Collec
      */
     public function add($element): bool
     {
-        $result =  parent::add($element);
-        if (true === $result) {
-            $this->setTotal($this->getTotal() + 1);
-        }
-        return $result;
+        parent::add($element);
+        $this->setTotal($this->getTotal() + 1);
+        return true;
     }
 
     /**

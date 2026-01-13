@@ -23,7 +23,6 @@
     ],
     "require-dev": {
         "ext-simplexml": "*",
-        "phpmd/phpmd": "^2",
         "phpstan/phpstan": "^2",
         "phpunit/phpunit": "^11",
         "roave/security-advisories": "dev-master",
@@ -60,11 +59,9 @@
         ],
         "style-check": [
             "@phpstan",
-            "@phpmd",
             "@phpcs"
         ],
         "phpstan": "vendor/bin/phpstan analyse",
-        "phpmd": "vendor/bin/phpmd src,samples text phpmd.xml",
         "phpcs": "vendor/bin/phpcs"
     },
     "archive": {

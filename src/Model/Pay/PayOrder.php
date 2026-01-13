@@ -133,7 +133,7 @@ class PayOrder implements ModelInterface
     /**
      * @var Amount
      */
-    protected $amountRefunded;
+    protected ?Amount $amountRefunded;
 
     /**
      * @var array
@@ -159,11 +159,11 @@ class PayOrder implements ModelInterface
     }
 
     /**
-     * @return mixed
+     * @return float|int|null
      */
     public function getAmountRefunded()
     {
-        if (!empty($this->amountRefunded) && $this->amountRefunded instanceof Amount) {
+        if (!empty($this->amountRefunded)) {
             return $this->amountRefunded->getValue() / 100;
         }
         return null;

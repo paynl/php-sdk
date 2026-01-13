@@ -24,9 +24,6 @@ class Misc
      * @throws LogicException when the class name is not the same as the terminating class file name
      *  (PSR-4 3.3 - https://www.php-fig.org/psr/psr-4/)
      *
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     *
      * @throws InvalidArgumentException when given file can not be found or read
      */
     public static function getClassNameByFile(string $file): string
@@ -61,6 +58,7 @@ class Misc
 
             for (; $counter < $tokenCount; $counter++) {
                 if ($tokens[$counter][0] === T_NAMESPACE) {
+                    /** @phpstan-ignore-next-line */
                     $namespaceIdentifier = PHP_VERSION_ID < 80000 ? T_STRING : T_NAME_QUALIFIED;
 
                     for ($nextCounter = $counter + 1; $nextCounter < $tokenCount; $nextCounter++) {
@@ -105,7 +103,7 @@ class Misc
     {
         $namespaceSeparator = '\\';
         $parts = explode($namespaceSeparator, $fqn);
-        return array_pop($parts) ?? '';
+        return array_pop($parts);
     }
 
     /**

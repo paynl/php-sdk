@@ -88,12 +88,7 @@ class ConfigProvider implements ConfigProviderInterface
             'requiredParams' => [
               'value' => '[0-9\.]+',
             ],
-          ],
-          'GetIpAddresses' => [
-            'uri' => '/ipaddresses',
-            'method' => RequestInterface::METHOD_GET,
-            'requiredParams' => [],
-          ],
+          ]
         ];
     }
 

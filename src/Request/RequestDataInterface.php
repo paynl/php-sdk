@@ -27,4 +27,15 @@ interface RequestDataInterface
      */
     public function getMethodName(): string;
 
+
+    /**
+     * @return array
+     */
+    public function getPathParameters(): array;
+
+    /**
+     * @return array
+     */
+    public function getBodyParameters(): array;
+
 }

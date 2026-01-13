@@ -72,7 +72,6 @@ abstract class AbstractHydrator extends ClassMethodsHydrator implements DebugAwa
      * @throws Exception
      * @return DateTime|null
      *
-     * @SuppressWarnings(PHPMD.StaticAccess)
      */
     protected function getSdkDateTime($dateTime): ?DateTime
     {
@@ -84,7 +83,7 @@ abstract class AbstractHydrator extends ClassMethodsHydrator implements DebugAwa
             $dateTime = $dateTime->format(stdDateTime::ATOM);
         }
 
-        if (true === is_string($dateTime) && '' === $dateTime) {
+        if ($dateTime === '') {
             return null;
         }
 

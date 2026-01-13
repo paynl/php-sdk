@@ -1,0 +1,10 @@
+parameters:
+  level: 5
+  paths:
+    - src
+
+  excludePaths:
+    - src/Packages
+    - src/Validator/RequiredMembers.php
+
+  reportUnmatchedIgnoredErrors: false

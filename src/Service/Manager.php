@@ -20,8 +20,6 @@ use Exception as stdException;
  * Class Manager
  *
  * @package PayNL\Sdk
- *
- * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class Manager implements ContainerInterface
 {
@@ -271,25 +269,14 @@ class Manager implements ContainerInterface
 
     /**
      * @inheritDoc
-     *
-     * @throws InvalidArgumentException when given name is not a string
      */
-    public function has($name): bool
+    public function has(string $name): bool
     {
-        if (false === is_string($name)) {
-            throw new InvalidArgumentException(
-                sprintf(
-                    'Given name to "%s" must be a string, %s given',
-                    __METHOD__,
-                    gettype($name)
-                )
-            );
-        }
-
         $name = $this->resolvedAliases[$name] ?? $name;
 
         return isset($this->services[$name]) || isset($this->factories[$name]);
     }
+
 
     /**
      * @inheritDoc

@@ -1,3 +1,8 @@
+ 
+
+[//]: # ([![codecov]&#40;https://codecov.io/gh/paynl/php-sdk---private/graph/badge.svg?token=${CODECOV_TOKEN}&#41;]&#40;https://codecov.io/gh/paynl/php-sdk---private&#41;)
+
+
 <img src="https://www.pay.nl/uploads/1/brands/main_logo.png" width="100px" style="margin-bottom: -30px"/> <h1 style="position:relative;top:-6px;padding-left:10px;display: inline-block">PHP SDK</h1>
 
 
@@ -12,7 +17,7 @@ Use this SDK to implement Pay. into your PHP integration.
 > CURL extension installed
 
 <br>
-
+![img.png](img.png)
 If requirements are met, go ahead with the [installation and set-up](https://github.com/paynl/php-sdk/wiki/Install) of the SDK!
 
 <br>

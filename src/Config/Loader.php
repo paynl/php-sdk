@@ -41,52 +41,38 @@ class Loader
      */
     protected $mergedConfig;
 
+
     /**
-     * Loader constructor.
-     *
      * @param array|Config $applicationConfig
-     *
-     * @throws Exception\InvalidArgumentException
      */
-    public function __construct($applicationConfig = [])
+    public function __construct(array|Config $applicationConfig = [])
     {
-        if (true === is_array($applicationConfig)) {
+        if (is_array($applicationConfig)) {
             $applicationConfig = new Config($applicationConfig);
-        } elseif (($applicationConfig instanceof Config) === false) {
-            throw new Exception\InvalidArgumentException('Config not correct');
         }
 
-        if (true === $applicationConfig->has('config_paths')) {
+        if ($applicationConfig->has('config_paths')) {
             $this->addPaths($applicationConfig->get('config_paths'));
         }
 
-        $this->mergedConfig = new Config();
+        $this->mergedConfig      = new Config();
         $this->applicationConfig = $applicationConfig;
     }
 
     /**
-     * @param string|array|Traversable $paths
-     *
-     * @throws Exception\InvalidArgumentException
-     *
-     * @return Loader
+     * @param string|iterable $paths
+     * @return $this
      */
-    public function addPaths($paths): self
+    public function addPaths(string|iterable $paths): self
     {
-        if (true === is_string($paths)) {
+        if (is_string($paths)) {
             $paths = [$paths];
-        } elseif (false === is_iterable($paths)) {
-            throw new Exception\InvalidArgumentException(
-                sprintf(
-                    'Given paths to "%s" must be iterable or a string',
-                    __METHOD__
-                )
-            );
         }
 
         foreach ($paths as $path) {
             $this->addPath($path);
         }
+
         return $this;
     }
 
@@ -116,7 +102,6 @@ class Loader
      *
      * @return Loader
      *
-     * @SuppressWarnings(PHPMD.StaticAccess)
      */
     public function addConfigByPath(string $path): self
     {

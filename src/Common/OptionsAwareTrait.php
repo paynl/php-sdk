@@ -58,22 +58,13 @@ trait OptionsAwareTrait
      */
     public function setOptions(iterable $options): void
     {
-        if (false === is_iterable($options)) {
-            throw new InvalidArgumentException(
-                sprintf(
-                    'Given options should be an array or an instance of %s, %s given',
-                    Traversable::class,
-                    gettype($options)
-                )
-            );
-        }
-
         $this->clear();
 
         foreach ($options as $name => $value) {
             $this->addOption($name, $value);
         }
     }
+
 
     /**
      * @param string|int $name
