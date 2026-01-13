@@ -78,15 +78,15 @@ class PayOrder implements ModelInterface
     /**
      * @var Amount
      */
-    protected $amount;
+    protected Amount $amount;
 
     /**
      * @var Amount
      */
-    protected $authorizedAmount;
+    protected ?Amount $authorizedAmount;
 
     /**
-     * @var Amount|null 
+     * @var Amount
      */
     protected ?Amount $capturedAmount;
 
@@ -253,7 +253,7 @@ class PayOrder implements ModelInterface
      */
     public function getServiceId(): string
     {
-        return (string)$this->serviceId;
+        return (string)($this->serviceId ?? '');
     }
 
     /**
@@ -307,7 +307,7 @@ class PayOrder implements ModelInterface
      */
     public function getManualTransferCode(): string
     {
-        return (string)$this->manualTransferCode;
+        return (string)($this->manualTransferCode ?? '');
     }
 
     /**
@@ -500,11 +500,11 @@ class PayOrder implements ModelInterface
     }
 
     /**
-     * @return Amount
+     * @return ?Amount
      */
-    public function getAuthorizedAmount(): Amount
+    public function getAuthorizedAmount(): ?Amount
     {
-        return $this->authorizedAmount;
+        return $this->authorizedAmount ?? null;
     }
 
     /**
@@ -518,11 +518,11 @@ class PayOrder implements ModelInterface
     }
 
     /**
-     * @return Amount
+     * @return ?Amount
      */
-    public function getCapturedAmount(): Amount
+    public function getCapturedAmount(): ?Amount
     {
-        return $this->capturedAmount;
+        return $this->capturedAmount ?? null;
     }
 
     /**
