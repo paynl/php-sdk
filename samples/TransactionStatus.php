@@ -29,7 +29,8 @@ try {
 echo '<pre>';
 echo 'Success, values:' . PHP_EOL . PHP_EOL;
 
-$x = $payOrder->getModifiedBy();
+$x = $payOrder->getTransferData();
+var_dump($x);
 $x = $payOrder->getModifiedAt();
 $x = $payOrder->getExpiresAt();
 $x = $payOrder->getCompletedAt();

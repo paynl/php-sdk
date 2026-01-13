@@ -28,6 +28,11 @@ try {
 }
 
 echo '<pre>';
+
+$x = $payOrder->getTransferData();
+var_dump($x);
+
+
 echo 'Success, values:' . PHP_EOL . PHP_EOL;
 echo 'type: ' . $payOrder->getType() . PHP_EOL;
 echo 'getCustomerId: ' . $payOrder->getCustomerId() . PHP_EOL;

@@ -141,6 +141,12 @@ class PayOrder implements ModelInterface
     protected $links;
 
     /**
+     * @var array
+     */
+    protected ?array $transferData;
+
+
+    /**
      * @param array|null $payload
      */
     public function __construct(?array $payload = null)
@@ -830,4 +836,23 @@ class PayOrder implements ModelInterface
 
         return false;
     }
+
+    /**
+     * @return array|null
+     */
+    public function getTransferData(): ?array
+    {
+        return $this->transferData;
+    }
+
+    /**
+     * @param array|null $transferData
+     * @return $this
+     */
+    public function setTransferData(?array $transferData): self
+    {
+        $this->transferData = $transferData;
+        return $this;
+    }
+
 }
