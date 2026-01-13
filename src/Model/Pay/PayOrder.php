@@ -43,7 +43,7 @@ class PayOrder implements ModelInterface
     /**
      * @var string
      */
-    protected $manualTransferCode;
+    protected ?string $manualTransferCode;
 
     /**
      * @var string
