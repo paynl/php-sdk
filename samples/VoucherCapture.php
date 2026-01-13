@@ -15,7 +15,7 @@ $request = new VoucherCaptureRequest();
 $request->setType('POS'); // ECOM or POS
 $request->setServiceId($_REQUEST['slcode'] ?? '');
 $request->setDescription('Order ABC0123456789');
-$request->setAmount((float) ($_REQUEST['amount'] ?? 5.3));
+$request->setAmount((float) ($_REQUEST['amount'] ?? 5.2));
 $request->setCurrency('EUR');
 $request->setExchangeUrl($_REQUEST['exchangeUrl'] ?? 'https://yourdomain/exchange.php');
 
