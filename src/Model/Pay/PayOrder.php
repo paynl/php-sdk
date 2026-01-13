@@ -43,7 +43,7 @@ class PayOrder implements ModelInterface
     /**
      * @var string
      */
-    protected $manualTransferCode;
+    protected ?string $manualTransferCode;
 
     /**
      * @var string
@@ -78,17 +78,17 @@ class PayOrder implements ModelInterface
     /**
      * @var Amount
      */
-    protected $amount;
+    protected Amount $amount;
 
     /**
      * @var Amount
      */
-    protected $authorizedAmount;
+    protected ?Amount $authorizedAmount;
 
     /**
      * @var Amount
      */
-    protected $capturedAmount;
+    protected ?Amount $capturedAmount;
 
     /**
      * @var array
@@ -139,6 +139,12 @@ class PayOrder implements ModelInterface
      * @var array
      */
     protected $links;
+
+    /**
+     * @var array
+     */
+    protected ?array $transferData;
+
 
     /**
      * @param array|null $payload
@@ -253,7 +259,7 @@ class PayOrder implements ModelInterface
      */
     public function getServiceId(): string
     {
-        return (string)$this->serviceId;
+        return (string)($this->serviceId ?? '');
     }
 
     /**
@@ -307,7 +313,7 @@ class PayOrder implements ModelInterface
      */
     public function getManualTransferCode(): string
     {
-        return (string)$this->manualTransferCode;
+        return (string)($this->manualTransferCode ?? '');
     }
 
     /**
@@ -500,11 +506,11 @@ class PayOrder implements ModelInterface
     }
 
     /**
-     * @return Amount
+     * @return ?Amount
      */
-    public function getAuthorizedAmount(): Amount
+    public function getAuthorizedAmount(): ?Amount
     {
-        return $this->authorizedAmount;
+        return $this->authorizedAmount ?? null;
     }
 
     /**
@@ -518,11 +524,11 @@ class PayOrder implements ModelInterface
     }
 
     /**
-     * @return Amount
+     * @return ?Amount
      */
-    public function getCapturedAmount(): Amount
+    public function getCapturedAmount(): ?Amount
     {
-        return $this->capturedAmount;
+        return $this->capturedAmount ?? null;
     }
 
     /**
@@ -830,4 +836,23 @@ class PayOrder implements ModelInterface
 
         return false;
     }
+
+    /**
+     * @return array|null
+     */
+    public function getTransferData(): ?array
+    {
+        return $this->transferData;
+    }
+
+    /**
+     * @param array|null $transferData
+     * @return $this
+     */
+    public function setTransferData(?array $transferData): self
+    {
+        $this->transferData = $transferData;
+        return $this;
+    }
+
 }
