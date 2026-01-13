@@ -12,7 +12,7 @@ Use this SDK to implement Pay. into your PHP integration.
 > CURL extension installed
 
 <br>
-![img.png](img.png)
+
 If requirements are met, go ahead with the [installation and set-up](https://github.com/paynl/php-sdk/wiki/Install) of the SDK!
 
 <br>
