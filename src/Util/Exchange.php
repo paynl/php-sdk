@@ -22,6 +22,12 @@ use PayNL\Sdk\Model\Request\TransactionStatusRequest;
  */
 class Exchange
 {
+    public const ERROR_EMPTY_PAYLOAD = 8001;
+    public const ERROR_EMPTY_PAYLOAD_INCOMPLETE = 8002;
+    public const ERROR_EMPTY_CONFIG = 8003;
+    public const ERROR_PAYLOAD_OBJECT = 8004;
+    public const ERROR_ACTION_FAULT = 8005;
+
     private PayLoad $payload;
     private ?array $custom_payload;
     private mixed $headers;
@@ -216,7 +222,7 @@ class Exchange
         } else {
             $request = $_REQUEST;
             if (empty($request)) {
-                throw new Exception('Empty payload', 8001);
+                throw new Exception('Empty payload', Exchange::ERROR_EMPTY_PAYLOAD);
             }
         }
 
@@ -233,13 +239,13 @@ class Exchange
             } else {
                 $rawBody = file_get_contents('php://input');
                 if (empty(trim($rawBody))) {
-                    throw new Exception('Empty or incomplete payload', 8002);
+                    throw new Exception('Empty or incomplete payload', Exchange::ERROR_EMPTY_PAYLOAD_INCOMPLETE);
                 }
                 $tguData = json_decode($rawBody, true, 512, JSON_BIGINT_AS_STRING);
             }
 
             if (empty($tguData['object'])) {
-                throw new Exception('Payload error: object empty', 8004);
+                throw new Exception('Payload error: object empty', Exchange::ERROR_PAYLOAD_OBJECT);
             }
 
             if (!isset($tguData['type']) && isset($tguData['action'])) {
@@ -305,7 +311,7 @@ class Exchange
         }
 
         if (empty($config->getUsername()) || empty($config->getPassword())) {
-            throw new Exception('Process failed, config not set', 8003);
+            throw new Exception('Process failed, config not set', Exchange::ERROR_EMPTY_CONFIG);
         }
 
         if ($this->isSignExchange()) {
@@ -372,7 +378,7 @@ class Exchange
             }
 
             if ($payOrder->isPending() && $action != PayStatus::EVENT_PENDING) {
-                throw new Exception('Unexpected API status `' . $payOrder->getStatusName() . '`. Action: ' . $action);
+                throw new Exception('Unexpected API status `' . $payOrder->getStatusName() . '`. Action: ' . $action, Exchange::ERROR_ACTION_FAULT);
             }
         }
 
