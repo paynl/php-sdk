@@ -121,7 +121,7 @@ class Loader
     }
 
     /**
-     * @param string $key
+     * @param string                  $key
      * @param ConfigProviderInterface $config
      *
      * @return Loader

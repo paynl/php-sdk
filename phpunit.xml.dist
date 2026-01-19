@@ -9,10 +9,11 @@
 
     <source>
         <include>
-            <directory suffix=".php">src</directory>
+            <directory suffix=".php">src/Exception</directory>
+            <directory suffix=".php">src/Model/Pay</directory>
+            <directory suffix=".php">src/Model/Request</directory>
+            <directory suffix=".php">src/Model/Response</directory>
+            <directory suffix=".php">src/Util</directory>
         </include>
-        <exclude>
-            <directory>src/Packages</directory>
-        </exclude>
     </source>
 </phpunit>

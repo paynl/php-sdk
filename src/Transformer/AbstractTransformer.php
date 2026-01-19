@@ -7,10 +7,10 @@ namespace PayNL\Sdk\Transformer;
 use PayNL\Sdk\Exception\UnexpectedValueException;
 use PayNL\Sdk\Model\ModelAwareInterface;
 use PayNL\Sdk\Model\ModelAwareTrait;
-use PayNL\Sdk\Packages\Symfony\Serializer\Encoder\JsonEncoder;
-use PayNL\Sdk\Packages\Symfony\Serializer\Exception\NotEncodableValueException;
-use PayNL\Sdk\Packages\Laminas\Hydrator\HydratorAwareInterface;
-use PayNL\Sdk\Packages\Laminas\Hydrator\HydratorAwareTrait;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Exception\NotEncodableValueException;
+use Laminas\Hydrator\HydratorAwareInterface;
+use Laminas\Hydrator\HydratorAwareTrait;
 use PayNL\Sdk\Service\Manager as ServiceManager;
 
 /**
@@ -28,6 +28,9 @@ abstract class AbstractTransformer implements TransformerInterface, ModelAwareIn
      */
     protected $serviceManager;
 
+    /**
+     * @param ServiceManager $serviceManager
+     */
     public function __construct(ServiceManager $serviceManager)
     {
         $this->serviceManager = $serviceManager;

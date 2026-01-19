@@ -59,11 +59,11 @@ class Manager extends AbstractPluginManager
         parent::configure(['services' => $services]);
         return $this;
     }
- 
+
 
     /**
      * @param ContainerInterface $container
-     * @param RequestInterface $instance
+     * @param RequestInterface   $instance
      * @return void
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
@@ -76,6 +76,4 @@ class Manager extends AbstractPluginManager
 
         $instance->setValidatorManager($container->get('validatorManager'));
     }
-
-    
 }

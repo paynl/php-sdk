@@ -14,22 +14,24 @@ use PayNL\Sdk\Common\JsonSerializeTrait;
  */
 class Product implements ModelInterface, JsonSerializable
 {
-    const TYPE_ARTICLE = 'article';
-    const TYPE_SHIPPING = 'shipping';
-    const TYPE_ROUNDING = 'rounding';
-    const TYPE_HANDLING = 'handling';
-    const TYPE_PAYMENT = 'payment';
-    const TYPE_CREDIT = 'credit';
-    const TYPE_GIFTCARD= 'giftcard';
-    const TYPE_EMONEY = 'emoney';
-    const TYPE_CRYPTO = 'crypto';
-    const TYPE_DISCOUNT = 'discount';
-
-    const VAT_N = 'N';
-    const VAT_HIGH = 'H';
-    const VAT_LOW = 'L';
-
     use JsonSerializeTrait;
+
+    public const TYPE_ARTICLE = 'article';
+    public const TYPE_SHIPPING = 'shipping';
+    public const TYPE_ROUNDING = 'rounding';
+    public const TYPE_HANDLING = 'handling';
+    public const TYPE_PAYMENT = 'payment';
+    public const TYPE_CREDIT = 'credit';
+    public const TYPE_GIFTCARD = 'giftcard';
+    public const TYPE_EMONEY = 'emoney';
+    public const TYPE_CRYPTO = 'crypto';
+    public const TYPE_DISCOUNT = 'discount';
+
+    public const VAT_N = 'N';
+    public const VAT_HIGH = 'H';
+    public const VAT_LOW = 'L';
+
+
 
     /**
      * @var string
@@ -66,26 +68,18 @@ class Product implements ModelInterface, JsonSerializable
      */
     protected ?float $vatPercentage = null;
 
+
     /**
-     * @param $id
-     * @param $description
-     * @param $amount
-     * @param $currency
-     * @param $type
-     * @param $quantity
+     * @param mixed       $id
+     * @param string      $description
+     * @param float       $amount
+     * @param string      $currency
+     * @param string      $type
+     * @param integer     $quantity
      * @param string|null $vatCode
-     * @param float|null $vatPercentage
+     * @param float|null  $vatPercentage
      */
-    public function __construct(
-        $id = null,
-        $description = null,
-        $amount = null,
-        $currency = null,
-        $type = null,
-        $quantity = null,
-        ?string $vatCode = null,
-        ?float $vatPercentage = null
-    )
+    public function __construct($id = null, $description = null, $amount = null, $currency = null, $type = null, $quantity = null, ?string $vatCode = null, ?float $vatPercentage = null)
     {
         if (!is_null($id)) {
             $this->setId($id);
@@ -113,16 +107,20 @@ class Product implements ModelInterface, JsonSerializable
         }
     }
 
-    /*
+    /**
      * Set amount for product in full price (not in cents)
+     * @param mixed $amount
+     * @return void
      */
     public function setAmount($amount)
     {
         $this->setPrice($this->getPrice()->setValue((int)round($amount * 100)));
     }
 
-    /*
+    /**
      * Set currency for product
+     * @param mixed $currency
+     * @return void
      */
     public function setCurrency($currency)
     {
