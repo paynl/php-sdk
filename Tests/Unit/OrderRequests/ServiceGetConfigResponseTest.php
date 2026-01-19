@@ -26,7 +26,6 @@ final class ServiceGetConfigResponseTest extends TestCase
         $otherMethod->method('hasOptions')->willReturn(true);
         $otherMethod->method('getOptions')->willReturn([]);
 
-        // simpele stub voor één checkoutOption
         $checkoutOption = new class ([$otherMethod, $pinMethod]) {
             /** @var Method[] */
             private array $methods;

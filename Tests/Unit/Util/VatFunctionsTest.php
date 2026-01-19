@@ -13,7 +13,6 @@ class VatFunctionsTest extends TestCase
      */
     public function testCalcVatPercentage(): void
     {
-        // 121 incl, 21 is btw → verwacht 21% btw
         $percentage = paynl_calc_vat_percentage(121.00, 21.00);
 
         $this->assertIsFloat($percentage);
@@ -28,10 +27,8 @@ class VatFunctionsTest extends TestCase
         $amountIncludingVat = 121.00;
         $vatAmount          = 21.00;
 
-        // Via bedragen
         $vatClassFromAmounts = paynl_determine_vat_class($amountIncludingVat, $vatAmount);
 
-        // Via percentage → zelfde resultaat verwachten
         $percentage          = paynl_calc_vat_percentage($amountIncludingVat, $vatAmount);
         $vatClassFromPercent = paynl_determine_vat_class_by_percentage($percentage);
 
