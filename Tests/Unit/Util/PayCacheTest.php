@@ -7,9 +7,6 @@ use PHPUnit\Framework\TestCase;
 
 final class PayCacheTest extends TestCase
 {
-    /**
-     * Helper om private/protected methodes aan te roepen.
-     */
     private function invokeMethod(object $object, string $method, array $args = []): mixed
     {
         $refClass = new \ReflectionClass($object);
