@@ -26,7 +26,7 @@ class OrderCaptureRequest extends RequestData
     private $mode;
 
     /**
-     * @param string $transactionId
+     * @param string     $transactionId
      * @param float|null $amount
      */
     public function __construct(string $transactionId, ?float $amount = null)
@@ -40,8 +40,8 @@ class OrderCaptureRequest extends RequestData
     }
 
     /**
-     * @param $productId
-     * @param $quantity
+     * @param mixed   $productId
+     * @param integer $quantity
      * @return $this
      */
     public function setProduct($productId, $quantity): self

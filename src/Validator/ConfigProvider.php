@@ -49,6 +49,9 @@ class ConfigProvider implements ConfigProviderInterface
         ];
     }
 
+    /**
+     * @return array
+     */
     public function getValidatorConfig(): array
     {
         return [

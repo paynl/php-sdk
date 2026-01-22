@@ -21,10 +21,10 @@ class Misc
      * @param string $file
      *
      * @return string
-     * @throws LogicException when the class name is not the same as the terminating class file name
-     *  (PSR-4 3.3 - https://www.php-fig.org/psr/psr-4/)
+     * @throws LogicException When the class name is not the same as the terminating class file name
+     *  (PSR-4 3.3 - https://www.php-fig.org/psr/psr-4/).
      *
-     * @throws InvalidArgumentException when given file can not be found or read
+     * @throws InvalidArgumentException When given file can not be found or read.
      */
     public static function getClassNameByFile(string $file): string
     {
@@ -165,7 +165,7 @@ class Misc
      * Determine if a transaction ID is a TGU transaction.
      *
      * @param string|null $transactionId
-     * @return bool
+     * @return boolean
      */
     public static function isTguTransaction(?string $transactionId): bool
     {
@@ -174,6 +174,4 @@ class Misc
 
         return $id !== null && ctype_digit($id) && (int)$id > 3;
     }
-
-
 }

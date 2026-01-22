@@ -34,7 +34,8 @@ class ManagerFactory implements FactoryInterface
     public function __invoke(ContainerInterface $container, string $requestedName, ?array $options = null): AbstractPluginManager
     {
         $options = $options ?? [];
-        if (true === $container->has('config') &&
+        if (
+            true === $container->has('config') &&
             true === $container->get('config')->get('service_loader_options')->has($requestedName)
         ) {
             $options = array_merge($options, ['loader_options' => $container->get('config')->get('service_loader_options')->get($requestedName)]);

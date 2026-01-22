@@ -48,7 +48,7 @@ class Application
      * Application constructor.
      *
      * @param ServiceManager $serviceManager
-     * @param Response $response
+     * @param Response       $response
      */
     public function __construct(ServiceManager $serviceManager, Response $response)
     {
@@ -138,7 +138,7 @@ class Application
      * Parameters, filters and body can be given only when the given request (name) is a string, otherwise
      * these parameters will be ignored
      *
-     * @param $request
+     * @param mixed      $request
      * @param array|null $params
      * @param array|null $filters
      * @param mixed|null $body
@@ -153,8 +153,7 @@ class Application
 
             # Do we've got a body given? And if yes, is it correct?
             if ($body !== null) {
-                if (true === is_array($body))
-                {
+                if (true === is_array($body)) {
                     $modelType = current(array_keys($body));
                     /** @var ModelInterface $model */
                     $model = $this->getServiceManager()->get('modelManager')->build($modelType);
@@ -187,12 +186,12 @@ class Application
             $request->setBody($body);
         } elseif (($request instanceof AbstractRequest) === false) {
             throw new InvalidArgumentException(
-              sprintf(
-                'Given request should correspond to a request class name or alias, or should be an ' .
-                'instance of %s, %s given',
-                AbstractRequest::class,
-                (is_object($request) === true ? get_class($request) : gettype($request))
-              )
+                sprintf(
+                    'Given request should correspond to a request class name or alias, or should be an ' .
+                    'instance of %s, %s given',
+                    AbstractRequest::class,
+                    (is_object($request) === true ? get_class($request) : gettype($request))
+                )
             );
         }
 

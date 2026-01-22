@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PayNL\Sdk\Hydrator;
 
-use PayNL\Sdk\Packages\Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\ArrayCollection;
 use PayNL\Sdk\{Common\CollectionInterface,
     Common\DateTime,
     Common\OptionsAwareInterface,
@@ -13,6 +13,7 @@ use PayNL\Sdk\{Common\CollectionInterface,
     Exception\RuntimeException,
     Model\ModelInterface};
 use ReflectionClass,
+
     ReflectionException,
     Exception;
 
@@ -50,7 +51,7 @@ class Entity extends AbstractHydrator implements OptionsAwareInterface
      * @param ModelInterface $model
      *
      * @throws ReflectionException
-     * @throws LogicException when a property within the object does not have a DocBlock
+     * @throws LogicException When a property within the object does not have a DocBlock.
      *
      * @return array
      */
@@ -119,7 +120,8 @@ class Entity extends AbstractHydrator implements OptionsAwareInterface
             $docComment = $property->getDocComment();
 
             # If docblock exists, try to parse @var
-            if ($docComment !== false &&
+            if (
+                $docComment !== false &&
                 preg_match("/@var(?:\n|\s(?P<type>.*))\n/s", $docComment, $annotations)
             ) {
                 $propertyInfo[$property->getName()] = $annotations['type'];
@@ -149,10 +151,10 @@ class Entity extends AbstractHydrator implements OptionsAwareInterface
 
 
     /**
-     * @param array $data
+     * @param array  $data
      * @param object $object
      *
-     * @throws RuntimeException when given object isn't an instance of ModelInterface
+     * @throws RuntimeException When given object isn't an instance of ModelInterface.
      * @throws Exception
      *
      * @return object
@@ -244,6 +246,9 @@ class Entity extends AbstractHydrator implements OptionsAwareInterface
         return $data;
     }
 
+    /**
+     * @return void
+     */
     private function loadCollectionMap(): void
     {
         $collectionMap = $this->getOption('collectionMap');

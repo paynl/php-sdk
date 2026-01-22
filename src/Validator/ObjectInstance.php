@@ -28,8 +28,9 @@ class ObjectInstance extends AbstractValidator
     ];
 
     /**
-     * @inheritDoc
+     * @param mixed       $value
      * @param string|null $className
+     * @return boolean
      */
     public function isValid($value, ?string $className = null): bool
     {

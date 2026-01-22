@@ -84,7 +84,7 @@ class LoaderFactory implements FactoryInterface
     }
 
     /**
-     * @param mixed $options
+     * @param mixed         $options
      * @param ServiceLoader $serviceLoader
      *
      * @throws Exception\ServiceNotCreatedException

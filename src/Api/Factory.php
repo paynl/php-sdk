@@ -24,8 +24,8 @@ class Factory implements FactoryInterface
 {
     /**
      * @param ContainerInterface $container
-     * @param string $requestedName
-     * @param array|null $options
+     * @param string             $requestedName
+     * @param array|null         $options
      * @return Api|Service
      */
     public function __invoke(ContainerInterface $container, string $requestedName, ?array $options = null)

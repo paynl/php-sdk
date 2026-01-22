@@ -4,7 +4,6 @@ parameters:
     - src
 
   excludePaths:
-    - src/Packages
     - src/Validator/RequiredMembers.php
 
   reportUnmatchedIgnoredErrors: false

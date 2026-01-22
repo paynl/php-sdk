@@ -15,13 +15,15 @@ use PayNL\Sdk\{
     Validator\ValidatorManagerAwareTrait
 };
 use Exception;
-use PayNL\Sdk\Packages\Laminas\Hydrator\ClassMethodsHydrator;
+use Laminas\Hydrator\ClassMethodsHydrator;
 
 /**
  * Class AbstractHydrator
  *
  * @package PayNL\Sdk\Hydrator
  */
+
+/** @phpstan-ignore-next-line */
 abstract class AbstractHydrator extends ClassMethodsHydrator implements DebugAwareInterface, ValidatorManagerAwareInterface
 {
     use DebugAwareTrait;
@@ -41,7 +43,7 @@ abstract class AbstractHydrator extends ClassMethodsHydrator implements DebugAwa
      * AbstractHydrator constructor.
      *
      * @param HydratorManager $hydratorManager
-     * @param ModelManager $modelManager
+     * @param ModelManager    $modelManager
      */
     public function __construct(HydratorManager $hydratorManager, ModelManager $modelManager)
     {

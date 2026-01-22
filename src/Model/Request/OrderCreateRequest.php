@@ -44,23 +44,26 @@ class OrderCreateRequest extends RequestData
     private array $transferData = [];
     private array $optimize = [];
 
+    /**
+     * Construct
+     */
     public function __construct()
     {
         parent::__construct('OrderCreate', 'orders', RequestInterface::METHOD_POST);
     }
 
     /**
-     * @param $requestForShippingAddress
-     * @param $requestForBillingAddress
-     * @param $requestForContactDetails
+     * @param boolean $requestForShippingAddress
+     * @param boolean $requestForBillingAddress
+     * @param boolean $requestForContactDetails
      * @return void
      */
     public function enableFastCheckout($requestForShippingAddress = true, $requestForBillingAddress = true, $requestForContactDetails = true): void
     {
         $this->optimize['flow'] = 'fastCheckout';
-        $this->optimize['shippingAddress'] =  $requestForShippingAddress;
-        $this->optimize['billingAddress'] =  $requestForBillingAddress;
-        $this->optimize['contactDetails'] =  $requestForContactDetails;
+        $this->optimize['shippingAddress'] = $requestForShippingAddress;
+        $this->optimize['billingAddress'] = $requestForBillingAddress;
+        $this->optimize['contactDetails'] = $requestForContactDetails;
     }
 
     /**
@@ -76,7 +79,7 @@ class OrderCreateRequest extends RequestData
     /**
      * @return array
      */
-    private function getProducts() : array
+    private function getProducts(): array
     {
         $products = [];
 
@@ -103,12 +106,12 @@ class OrderCreateRequest extends RequestData
     }
 
     /**
-     * @param $returnArr
-     * @param $field
-     * @param $value
+     * @param array  $returnArr
+     * @param string $field
+     * @param mixed  $value
      * @return void
      */
-    private function _add(&$returnArr, $field, $value)
+    private function addField(&$returnArr, $field, $value)
     {
         if (!empty($value)) {
             $returnArr = array_merge($returnArr, [$field => $value]);
@@ -210,7 +213,7 @@ class OrderCreateRequest extends RequestData
     }
 
     /**
-     * @param int $paymentMethodId
+     * @param integer $paymentMethodId
      * @return $this
      */
     public function setPaymentMethodId(int $paymentMethodId): self
@@ -220,7 +223,7 @@ class OrderCreateRequest extends RequestData
     }
 
     /**
-     * @param int $issuerId Bank id
+     * @param integer $issuerId Bank id.
      */
     public function setIssuerId(int $issuerId): self
     {
@@ -231,7 +234,7 @@ class OrderCreateRequest extends RequestData
     /**
      * Use when implementing express checkout for PayPal.
      *
-     * @param string $orderId PayPal order ID
+     * @param string $orderId PayPal order ID.
      * @return $this
      */
     public function setPayPalOrderId(string $orderId): self
@@ -253,7 +256,7 @@ class OrderCreateRequest extends RequestData
     }
 
     /**
-     * @param bool $testMode
+     * @param boolean $testMode
      * @return $this
      */
     public function setTestmode(bool $testMode): self
@@ -263,8 +266,8 @@ class OrderCreateRequest extends RequestData
     }
 
     /**
-     * @param string $type options: push or email
-     * @param string $recipient options: ad-code or emailaddress, depending on type
+     * @param string $type      Options: push or email.
+     * @param string $recipient Options: ad-code or emailaddress, depending on type.
      * @return $this
      * @throws \Exception
      */
@@ -277,7 +280,7 @@ class OrderCreateRequest extends RequestData
             }
         }
         if ($type == 'push') {
-            if (!(substr(strtoupper($recipient),0,3) == 'AD-')) {
+            if (!(substr(strtoupper($recipient), 0, 3) == 'AD-')) {
                 throw new \Exception('Recepient expected to be AD-####-#### code');
             }
         }
@@ -287,7 +290,7 @@ class OrderCreateRequest extends RequestData
     }
 
     /**
-     * @param array $transferData multidimensional array with one or more key and value
+     * @param array $transferData Multidimensional array with one or more key and value.
      */
     public function setTransferData(array $transferData): self
     {
@@ -337,11 +340,11 @@ class OrderCreateRequest extends RequestData
         ];
 
         # Optional parameters
-        $this->_add($parameters, 'returnUrl', $this->returnUrl);
-        $this->_add($parameters, 'description', $this->description);
-        $this->_add($parameters, 'reference', $this->reference);
-        $this->_add($parameters, 'expire', $this->expire);
-        $this->_add($parameters, 'exchangeUrl', $this->exchangeUrl);
+        $this->addField($parameters, 'returnUrl', $this->returnUrl);
+        $this->addField($parameters, 'description', $this->description);
+        $this->addField($parameters, 'reference', $this->reference);
+        $this->addField($parameters, 'expire', $this->expire);
+        $this->addField($parameters, 'exchangeUrl', $this->exchangeUrl);
 
         if (!empty($this->paymentMethodId)) {
             $parameters['paymentMethod'] = ['id' => $this->paymentMethodId];
@@ -371,74 +374,74 @@ class OrderCreateRequest extends RequestData
         $parameters['integration']['test'] = $this->testMode === true;
 
         if (!empty($this->optimize)) {
-            $this->_add($parameters, 'optimize', $this->optimize);
+            $this->addField($parameters, 'optimize', $this->optimize);
         }
 
         if ($this->customer instanceof Customer) {
             $custParameters = [];
-            $this->_add($custParameters, 'firstName', $this->customer->getFirstName());
-            $this->_add($custParameters, 'lastName', $this->customer->getLastName());
-            $this->_add($custParameters, 'ipAddress', $this->customer->getIpAddress());
-            $this->_add($custParameters, 'birthDate', $this->customer->getBirthDate());
-            $this->_add($custParameters, 'gender', $this->customer->getGender());
-            $this->_add($custParameters, 'phone', $this->customer->getPhone());
-            $this->_add($custParameters, 'email', $this->customer->getEmail());
-            $this->_add($custParameters, 'language', $this->customer->getLanguage());
-            $this->_add($custParameters, 'trust', $this->customer->getTrust());
-            $this->_add($custParameters, 'reference', $this->customer->getReference());
-            $this->_add($custParameters, 'locale', $this->customer->getLocale());
+            $this->addField($custParameters, 'firstName', $this->customer->getFirstName());
+            $this->addField($custParameters, 'lastName', $this->customer->getLastName());
+            $this->addField($custParameters, 'ipAddress', $this->customer->getIpAddress());
+            $this->addField($custParameters, 'birthDate', $this->customer->getBirthDate());
+            $this->addField($custParameters, 'gender', $this->customer->getGender());
+            $this->addField($custParameters, 'phone', $this->customer->getPhone());
+            $this->addField($custParameters, 'email', $this->customer->getEmail());
+            $this->addField($custParameters, 'language', $this->customer->getLanguage());
+            $this->addField($custParameters, 'trust', $this->customer->getTrust());
+            $this->addField($custParameters, 'reference', $this->customer->getReference());
+            $this->addField($custParameters, 'locale', $this->customer->getLocale());
 
             $compParameters = [];
-            $this->_add($compParameters, 'name', $this->customer->getCompany()->getName());
-            $this->_add($compParameters, 'cocNumber', $this->customer->getCompany()->getCoc());
-            $this->_add($compParameters, 'vatNumber', $this->customer->getCompany()->getVat());
-            $this->_add($compParameters, 'countryCode', $this->customer->getCompany()->getCountryCode());
+            $this->addField($compParameters, 'name', $this->customer->getCompany()->getName());
+            $this->addField($compParameters, 'cocNumber', $this->customer->getCompany()->getCoc());
+            $this->addField($compParameters, 'vatNumber', $this->customer->getCompany()->getVat());
+            $this->addField($compParameters, 'countryCode', $this->customer->getCompany()->getCountryCode());
 
-            $this->_add($custParameters, 'company', $compParameters);
-            $this->_add($parameters, 'customer', $custParameters);
+            $this->addField($custParameters, 'company', $compParameters);
+            $this->addField($parameters, 'customer', $custParameters);
         }
 
         if ($this->order instanceof Order) {
             $orderParameters = [];
-            $this->_add($orderParameters, 'countryCode', $this->order->getCountryCode());
-            $this->_add($orderParameters, 'deliveryDate', $this->order->getDeliveryDate());
-            $this->_add($orderParameters, 'invoiceDate', $this->order->getInvoiceDate());
+            $this->addField($orderParameters, 'countryCode', $this->order->getCountryCode());
+            $this->addField($orderParameters, 'deliveryDate', $this->order->getDeliveryDate());
+            $this->addField($orderParameters, 'invoiceDate', $this->order->getInvoiceDate());
 
             $deliveryAddress = [];
-            $this->_add($deliveryAddress, 'code', $this->order->getDeliveryAddress()->getCode());
-            $this->_add($deliveryAddress, 'street', $this->order->getDeliveryAddress()->getStreetName());
-            $this->_add($deliveryAddress, 'streetNumber', $this->order->getDeliveryAddress()->getStreetNumber());
-            $this->_add($deliveryAddress, 'streetNumberExtension', $this->order->getDeliveryAddress()->getStreetNumberExtension());
-            $this->_add($deliveryAddress, 'zipCode', $this->order->getDeliveryAddress()->getZipCode());
-            $this->_add($deliveryAddress, 'city', $this->order->getDeliveryAddress()->getCity());
-            $this->_add($deliveryAddress, 'region', $this->order->getDeliveryAddress()->getRegionCode());
-            $this->_add($deliveryAddress, 'country', $this->order->getDeliveryAddress()->getCountryCode());
-            $this->_add($orderParameters, 'deliveryAddress', $deliveryAddress);
+            $this->addField($deliveryAddress, 'code', $this->order->getDeliveryAddress()->getCode());
+            $this->addField($deliveryAddress, 'street', $this->order->getDeliveryAddress()->getStreetName());
+            $this->addField($deliveryAddress, 'streetNumber', $this->order->getDeliveryAddress()->getStreetNumber());
+            $this->addField($deliveryAddress, 'streetNumberExtension', $this->order->getDeliveryAddress()->getStreetNumberExtension());
+            $this->addField($deliveryAddress, 'zipCode', $this->order->getDeliveryAddress()->getZipCode());
+            $this->addField($deliveryAddress, 'city', $this->order->getDeliveryAddress()->getCity());
+            $this->addField($deliveryAddress, 'region', $this->order->getDeliveryAddress()->getRegionCode());
+            $this->addField($deliveryAddress, 'country', $this->order->getDeliveryAddress()->getCountryCode());
+            $this->addField($orderParameters, 'deliveryAddress', $deliveryAddress);
 
             $invoiceAddress = [];
-            $this->_add($invoiceAddress, 'code', $this->order->getInvoiceAddress()->getCode());
-            $this->_add($invoiceAddress, 'street', $this->order->getInvoiceAddress()->getStreetName());
-            $this->_add($invoiceAddress, 'streetNumber', $this->order->getInvoiceAddress()->getStreetNumber());
-            $this->_add($invoiceAddress, 'streetNumberExtension', $this->order->getInvoiceAddress()->getStreetNumberExtension());
-            $this->_add($invoiceAddress, 'zipCode', $this->order->getInvoiceAddress()->getZipCode());
-            $this->_add($invoiceAddress, 'city', $this->order->getInvoiceAddress()->getCity());
-            $this->_add($invoiceAddress, 'region', $this->order->getInvoiceAddress()->getRegionCode());
-            $this->_add($invoiceAddress, 'country', $this->order->getInvoiceAddress()->getCountryCode());
-            $this->_add($orderParameters, 'invoiceAddress', $invoiceAddress);
-            $this->_add($orderParameters, 'products', $this->getProducts());
-            $this->_add($parameters, 'order', $orderParameters);
+            $this->addField($invoiceAddress, 'code', $this->order->getInvoiceAddress()->getCode());
+            $this->addField($invoiceAddress, 'street', $this->order->getInvoiceAddress()->getStreetName());
+            $this->addField($invoiceAddress, 'streetNumber', $this->order->getInvoiceAddress()->getStreetNumber());
+            $this->addField($invoiceAddress, 'streetNumberExtension', $this->order->getInvoiceAddress()->getStreetNumberExtension());
+            $this->addField($invoiceAddress, 'zipCode', $this->order->getInvoiceAddress()->getZipCode());
+            $this->addField($invoiceAddress, 'city', $this->order->getInvoiceAddress()->getCity());
+            $this->addField($invoiceAddress, 'region', $this->order->getInvoiceAddress()->getRegionCode());
+            $this->addField($invoiceAddress, 'country', $this->order->getInvoiceAddress()->getCountryCode());
+            $this->addField($orderParameters, 'invoiceAddress', $invoiceAddress);
+            $this->addField($orderParameters, 'products', $this->getProducts());
+            $this->addField($parameters, 'order', $orderParameters);
         }
 
         if ($this->stats instanceof Stats) {
             $stats = [];
-            $this->_add($stats, 'info', $this->stats->getInfo());
-            $this->_add($stats, 'tool', $this->stats->getTool());
-            $this->_add($stats, 'object', $this->getSdkObject($this->stats));
-            $this->_add($stats, 'extra1', $this->stats->getExtra1());
-            $this->_add($stats, 'extra2', $this->stats->getExtra2());
-            $this->_add($stats, 'extra3', $this->stats->getExtra3());
-            $this->_add($stats, 'domainId', $this->stats->getDomainId());
-            $this->_add($parameters, 'stats', $stats);
+            $this->addField($stats, 'info', $this->stats->getInfo());
+            $this->addField($stats, 'tool', $this->stats->getTool());
+            $this->addField($stats, 'object', $this->getSdkObject($this->stats));
+            $this->addField($stats, 'extra1', $this->stats->getExtra1());
+            $this->addField($stats, 'extra2', $this->stats->getExtra2());
+            $this->addField($stats, 'extra3', $this->stats->getExtra3());
+            $this->addField($stats, 'domainId', $this->stats->getDomainId());
+            $this->addField($parameters, 'stats', $stats);
         }
 
         if (!empty($this->notificationType)) {
@@ -448,7 +451,7 @@ class OrderCreateRequest extends RequestData
             ];
         }
 
-        $this->_add($parameters, 'transferData', $this->transferData);
+        $this->addField($parameters, 'transferData', $this->transferData);
 
         return $parameters;
     }
