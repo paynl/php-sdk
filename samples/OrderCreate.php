@@ -15,6 +15,11 @@ $request->setServiceId($_REQUEST['slcode'] ?? '');
 $request->setDescription('Order ABC0123456789');
 $request->setAmount((float)($_REQUEST['amount'] ?? 5.3));
 $request->setCurrency('EUR');
+
+# Or use the amount model to set the amount in cents or from float
+# $request->setAmount(\PayNL\Sdk\Model\Amount::fromCents(530, 'EUR'));
+# $request->setAmount(\PayNL\Sdk\Model\Amount::fromFloat(5.3, 'EUR'));
+
 $request->setExpire(date('c', time() + 60));
 $request->setReturnurl($_REQUEST['returnUrl'] ?? 'https://yourdomain/finish.php');
 $request->setExchangeUrl($_REQUEST['exchangeUrl'] ?? 'https://yourdomain/exchange.php');
