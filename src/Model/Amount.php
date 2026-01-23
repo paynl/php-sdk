@@ -43,7 +43,7 @@ class Amount implements ModelInterface, JsonSerializable
     }
 
     /**
-     * @param float $amount
+     * @param float       $amount
      * @param string|null $currency
      * @return self
      */
@@ -53,7 +53,7 @@ class Amount implements ModelInterface, JsonSerializable
     }
 
     /**
-     * @param int $amount
+     * @param integer     $amount
      * @param string|null $currency
      * @return self
      */

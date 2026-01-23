@@ -101,7 +101,7 @@ class TransactionRefundRequest extends RequestData
      */
     public function setAmount(float|Amount $amount): self
     {
-        if($amount instanceof Amount) {
+        if ($amount instanceof Amount) {
             $this->amount = $amount->getValue();
             $this->currency = $amount->getCurrency();
             return $this;
