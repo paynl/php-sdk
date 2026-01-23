@@ -42,6 +42,22 @@ class Amount implements ModelInterface, JsonSerializable
         }
     }
 
+    public static function fromFloat(float $amount, ?string $currency = null): self
+    {
+        return new self(
+            value: (int) round($amount * 100),
+            currency: $currency,
+        );
+    }
+
+    public static function fromCents(int $amount, ?string $currency = null): self
+    {
+        return new self(
+            value: $amount,
+            currency: $currency,
+        );
+    }
+
     /**
      * @return string
      */
