@@ -29,7 +29,7 @@ class Amount implements ModelInterface, JsonSerializable
     protected $currency = 'EUR';
 
     /**
-     * @param integer|null $value
+     * @param integer|null $value Cents
      * @param string|null  $currency
      */
     public function __construct(?int $value = null, ?string $currency = null)
@@ -90,7 +90,7 @@ class Amount implements ModelInterface, JsonSerializable
     }
 
     /**
-     * @param integer $value
+     * @param integer $value Amount in cents
      * @return $this
      */
     public function setValue(int $value): Amount

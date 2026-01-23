@@ -9,16 +9,17 @@ use PayNL\Sdk\Model\Product;
 use PayNL\Sdk\Model\Request\OrderCreateRequest;
 use PayNL\Sdk\Exception\PayException;
 use PayNL\Sdk\Config\Config;
+use PayNL\Sdk\Model\Amount;
 
 $request = new OrderCreateRequest();
 $request->setServiceId($_REQUEST['slcode'] ?? '');
 $request->setDescription('Order ABC0123456789');
-$request->setAmount((float)($_REQUEST['amount'] ?? 5.3));
-$request->setCurrency('EUR');
+$request->setAmount((float)($_REQUEST['amount'] ?? 5.3))->setCurrency('EUR');
 
-# Or use the amount model to set the amount in cents or from float
-# $request->setAmount(\PayNL\Sdk\Model\Amount::fromCents(530, 'EUR'));
-# $request->setAmount(\PayNL\Sdk\Model\Amount::fromFloat(5.3, 'EUR'));
+# Or set the amount using one of the following ways:
+# $request->setAmount(new Amount(456, 'EUR'));
+# $request->setAmount(Amount::fromCents(567, 'EUR'));
+# $request->setAmount(Amount::fromFloat(6.78, 'EUR'));
 
 $request->setExpire(date('c', time() + 60));
 $request->setReturnurl($_REQUEST['returnUrl'] ?? 'https://yourdomain/finish.php');
