@@ -29,7 +29,7 @@ class Amount implements ModelInterface, JsonSerializable
     protected $currency = 'EUR';
 
     /**
-     * @param integer|null $value
+     * @param integer|null $value    Cents.
      * @param string|null  $currency
      */
     public function __construct(?int $value = null, ?string $currency = null)
@@ -40,6 +40,26 @@ class Amount implements ModelInterface, JsonSerializable
         if (!is_null($currency)) {
             $this->setCurrency($currency);
         }
+    }
+
+    /**
+     * @param float       $amount
+     * @param string|null $currency
+     * @return self
+     */
+    public static function fromFloat(float $amount, ?string $currency = null): self
+    {
+        return new self(value: (int)round($amount * 100), currency: $currency);
+    }
+
+    /**
+     * @param integer     $amount
+     * @param string|null $currency
+     * @return self
+     */
+    public static function fromCents(int $amount, ?string $currency = null): self
+    {
+        return new self(value: $amount, currency: $currency);
     }
 
     /**
@@ -70,7 +90,7 @@ class Amount implements ModelInterface, JsonSerializable
     }
 
     /**
-     * @param integer $value
+     * @param integer $value Amount in cents.
      * @return $this
      */
     public function setValue(int $value): Amount
