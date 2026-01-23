@@ -29,7 +29,7 @@ class Amount implements ModelInterface, JsonSerializable
     protected $currency = 'EUR';
 
     /**
-     * @param integer|null $value Cents.
+     * @param integer|null $value    Cents.
      * @param string|null  $currency
      */
     public function __construct(?int $value = null, ?string $currency = null)
