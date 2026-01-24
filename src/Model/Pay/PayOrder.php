@@ -145,6 +145,10 @@ class PayOrder implements ModelInterface
      */
     protected ?array $transferData;
 
+    /**
+     * @var array
+     */
+    protected ?array $stats = [];
 
     /**
      * @param array|null $payload
@@ -853,5 +857,79 @@ class PayOrder implements ModelInterface
     {
         $this->transferData = $transferData;
         return $this;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getStats(): ?array
+    {
+        return $this->stats;
+    }
+
+    /**
+     * @param array|null $stats
+     * @return $this
+     */
+    public function setStats(?array $stats): self
+    {
+        $this->stats = $stats;
+        return $this;
+    }
+
+    /**
+     * @return mixed|null
+     */
+    public function getExtra1()
+    {
+        return $this->stats['extra1'] ?? null;
+    }
+
+    /**
+     * @return mixed|null
+     */
+    public function getExtra2()
+    {
+        return $this->stats['extra2'] ?? null;
+    }
+
+    /**
+     * @return mixed|null
+     */
+    public function getExtra3()
+    {
+        return $this->stats['extra3'] ?? null;
+    }
+
+    /**
+     * @return mixed|null
+     */
+    public function getTool()
+    {
+        return $this->stats['tool'] ?? null;
+    }
+
+    /**
+     * @return mixed|null
+     */
+    public function getInfo()
+    {
+        return $this->stats['info'] ?? null;
+    }
+
+    /**
+     * @return mixed|null
+     */
+    public function getObject()
+    {
+        return $this->stats['object'] ?? null;
+    }
+
+    /**
+     * @return mixed|null
+     */
+    public function getDomainId()
+    {
+        return $this->stats['domainId'] ?? null;
     }
 }

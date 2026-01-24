@@ -27,6 +27,7 @@ class Exchange
     public const ERROR_EMPTY_CONFIG = 8003;
     public const ERROR_PAYLOAD_OBJECT = 8004;
     public const ERROR_ACTION_FAULT = 8005;
+    public const ERROR_PAYLOAD_VALIDATION = 8006;
 
     private PayLoad $payload;
     private ?array $custom_payload;
