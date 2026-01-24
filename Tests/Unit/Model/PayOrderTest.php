@@ -14,13 +14,13 @@ class PayOrderTest extends TestCase
     {
         $payload = [
             'object' => [
-                'id'          => 'PO-123',
-                'description' => 'Test order',
-                'reference'   => 'REF-999',
-                'status'      => ['code' => 200, 'action' => 'PAID'],
-                'amount'          => ['value' => 1000, 'currency' => 'EUR'],
-                'capturedAmount'  => ['value' => 500, 'currency' => 'EUR'],
-                'authorizedAmount'=> ['value' => 1000, 'currency' => 'EUR'],
+                'id'               => 'PO-123',
+                'description'      => 'Test order',
+                'reference'        => 'REF-999',
+                'status'           => ['code' => 200, 'action' => 'PAID'],
+                'amount'           => ['value' => 1000, 'currency' => 'EUR'],
+                'capturedAmount'   => ['value' => 500, 'currency' => 'EUR'],
+                'authorizedAmount' => ['value' => 1000, 'currency' => 'EUR'],
             ],
         ];
 
@@ -42,7 +42,7 @@ class PayOrderTest extends TestCase
 
     public function testAmountRefundedReturnsValueInUnits(): void
     {
-        $order = new PayOrder();
+        $order  = new PayOrder();
         $amount = new Amount(1234, 'EUR');
 
         $order->setAmountRefunded($amount);
@@ -124,6 +124,7 @@ class PayOrderTest extends TestCase
         $this->assertNull($order->getPaymentMethod());
         $this->assertNull($order->getCustomerId());
         $this->assertNull($order->getCustomerName());
+        $this->assertSame([], $order->getPayments());
     }
 
     public function testIsTestmodeTrueWhenIntegrationTestFlagTrue(): void
@@ -146,6 +147,13 @@ class PayOrderTest extends TestCase
         $this->assertFalse($order->isTestmode());
     }
 
+    public function testCheckoutDataReturnsEmptyArrayWhenNotSet(): void
+    {
+        $order = new PayOrder();
+
+        $this->assertSame([], $order->getCheckoutData());
+    }
+
     public function testAmountAndCurrency(): void
     {
         $order  = new PayOrder();
@@ -157,6 +165,21 @@ class PayOrderTest extends TestCase
         $this->assertSame('EUR', $order->getCurrency());
     }
 
+    public function testAuthorizedAndCapturedAmountGettersAndSetters(): void
+    {
+        $order      = new PayOrder();
+        $authorized = new Amount(1000, 'EUR');
+        $captured   = new Amount(500, 'EUR');
+
+        $this->assertNull($order->getAuthorizedAmount());
+        $this->assertNull($order->getCapturedAmount());
+
+        $order->setAuthorizedAmount($authorized);
+        $order->setCapturedAmount($captured);
+
+        $this->assertSame($authorized, $order->getAuthorizedAmount());
+        $this->assertSame($captured, $order->getCapturedAmount());
+    }
 
     public function testPaymentAndStatusUrls(): void
     {
@@ -192,8 +215,53 @@ class PayOrderTest extends TestCase
         $data = ['some' => 'value', 'foo' => 'bar'];
 
         $order->setTransferData($data);
-
         $this->assertSame($data, $order->getTransferData());
+
+        $order->setTransferData(null);
+        $this->assertNull($order->getTransferData());
     }
 
+    public function testStatsGettersReturnNullWhenNotSet(): void
+    {
+        $order = new PayOrder();
+
+        // Typed property $stats is not initialized unless setStats() is called
+        $order->setStats([]);
+
+        $this->assertSame([], $order->getStats());
+        $this->assertNull($order->getExtra1());
+        $this->assertNull($order->getExtra2());
+        $this->assertNull($order->getExtra3());
+        $this->assertNull($order->getTool());
+        $this->assertNull($order->getInfo());
+        $this->assertNull($order->getObject());
+        $this->assertNull($order->getDomainId());
+    }
+
+
+    public function testStatsGettersReturnValuesWhenSet(): void
+    {
+        $order = new PayOrder();
+
+        $stats = [
+            'extra1'   => 'E1',
+            'extra2'   => 'E2',
+            'extra3'   => 'E3',
+            'tool'     => 'api',
+            'info'     => ['k' => 'v'],
+            'object'   => 'order',
+            'domainId' => 123,
+        ];
+
+        $order->setStats($stats);
+
+        $this->assertSame($stats, $order->getStats());
+        $this->assertSame('E1', $order->getExtra1());
+        $this->assertSame('E2', $order->getExtra2());
+        $this->assertSame('E3', $order->getExtra3());
+        $this->assertSame('api', $order->getTool());
+        $this->assertSame(['k' => 'v'], $order->getInfo());
+        $this->assertSame('order', $order->getObject());
+        $this->assertSame(123, $order->getDomainId());
+    }
 }
