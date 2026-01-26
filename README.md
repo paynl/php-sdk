@@ -51,9 +51,9 @@ More info about installation [here](https://github.com/paynl/php-sdk/wiki/Instal
 use PayNL\Sdk\Model\Request\OrderCreateRequest;
 
 $payOrder = (new OrderCreateRequest())
-    ->setServiceId($serviceId)
+    ->setServiceId($serviceId) // Your SL-code: SL-####-####
     ->setAmount(1.95) // Currency default in EURO.
-    ->setReturnUrl('https://yourdomain/finish.php')
+    ->setReturnUrl('https://yourdomain/yourfinishpage.php')
     ->start();
 
 echo $payOrder->getPaymentUrl();
@@ -69,12 +69,12 @@ See also this minimum create order [example](https://github.com/paynl/php-sdk/bl
 
 For complete and up-to-date documentation, please explore our Developer Portal. Documentation is available in English.
 
-* API endpoints and parameters {add links}
-* Creating and managing transactions {add links}
-* Payment methods and statuses {add links}
-* Refunds and partial refunds {add links}
-* Webhooks (exchange URLs) {add links}
-* Testing and debugging {add links}
+* API endpoints and parameters
+* Creating and managing transactions
+* Payment methods and statuses
+* Refunds and partial refunds
+* Webhooks (exchange URLs
+* Testing and debugging
 
 Detailed SDK usage examples can be found in this repository and in the official Developer Portal.
 
@@ -93,7 +93,7 @@ The Pay. PHP SDK includes practical [examples](https://github.com/paynl/SDK-PHP/
 
 ## Upgrading
 
-Please refer to the UPGRADING.md file for details on breaking changes and migration steps between SDK versions.
+If you are upgrading from the [old SDK](https://github.com/paynl/sdk), please follow the [SDK Migration Guide](https://github.com/paynl/php-sdk/wiki/SDK-Migration-guide).
 
 <hr>
 
