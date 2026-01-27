@@ -1,4 +1,4 @@
-name: Build and Release PHP-SDK ZIP (with vendor)
+name: Build and Release PHP-SDK Vendor ZIP (SDK inside vendor)
 
 on:
   push:
@@ -31,57 +31,55 @@ jobs:
           php-version: "8.1"
           tools: composer:v2
 
-      - name: Cache Composer downloads
-        uses: actions/cache@v4
-        with:
-          path: ~/.composer/cache/files
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
-          restore-keys: |
-            ${{ runner.os }}-composer-
-
-      - name: Composer update (no-dev)
+      - name: Build wrapper project (installs SDK into vendor)
         run: |
-          composer update \
+          set -e
+
+          rm -rf _build
+          mkdir -p _build
+          cd _build
+
+          # Wrapper composer.json: install YOUR SDK into vendor as a dependency via path repo
+          cat > composer.json <<'JSON'
+          {
+            "name": "paynl/php-sdk-vendor-bundle",
+            "type": "project",
+            "minimum-stability": "stable",
+            "prefer-stable": true,
+            "repositories": [
+              { "type": "path", "url": "..", "options": { "symlink": false } }
+            ],
+            "require": {
+              "paynl/php-sdk": "*"
+            }
+          }
+          JSON
+
+          # Install deps (no-dev) so vendor/ is complete
+          composer install \
             --no-dev \
             --prefer-dist \
             --no-interaction \
             --no-progress \
             --optimize-autoloader
 
-      - name: Build release folder
+          # Sanity check: SDK should now exist inside vendor
+          test -d "vendor/paynl/php-sdk" || (echo "ERROR: vendor/paynl/php-sdk not found" && exit 1)
+
+      - name: Make vendor ZIP (vendor only)
         run: |
-          RELEASE_DIR="paynl-sdk"
-          rm -rf "${RELEASE_DIR}"
-          mkdir -p "${RELEASE_DIR}"
-
-          # Copy SDK source (adjust if your structure differs)
-          cp -R src "${RELEASE_DIR}/" 2>/dev/null || true
-
-          # Copy composer metadata (optional but useful)
-          cp composer.json "${RELEASE_DIR}/"
-          [ -f composer.lock ] && cp composer.lock "${RELEASE_DIR}/" || true
-
-          # Copy vendor
-          cp -R vendor "${RELEASE_DIR}/"
-
-          # Optional: include docs/license
-          [ -f README.md ] && cp README.md "${RELEASE_DIR}/" || true
-          [ -f LICENSE ] && cp LICENSE "${RELEASE_DIR}/" || true
-
-          # Safety cleanup (just in case)
-          find "${RELEASE_DIR}" -name ".DS_Store" -delete || true
-
-      - name: Make ZIP
-        run: |
-          ZIP_NAME="SDKv${TAG_STRIPPED}.zip"
-          zip -r "${ZIP_NAME}" paynl-sdk \
+          ZIP_NAME="PayPHPSDKv${TAG_STRIPPED}.zip"
+          cd _build
+          zip -r "../${ZIP_NAME}" vendor \
             -x "*.DS_Store" \
                "*/.git*" \
                "*/.github/*"
+          cd ..
+          ls -la "${ZIP_NAME}"
 
       - name: Upload ZIP to Release
         uses: softprops/action-gh-release@v2
         with:
-          files: SDKv${{ env.TAG_STRIPPED }}.zip
+          files: PayPHPSDKv${{ env.TAG_STRIPPED }}.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
