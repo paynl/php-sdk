@@ -234,11 +234,9 @@ class ConfigProvider implements ConfigProviderInterface
             ],
           ],
           'TransactionStatus' => [
-                'uri' => '/transactions/%transactionId%/status',
+                'uri' => '',
                 'method' => RequestInterface::METHOD_GET,
-                'requiredParams' => [
-                'transactionId' => '',
-                ],
+                'requiredParams' => ['transactionId' => ''],
           ],
           'OrderStatus' => [
             'uri' => '/transactions/%transactionId%/status',
