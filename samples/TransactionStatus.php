@@ -50,3 +50,12 @@ echo 'getCurrency: ' . $payOrder->getCurrency() . PHP_EOL;
 echo 'integration: ' . ($payOrder->getIntegration()['testMode'] === true ? '1' : 0) . PHP_EOL;
 echo 'expiresAt: ' . $payOrder->getExpiresAt() . PHP_EOL;
 echo 'createdAt: ' . $payOrder->getCreatedAt() . PHP_EOL;
+
+print_r($payOrder->getStats());
+echo 'extra1: ' . $payOrder->getExtra1() . PHP_EOL;
+echo 'extra2: ' . $payOrder->getExtra2() . PHP_EOL;
+echo 'extra3: ' . $payOrder->getExtra3() . PHP_EOL;
+echo 'getTool: ' . $payOrder->getTool() . PHP_EOL;
+echo 'getInfo: ' . $payOrder->getInfo() . PHP_EOL;
+echo 'getObject: ' . $payOrder->getObject() . PHP_EOL;
+echo 'getDomainId: ' . $payOrder->getDomainId() . PHP_EOL;
