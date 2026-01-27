@@ -1,0 +1,70 @@
+name: Build and Release PHP-SDK Vendor ZIP
+
+on:
+  push:
+    tags:
+      - "*" # triggers on any tag (v1.0.0, 1.0.0, etc.)
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Detect tag
+        run: |
+          TAG="${GITHUB_REF#refs/tags/}"
+          TAG_STRIPPED="${TAG#v}"
+          echo "Tag: $TAG"
+          echo "Tag stripped: $TAG_STRIPPED"
+          echo "TAG=$TAG" >> $GITHUB_ENV
+          echo "TAG_STRIPPED=$TAG_STRIPPED" >> $GITHUB_ENV
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.1"
+          tools: composer:v2
+
+      - name: Cache Composer downloads
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.composer/cache/files
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
+      - name: Composer install (vendor only, no-dev)
+        run: |
+          composer install \
+            --no-dev \
+            --prefer-dist \
+            --no-interaction \
+            --no-progress \
+            --optimize-autoloader
+
+      - name: Make vendor ZIP
+        run: |
+          ZIP_NAME="SDKv${TAG_STRIPPED}.zip"
+          echo "Creating ZIP ${ZIP_NAME}"
+          # Zip only the vendor directory (as per your install instructions)
+          zip -r "${ZIP_NAME}" vendor \
+            -x "*.DS_Store" \
+               "*/.gitignore" \
+               "*/.git*" \
+               "*/.github/*"
+
+      - name: Upload ZIP to Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: SDKv*.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
