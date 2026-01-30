@@ -30,7 +30,7 @@ class TransactionStatusRequest extends RequestData
     public function __construct(string $orderId)
     {
         $this->orderId = $orderId;
-        parent::__construct('TransactionStatus', '/transactions/%transactionId%/status', RequestInterface::METHOD_GET);
+        parent::__construct('TransactionStatus', '/transactions/%transactionId%', RequestInterface::METHOD_GET);
     }
 
     /**
