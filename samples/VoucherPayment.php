@@ -6,21 +6,19 @@ declare(strict_types=1);
 require '../../../../vendor/autoload.php';
 
 use PayNL\Sdk\Model\Product;
-use PayNL\Sdk\Model\Request\VoucherCaptureRequest;
+use PayNL\Sdk\Model\Request\VoucherPaymentRequest;
 use PayNL\Sdk\Exception\PayException;
 use PayNL\Sdk\Config\Config;
 
-$request = new VoucherCaptureRequest();
+$request = new VoucherPaymentRequest();
 
-$request->setType('POS'); // ECOM or POS
 $request->setServiceId($_REQUEST['slcode'] ?? '');
-$request->setDescription('Order ABC0123456789');
-$request->setAmount((float) ($_REQUEST['amount'] ?? 5.2));
-$request->setCurrency('EUR');
-$request->setExchangeUrl($_REQUEST['exchangeUrl'] ?? 'https://yourdomain/exchange.php');
+
+$request->setPointOfInteraction('IN_PERSON'); // ['ON_THE_MOVE', 'ECOMMERCE', 'IN_PERSON', 'INVOICE', 'DEBT_COLLECTION', 'FUNDING', 'PAYMENT_REQUEST', 'RECURRING', 'UNATTENDED', 'MOTO', 'PAYOUT']
 
 $request->setCardNumber('12345678901234567');
 $request->setPinCode('12345');
+
 
 $customer = new \PayNL\Sdk\Model\Customer();
 $customer->setFirstName('John');
@@ -95,6 +93,8 @@ $request->setStats((new \PayNL\Sdk\Model\Stats())
     ->setExtra3('ex3')
     ->setDomainId('WU-1234-1234'));
 
+$request->setTransferData([['yourField' => 'yourData'], ['tracker' => 'trackerinfo']]);
+
 $config = new Config();
 $config->setUsername($_REQUEST['username'] ?? '');
 $config->setPassword($_REQUEST['password'] ?? '');
@@ -102,7 +102,6 @@ $config->setCore($_REQUEST['core'] ?? '');
 $request->setConfig($config);
 
 try {
-    $request->setReference('VOUCHER0123456789');
     $response = $request->start();
 } catch (PayException $e) {
     echo '<pre>';

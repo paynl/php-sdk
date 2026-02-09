@@ -8,17 +8,22 @@ use PayNL\Sdk\Model\ModelInterface;
 use PayNL\Sdk\Model\Amount;
 
 /**
- * Class VoucherCaptureResponse
+ * Class VoucherPaymentResponse
  *
  * @package PayNL\Sdk\Model
  */
-class VoucherCaptureResponse implements ModelInterface
+class VoucherPaymentResponse implements ModelInterface
 {
 
     /**
      * @var string
      */
     protected $id;
+
+    /**
+     * @var string
+     */
+    protected $orderId;
 
     /**
      * @var string
@@ -33,12 +38,7 @@ class VoucherCaptureResponse implements ModelInterface
     /**
      * @var string
      */
-    protected $orderId;
-
-    /**
-     * @var string
-     */
-    protected $paymentUrl;
+    protected $manualTransferCode;
 
     /**
      * @var Amount
@@ -48,12 +48,22 @@ class VoucherCaptureResponse implements ModelInterface
     /**
      * @var string
      */
-    protected $created;
+    protected $createdAt;
 
     /**
      * @var string
      */
-    protected $modified;
+    protected $expiresAt;
+
+    /**
+     * @var object
+     */
+    protected $integration;
+
+    /**
+     * @var object
+     */
+    protected $links;
 
     /**
      * @return string
@@ -130,18 +140,18 @@ class VoucherCaptureResponse implements ModelInterface
     /**
      * @return string
      */
-    public function getPaymentUrl(): string
+    public function getManualTransferCode(): string
     {
-        return (string) $this->paymentUrl;
+        return (string) $this->manualTransferCode;
     }
 
     /**
-     * @param string $paymentUrl
+     * @param string $manualTransferCode
      * @return $this
      */
-    public function setPaymentUrl(string $paymentUrl): self
+    public function setManualTransferCode(string $manualTransferCode): self
     {
-        $this->paymentUrl = $paymentUrl;
+        $this->manualTransferCode = $manualTransferCode;
         return $this;
     }
 
@@ -167,36 +177,73 @@ class VoucherCaptureResponse implements ModelInterface
     /**
      * @return string
      */
-    public function getCreated(): string
+    public function getcreatedAt(): string
     {
-        return (string) $this->created;
+        return (string) $this->createdAt;
     }
 
     /**
-     * @param string $created
+     * @param string $createdAt
      * @return $this
      */
-    public function setCreatedAt(string $created): self
+    public function setcreatedAtAt(string $createdAt): self
     {
-        $this->createdAt = $created;
+        $this->createdAtAt = $createdAt;
         return $this;
     }
 
     /**
      * @return string
      */
-    public function getModified(): string
+    public function getexpiresAt(): string
     {
-        return (string) $this->modified;
+        return (string) $this->expiresAt;
     }
 
     /**
-     * @param string $modified
+     * @param string $expiresAt
      * @return $this
      */
-    public function setModified(string $modified): self
+    public function setexpiresAt(string $expiresAt): self
     {
-        $this->modified = $modified;
+        $this->expiresAt = $expiresAt;
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getIntegration(): object
+    {
+        return $this->integration;
+    }
+
+    /**
+     * @param object $integration
+     * @return $this
+     */
+    public function setIntegration(object $integration): self
+    {
+        $this->integration = $integration;
+        return $this;
+    }
+   
+  
+    /**
+     * @return string
+     */
+    public function getLinks(): object
+    {
+        return $this->links;
+    }
+
+    /**
+     * @param object $links
+     * @return $this
+     */
+    public function setLinks(object $links): self
+    {
+        $this->links = $links;
         return $this;
     }
 

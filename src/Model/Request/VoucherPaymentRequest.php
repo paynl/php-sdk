@@ -11,32 +11,43 @@ use PayNL\Sdk\Model\Stats;
 use PayNL\Sdk\Request\RequestData;
 use PayNL\Sdk\Request\RequestInterface;
 use PayNL\Sdk\Util\Vat;
-use PayNL\Sdk\Model\Response\VoucherCaptureResponse;
+use PayNL\Sdk\Model\Response\VoucherPaymentResponse;
 
 /**
- * Class VoucherCaptureRequest
+ * Class VoucherPaymentRequest
  *
  * @package PayNL\Sdk\Model\Request
  */
-class VoucherCaptureRequest extends RequestData
+class VoucherPaymentRequest extends RequestData
 {
     private string $serviceId;
-    private string $description = '';
+
+    // Integration
+    private string $pointOfInteraction = '';
+    private array $pointOfInteraction_types = ['ON_THE_MOVE', 'ECOMMERCE', 'IN_PERSON', 'INVOICE', 'DEBT_COLLECTION', 'FUNDING', 'PAYMENT_REQUEST', 'RECURRING', 'UNATTENDED', 'MOTO', 'PAYOUT'];
+
+    // Voucher
+    private string $cardNumber = '';
+    private string $pinCode = '';
+
+    // Order
     private string $reference = '';
-    private string $expire = '';
+    private string $description = '';
     private string $exchangeUrl = '';
     private int $amount;
     private string $currency = 'EUR';
+
     private ?Customer $customer = null;
     private ?Order $order = null;
+
+    // Stats
     private ?Stats $stats = null;
-    private string $cardNumber = '';
-    private string $pinCode = '';
-    private string $type = '';
+    private array $transferData = [];
+
 
     public function __construct()
     {
-        parent::__construct('VoucherCapture', 'vouchers/transaction', RequestInterface::METHOD_POST);
+        parent::__construct('VoucherPayment', 'vouchers/payment', RequestInterface::METHOD_POST);
     }
 
     /**
@@ -82,6 +93,16 @@ class VoucherCaptureRequest extends RequestData
     }
 
     /**
+     * @param string $serviceId
+     * @return $this
+     */
+    public function setServiceId(string $serviceId): self
+    {
+        $this->serviceId = $serviceId;
+        return $this;
+    }
+
+    /**
      * @param string $cardNumber
      * @return $this
      */
@@ -102,25 +123,59 @@ class VoucherCaptureRequest extends RequestData
     }
 
     /**
-     * @param string $type ECOM or POS
+     * @param string $pointOfInteraction 
      * @return $this
      */
-    public function setType(string $type): self
+    public function setPointOfInteraction(string $pointOfInteraction): self
     {
-        if ($type !== 'ECOM' && $type !== 'POS') {
-            throw new \Exception('Type should be either: ECOM or POS');
+        if (!in_array($pointOfInteraction, $this->pointOfInteraction_types, true)) {
+            throw new \Exception('pointOfInteraction should be one of: ' . implode(', ', $this->pointOfInteraction_types));
         }
-        $this->type = $type;
+        $this->pointOfInteraction = $pointOfInteraction;
+        return $this;
+    }    
+
+    /**
+     * @param string $reference
+     * @return $this
+     * @throws \Exception
+     */
+    public function setReference(string $reference): self
+    {
+        if (!ctype_alnum($reference)) {
+            throw new \Exception('Reference should consist of all letters or digits');
+        }
+        $this->reference = $reference;
         return $this;
     }
 
     /**
-     * @param float $amount Whole amount. Not in cents.
+     * @param string $description
+     * @return $this
+     */
+    public function setDescription(string $description): self
+    {
+        $this->description = $description;
+        return $this;
+    }
+
+    /**
+     * @param string $exchangeUrl
+     * @return $this
+     */
+    public function setExchangeUrl(string $exchangeUrl): self
+    {
+        $this->exchangeUrl = $exchangeUrl;
+        return $this;
+    }
+
+    /**
+     * @param float $amount in cents.
      * @return $this
      */
     public function setAmount(float $amount): self
     {
-        $this->amount = (int) round($amount * 100);
+        $this->amount = (int)round($amount * 100);
         return $this;
     }
 
@@ -165,46 +220,15 @@ class VoucherCaptureRequest extends RequestData
     }
 
     /**
-     * @param string $serviceId
-     * @return $this
+     * @param array $transferData multidimensional array with one or more key and value
      */
-    public function setServiceId(string $serviceId): self
+    public function setTransferData(array $transferData): self
     {
-        $this->serviceId = $serviceId;
-        return $this;
-    }
-
-    /**
-     * @param string $description
-     * @return $this
-     */
-    public function setDescription(string $description): self
-    {
-        $this->description = $description;
-        return $this;
-    }
-
-    /**
-     * @param string $reference
-     * @return $this
-     * @throws \Exception
-     */
-    public function setReference(string $reference): self
-    {
-        if (!ctype_alnum($reference)) {
-            throw new \Exception('Reference should consist of all letters or digits');
+        foreach ($transferData as $element) {
+            foreach ($element as $key => $value) {
+                $this->transferData[] = ['name' => $key, 'value' => $value];
+            }
         }
-        $this->reference = $reference;
-        return $this;
-    }
-
-    /**
-     * @param string $exchangeUrl
-     * @return $this
-     */
-    public function setExchangeUrl(string $exchangeUrl): self
-    {
-        $this->exchangeUrl = $exchangeUrl;
         return $this;
     }
 
@@ -213,7 +237,7 @@ class VoucherCaptureRequest extends RequestData
      */
     private function requiredArguments()
     {
-        return ['amount', 'serviceId', 'cardNumber', 'type'];
+        return ['serviceId', 'number', 'amount' , 'currency'];
     }
 
     /**
@@ -238,82 +262,74 @@ class VoucherCaptureRequest extends RequestData
 
         $parameters = [];
 
-        # Transaction required parameters
-        $transParameters = [
-            'type' => $this->type,
-            'serviceId' => $this->serviceId,
-            'amount' => [
-                'value' => $this->amount,
-                'currency' => $this->currency,
-            ],
-        ];
+        $this->_add($parameters, 'serviceId', $this->serviceId);
 
-        # Transaction Optional parameters
-        $this->_add($transParameters, 'description', $this->description);
-        $this->_add($transParameters, 'reference', $this->reference);
-        $this->_add($transParameters, 'exchangeUrl', $this->exchangeUrl);
-        $this->_add($parameters, 'transaction', $transParameters);
+        $integrationParameters = [];
+        $this->_add($integrationParameters, 'pointOfInteraction', $this->pointOfInteraction);
+        $this->_add($parameters, 'integration', $integrationParameters);
 
-        # Voucher required parameters
-        $voucherParameters = [
-            'cardNumber' => $this->cardNumber,
-        ];
-
-        $this->_add($voucherParameters, 'pinCode', $this->pinCode);
+        $voucherParameters = [];
+        $this->_add($voucherParameters, 'number', $this->cardNumber);
+        $this->_add($voucherParameters, 'pincode', $this->pinCode);
         $this->_add($parameters, 'voucher', $voucherParameters);
-
-
-        if ($this->customer instanceof Customer) {
-            $custParameters = [];
-            $this->_add($custParameters, 'firstName', $this->customer->getFirstName());
-            $this->_add($custParameters, 'lastName', $this->customer->getLastName());
-            $this->_add($custParameters, 'ipAddress', $this->customer->getIpAddress());
-            $this->_add($custParameters, 'birthDate', $this->customer->getBirthDate());
-            $this->_add($custParameters, 'gender', $this->customer->getGender());
-            $this->_add($custParameters, 'phone', $this->customer->getPhone());
-            $this->_add($custParameters, 'email', $this->customer->getEmail());
-            $this->_add($custParameters, 'language', $this->customer->getLanguage());
-            $this->_add($custParameters, 'trust', $this->customer->getTrust());
-            $this->_add($custParameters, 'reference', $this->customer->getReference());
-            $this->_add($custParameters, 'locale', $this->customer->getLocale());
-
-            $compParameters = [];
-            $this->_add($compParameters, 'name', $this->customer->getCompany()->getName());
-            $this->_add($compParameters, 'cocNumber', $this->customer->getCompany()->getCoc());
-            $this->_add($compParameters, 'vatNumber', $this->customer->getCompany()->getVat());
-            $this->_add($compParameters, 'countryCode', $this->customer->getCompany()->getCountryCode());
-
-            $this->_add($custParameters, 'company', $compParameters);
-            $this->_add($parameters, 'customer', $custParameters);
-        }
 
         if ($this->order instanceof Order) {
             $orderParameters = [];
-            $this->_add($orderParameters, 'countryCode', $this->order->getCountryCode());
+            $this->_add($orderParameters, 'reference', $this->reference);
+            $this->_add($orderParameters, 'description', $this->description);
+            $this->_add($orderParameters, 'exchangeUrl', $this->exchangeUrl);
             $this->_add($orderParameters, 'deliveryDate', $this->order->getDeliveryDate());
             $this->_add($orderParameters, 'invoiceDate', $this->order->getInvoiceDate());
 
+            $amountParameters = [];
+            $this->_add($amountParameters, 'value', $this->amount);
+            $this->_add($amountParameters, 'currency', $this->currency);
+            $this->_add($orderParameters, 'amount', $amountParameters);
+
             $deliveryAddress = [];
-            $this->_add($deliveryAddress, 'code', $this->order->getDeliveryAddress()->getCode());
             $this->_add($deliveryAddress, 'street', $this->order->getDeliveryAddress()->getStreetName());
             $this->_add($deliveryAddress, 'streetNumber', $this->order->getDeliveryAddress()->getStreetNumber());
             $this->_add($deliveryAddress, 'streetNumberExtension', $this->order->getDeliveryAddress()->getStreetNumberExtension());
-            $this->_add($deliveryAddress, 'zipCode', $this->order->getDeliveryAddress()->getZipCode());
             $this->_add($deliveryAddress, 'city', $this->order->getDeliveryAddress()->getCity());
-            $this->_add($deliveryAddress, 'region', $this->order->getDeliveryAddress()->getRegionCode());
+            $this->_add($deliveryAddress, 'zipCode', $this->order->getDeliveryAddress()->getZipCode());
             $this->_add($deliveryAddress, 'country', $this->order->getDeliveryAddress()->getCountryCode());
+            $this->_add($deliveryAddress, 'region', $this->order->getDeliveryAddress()->getRegionCode());
             $this->_add($orderParameters, 'deliveryAddress', $deliveryAddress);
 
             $invoiceAddress = [];
-            $this->_add($invoiceAddress, 'code', $this->order->getInvoiceAddress()->getCode());
             $this->_add($invoiceAddress, 'street', $this->order->getInvoiceAddress()->getStreetName());
             $this->_add($invoiceAddress, 'streetNumber', $this->order->getInvoiceAddress()->getStreetNumber());
             $this->_add($invoiceAddress, 'streetNumberExtension', $this->order->getInvoiceAddress()->getStreetNumberExtension());
-            $this->_add($invoiceAddress, 'zipCode', $this->order->getInvoiceAddress()->getZipCode());
             $this->_add($invoiceAddress, 'city', $this->order->getInvoiceAddress()->getCity());
-            $this->_add($invoiceAddress, 'region', $this->order->getInvoiceAddress()->getRegionCode());
+            $this->_add($invoiceAddress, 'zipCode', $this->order->getInvoiceAddress()->getZipCode());
             $this->_add($invoiceAddress, 'country', $this->order->getInvoiceAddress()->getCountryCode());
+            $this->_add($invoiceAddress, 'region', $this->order->getInvoiceAddress()->getRegionCode());
             $this->_add($orderParameters, 'invoiceAddress', $invoiceAddress);
+
+            if ($this->customer instanceof Customer) {
+                $custParameters = [];
+                $this->_add($custParameters, 'firstName', $this->customer->getFirstName());
+                $this->_add($custParameters, 'lastName', $this->customer->getLastName());
+                $this->_add($custParameters, 'ipAddress', $this->customer->getIpAddress());
+                $this->_add($custParameters, 'birthDate', $this->customer->getBirthDate());
+                $this->_add($custParameters, 'gender', $this->customer->getGender());
+                $this->_add($custParameters, 'phone', $this->customer->getPhone());
+                $this->_add($custParameters, 'email', $this->customer->getEmail());
+                $this->_add($custParameters, 'language', $this->customer->getLanguage());
+                $this->_add($custParameters, 'trust', $this->customer->getTrust());
+                $this->_add($custParameters, 'reference', $this->customer->getReference());
+                $this->_add($custParameters, 'locale', $this->customer->getLocale());
+
+                $compParameters = [];
+                $this->_add($compParameters, 'name', $this->customer->getCompany()->getName());
+                $this->_add($compParameters, 'cocNumber', $this->customer->getCompany()->getCoc());
+                $this->_add($compParameters, 'vatNumber', $this->customer->getCompany()->getVat());
+                $this->_add($compParameters, 'countryCode', $this->customer->getCompany()->getCountryCode());
+                $this->_add($custParameters, 'company', $compParameters);
+
+                $this->_add($orderParameters, 'customer', $custParameters);
+            }
+
             $this->_add($orderParameters, 'products', $this->getProducts());
             $this->_add($parameters, 'order', $orderParameters);
         }
@@ -327,6 +343,7 @@ class VoucherCaptureRequest extends RequestData
             $this->_add($stats, 'extra2', $this->stats->getExtra2());
             $this->_add($stats, 'extra3', $this->stats->getExtra3());
             $this->_add($stats, 'domainId', $this->stats->getDomainId());
+            $this->_add($stats, 'transferData', $this->transferData);
             $this->_add($parameters, 'stats', $stats);
         }
 
@@ -366,10 +383,10 @@ class VoucherCaptureRequest extends RequestData
     }
 
     /**
-     * @return VoucherCaptureResponse
+     * @return VoucherPaymentResponse
      * @throws PayException
      */
-    public function start(): VoucherCaptureResponse
+    public function start(): VoucherPaymentResponse
     {
         $this->config->setVersion(2);
         return parent::start();
