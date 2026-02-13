@@ -163,6 +163,7 @@ final class ServiceGetConfigResponseTest extends TestCase
 
         $this->assertTrue(true);
     }
+
     private function createResponseWithMockData(): ServiceGetConfigResponse
     {
         $response = new ServiceGetConfigResponse();
@@ -204,8 +205,5 @@ final class ServiceGetConfigResponseTest extends TestCase
 
         return $response;
     }
-
-
-
 
 }

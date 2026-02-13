@@ -240,7 +240,7 @@ class ServiceGetConfigResponse implements ModelInterface
     }
 
     /**
-     * @param string $countryCode Uses `default` checkoutSequence when empty
+     * @param string $countryCode Uses `default` checkoutSequence when empty.
      * @return array
      */
     public function getPaymentMethods(string $countryCode = 'default'): array
