@@ -240,7 +240,7 @@ class ServiceGetConfigResponse implements ModelInterface
     }
 
     /**
-     * @param string $countryCode Uses `default` checkoutSequence when empty.
+     * @param string $countryCode Such as `NL` or `GB`. Uses `default` as checkoutSequence when empty.
      * @return array
      */
     public function getPaymentMethods(string $countryCode = 'default'): array
@@ -266,19 +266,20 @@ class ServiceGetConfigResponse implements ModelInterface
             }
         }
 
+        # checkoutSequence is based on countryCode or default, see https://developer.pay.nl/docs/load-the-configuration#checkoutsequence
         $countryCode = $countryCode === 'default' ? 'default' : strtoupper($countryCode);
         $checkoutSequence = $this->getCheckoutSequence();
 
-        $newlist = [];
+        $orderMethodList = [];
         foreach (['primary', 'secondary'] as $type) {
             foreach ($checkoutSequence[$countryCode][$type] ?? [] as $tag) {
                 if (isset($methods[$tag])) {
-                    $newlist[] = $methods[$tag];
+                    $orderMethodList[] = $methods[$tag];
                 }
             }
         }
 
-        return $newlist;
+        return $orderMethodList;
     }
 
     /**
