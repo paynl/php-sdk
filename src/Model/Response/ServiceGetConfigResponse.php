@@ -240,9 +240,10 @@ class ServiceGetConfigResponse implements ModelInterface
     }
 
     /**
+     * @param string $countryCode Uses `default` checkoutSequence when empty
      * @return array
      */
-    public function getPaymentMethods(): array
+    public function getPaymentMethods(string $countryCode = 'default'): array
     {
         $methods = [];
         foreach ($this->getCheckoutOptions() as $checkoutOption) {
@@ -257,14 +258,27 @@ class ServiceGetConfigResponse implements ModelInterface
                 $groupMethod->setImage($checkoutOption->getImage());
                 $groupMethod->setMinAmount(0);
                 $groupMethod->setMaxAmount(0);
-                $methods[] = $groupMethod;
+                $methods[$tag] = $groupMethod;
             } else {
                 foreach ($checkoutOption->getPaymentMethods() as $method) {
-                    $methods[] = $method;
+                    $methods[$tag] = $method;
                 }
             }
         }
-        return $methods;
+
+        $countryCode = $countryCode === 'default' ? 'default' : strtoupper($countryCode);
+        $checkoutSequence = $this->getCheckoutSequence();
+
+        $newlist = [];
+        foreach (['primary', 'secondary'] as $type) {
+            foreach ($checkoutSequence[$countryCode][$type] ?? [] as $tag) {
+                if (isset($methods[$tag])) {
+                    $newlist[] = $methods[$tag];
+                }
+            }
+        }
+
+        return $newlist;
     }
 
     /**
