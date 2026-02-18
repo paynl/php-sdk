@@ -240,9 +240,10 @@ class ServiceGetConfigResponse implements ModelInterface
     }
 
     /**
+     * @param string $countryCode Such as `NL` or `GB`. Uses `default` as checkoutSequence when empty.
      * @return array
      */
-    public function getPaymentMethods(): array
+    public function getPaymentMethods(string $countryCode = 'default'): array
     {
         $methods = [];
         foreach ($this->getCheckoutOptions() as $checkoutOption) {
@@ -257,14 +258,28 @@ class ServiceGetConfigResponse implements ModelInterface
                 $groupMethod->setImage($checkoutOption->getImage());
                 $groupMethod->setMinAmount(0);
                 $groupMethod->setMaxAmount(0);
-                $methods[] = $groupMethod;
+                $methods[$tag] = $groupMethod;
             } else {
                 foreach ($checkoutOption->getPaymentMethods() as $method) {
-                    $methods[] = $method;
+                    $methods[$tag] = $method;
                 }
             }
         }
-        return $methods;
+
+        # checkoutSequence is based on countryCode or default, see https://developer.pay.nl/docs/load-the-configuration#checkoutsequence
+        $countryCode = $countryCode === 'default' ? 'default' : strtoupper($countryCode);
+        $checkoutSequence = $this->getCheckoutSequence();
+
+        $orderMethodList = [];
+        foreach (['primary', 'secondary'] as $type) {
+            foreach ($checkoutSequence[$countryCode][$type] ?? [] as $tag) {
+                if (isset($methods[$tag])) {
+                    $orderMethodList[] = $methods[$tag];
+                }
+            }
+        }
+
+        return $orderMethodList;
     }
 
     /**
