@@ -95,7 +95,7 @@ class VoucherInfoRequest extends RequestData
      */
     private function requiredArguments()
     {
-        return ['serviceId', 'number'];
+        return ['serviceId', 'cardNumber'];
     }
 
     /**
