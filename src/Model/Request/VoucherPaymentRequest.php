@@ -36,7 +36,9 @@ class VoucherPaymentRequest extends RequestData
     private ?Stats $stats = null;
     private array $transferData = [];
 
-
+    /**
+     * VoucherPaymentRequest constructor.
+     */
     public function __construct()
     {
         parent::__construct('VoucherPayment', 'vouchers/payment', RequestInterface::METHOD_POST);
@@ -72,9 +74,9 @@ class VoucherPaymentRequest extends RequestData
     }
 
     /**
-     * @param $returnArr
-     * @param $field
-     * @param $value
+     * @param array $returnArr
+     * @param string $field
+     * @param mixed $value
      * @return void
      */
     private function _add(&$returnArr, $field, $value)
@@ -115,7 +117,7 @@ class VoucherPaymentRequest extends RequestData
     }
 
     /**
-     * @param string $pointOfInteraction 
+     * @param string $pointOfInteraction
      * @return $this
      */
     public function setPointOfInteraction(string $pointOfInteraction): self
@@ -172,7 +174,7 @@ class VoucherPaymentRequest extends RequestData
     }
 
     /**
-     * @param float $amount in cents.
+     * @param float $amount In cents.
      * @return $this
      */
     public function setAmount(float $amount): self
@@ -222,7 +224,7 @@ class VoucherPaymentRequest extends RequestData
     }
 
     /**
-     * @param array $transferData multidimensional array with one or more key and value
+     * @param array $transferData Multidimensional array with one or more key and value.
      */
     public function setTransferData(array $transferData): self
     {

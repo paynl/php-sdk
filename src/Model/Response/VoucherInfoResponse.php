@@ -17,12 +17,12 @@ class VoucherInfoResponse implements ModelInterface
     /**
      * @var array
      */
-    protected $integration; 
+    protected $integration;
 
     /**
     * @var array
      */
-    protected $voucher;   
+    protected $voucher;
 
     /**
      * @param array $integration
@@ -30,16 +30,16 @@ class VoucherInfoResponse implements ModelInterface
      */
     public function setIntegration(array $integration): self
     {
-        $this->integration = $integration;       
+        $this->integration = $integration;
         return $this;
-    }    
+    }
 
     /**
      * @param array $voucher
      * @return $this
      */
     public function setVoucher(array $voucher): self
-    { 
+    {
         $this->voucher = $voucher;
         return $this;
     }
@@ -50,7 +50,7 @@ class VoucherInfoResponse implements ModelInterface
     public function getIntegration(): array
     {
         return $this->integration;
-    }   
+    }
 
     /**
      * @return boolean
@@ -66,7 +66,7 @@ class VoucherInfoResponse implements ModelInterface
     public function getPointOfInteraction(): string
     {
         return $this->integration['pointOfInteraction'] ?? '';
-    }    
+    }
 
     /**
      * @return array
@@ -74,7 +74,7 @@ class VoucherInfoResponse implements ModelInterface
     public function getVoucher(): array
     {
         return $this->voucher;
-    }    
+    }
 
     /**
      * @return float|integer
@@ -90,7 +90,7 @@ class VoucherInfoResponse implements ModelInterface
     public function getCurrency(): string
     {
         return (string)$this->voucher['amount']['currency'] ?? '';
-    }  
+    }
 
     /**
      * @return string
@@ -98,7 +98,7 @@ class VoucherInfoResponse implements ModelInterface
     public function getExpiresAt(): string
     {
         return (string) $this->voucher['expiresAt'] ?? '';
-    }   
+    }
 
     /**
      * @return array
@@ -131,5 +131,4 @@ class VoucherInfoResponse implements ModelInterface
     {
         return $this->voucher['brand']['iconUrl'] ?? '';
     }
-    
 }

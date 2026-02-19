@@ -14,7 +14,6 @@ use PayNL\Sdk\Model\Amount;
  */
 class VoucherPaymentResponse implements ModelInterface
 {
-
     /**
      * @var string
      */
@@ -56,7 +55,7 @@ class VoucherPaymentResponse implements ModelInterface
      */
     protected $amount;
 
-    /**   
+    /**
      * @var array
      */
     protected $integration;
@@ -86,7 +85,7 @@ class VoucherPaymentResponse implements ModelInterface
     }
 
     /**
-     * @param string $id
+     * @param string $orderId
      * @return $this
      */
     public function setOrderId(string $orderId): self
@@ -165,7 +164,6 @@ class VoucherPaymentResponse implements ModelInterface
     {
         $this->createdAt = $createdAt;
         return $this;
-
     }
 
     /**
