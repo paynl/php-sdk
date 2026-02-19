@@ -15,94 +15,121 @@ use PayNL\Sdk\Model\Amount;
 class VoucherInfoResponse implements ModelInterface
 {
     /**
-     * @var object
+     * @var array
      */
-    protected $integration;
+    protected $integration; 
 
     /**
-     * @var amount
+    * @var array
      */
-    protected $amount;
+    protected $voucher;   
 
     /**
-     * @var string
+     * @param array $integration
+     * @return $this
      */
-    protected $expiresAt;
+    public function setIntegration(array $integration): self
+    {
+        $this->integration = $integration;       
+        return $this;
+    }    
 
     /**
-     * @var object
+     * @param array $voucher
+     * @return $this
      */
-    protected $brand;
+    public function setVoucher(array $voucher): self
+    { 
+        $this->voucher = $voucher;
+        return $this;
+    }
 
     /**
-     * @return object
+     * @return array
      */
-    public function getIntegration(): object
+    public function getIntegration(): array
     {
         return $this->integration;
+    }   
+
+    /**
+     * @return boolean
+     */
+    public function getTest(): bool
+    {
+        return $this->integration['test'] ?? false;
     }
 
     /**
-     * @param object $integration
-     * @return $this
+     * @return string
      */
-    public function setIntegration(object $integration): self
+    public function getPointOfInteraction(): string
     {
-        $this->integration = $integration;
-        return $this;
+        return $this->integration['pointOfInteraction'] ?? '';
+    }    
+
+    /**
+     * @return array
+     */
+    public function getVoucher(): array
+    {
+        return $this->voucher;
+    }    
+
+    /**
+     * @return float|integer
+     */
+    public function getAmount(): float|int
+    {
+        return $this->voucher['amount']['value'] / 100 ?? 0;
     }
 
     /**
-     * @return Amount
+     * @return string
      */
-    public function getAmount(): Amount
+    public function getCurrency(): string
     {
-        return $this->amount;
-    }
-
-    /**
-     * @param Amount $amount
-     * @return $this
-     */
-    public function setAmount(Amount $amount): self
-    {
-        $this->amount = $amount;
-        return $this;
-    }
+        return (string)$this->voucher['amount']['currency'] ?? '';
+    }  
 
     /**
      * @return string
      */
     public function getExpiresAt(): string
     {
-        return (string) $this->expiresAt;
+        return (string) $this->voucher['expiresAt'] ?? '';
+    }   
+
+    /**
+     * @return array
+     */
+    public function getBrand(): array
+    {
+        return $this->voucher['brand'] ?? [];
     }
 
     /**
-     * @param string $expiresAt
-     * @return $this
+     * @return integer
      */
-    public function setExpiresAt(string $expiresAt): self
+    public function getBrandId(): int
     {
-        $this->expiresAt = $expiresAt;
-        return $this;
+        return $this->voucher['brand']['id'] ?? '';
     }
 
     /**
-     * @return object
+     * @return string
      */
-    public function getBrand(): object
+    public function getBrandName(): string
     {
-        return $this->brand;
+        return $this->voucher['brand']['name'] ?? '';
     }
 
     /**
-     * @param object $brand
-     * @return $this
+     * @return string
      */
-    public function setBrand(object $brand): self
+    public function getBrandIconUrl(): string
     {
-        $this->brand = $brand;
-        return $this;
+        return $this->voucher['brand']['iconUrl'] ?? '';
     }
+    
 }

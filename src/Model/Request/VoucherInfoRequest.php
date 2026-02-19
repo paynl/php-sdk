@@ -19,13 +19,9 @@ use PayNL\Sdk\Model\Response\VoucherInfoResponse;
  */
 class VoucherInfoRequest extends RequestData
 {
-    private string $serviceId;
-
-    // Integration
+    private string $serviceId;    
     private string $pointOfInteraction = '';
     private array $pointOfInteraction_types = ['ON_THE_MOVE', 'ECOMMERCE', 'IN_PERSON', 'INVOICE', 'DEBT_COLLECTION', 'FUNDING', 'PAYMENT_REQUEST', 'RECURRING', 'UNATTENDED', 'MOTO', 'PAYOUT'];
-
-    // Voucher
     private string $cardNumber = '';
     private string $pinCode = '';
 

@@ -21,26 +21,18 @@ use PayNL\Sdk\Model\Response\VoucherPaymentResponse;
 class VoucherPaymentRequest extends RequestData
 {
     private string $serviceId;
-
-    // Integration
     private string $pointOfInteraction = '';
     private array $pointOfInteraction_types = ['ON_THE_MOVE', 'ECOMMERCE', 'IN_PERSON', 'INVOICE', 'DEBT_COLLECTION', 'FUNDING', 'PAYMENT_REQUEST', 'RECURRING', 'UNATTENDED', 'MOTO', 'PAYOUT'];
-
-    // Voucher
     private string $cardNumber = '';
     private string $pinCode = '';
-
-    // Order
     private string $reference = '';
     private string $description = '';
+    private string $returnUrl = '';
     private string $exchangeUrl = '';
     private int $amount;
     private string $currency = 'EUR';
-
     private ?Customer $customer = null;
     private ?Order $order = null;
-
-    // Stats
     private ?Stats $stats = null;
     private array $transferData = [];
 
@@ -133,7 +125,7 @@ class VoucherPaymentRequest extends RequestData
         }
         $this->pointOfInteraction = $pointOfInteraction;
         return $this;
-    }    
+    }
 
     /**
      * @param string $reference
@@ -170,12 +162,22 @@ class VoucherPaymentRequest extends RequestData
     }
 
     /**
+     * @param string $returnUrl
+     * @return $this
+     */
+    public function setReturnUrl(string $returnUrl): self
+    {
+        $this->returnUrl = $returnUrl;
+        return $this;
+    }
+
+    /**
      * @param float $amount in cents.
      * @return $this
      */
     public function setAmount(float $amount): self
     {
-        $this->amount = (int)round($amount * 100);
+        $this->amount = (int) round($amount * 100);
         return $this;
     }
 
@@ -237,7 +239,7 @@ class VoucherPaymentRequest extends RequestData
      */
     private function requiredArguments()
     {
-        return ['serviceId', 'number', 'amount' , 'currency'];
+        return ['serviceId', 'cardNumber', 'pinCode', 'amount', 'currency'];
     }
 
     /**
@@ -263,10 +265,16 @@ class VoucherPaymentRequest extends RequestData
         $parameters = [];
 
         $this->_add($parameters, 'serviceId', $this->serviceId);
+        $this->_add($parameters, 'description', $this->description);
+        $this->_add($parameters, 'reference', $this->reference);
+        $this->_add($parameters, 'returnUrl', $this->returnUrl);
+        $this->_add($parameters, 'exchangeUrl', $this->exchangeUrl);
+        $this->_add($parameters, 'pointOfInteraction', $this->pointOfInteraction);
 
-        $integrationParameters = [];
-        $this->_add($integrationParameters, 'pointOfInteraction', $this->pointOfInteraction);
-        $this->_add($parameters, 'integration', $integrationParameters);
+        $amountParameters = [];
+        $this->_add($amountParameters, 'value', $this->amount);
+        $this->_add($amountParameters, 'currency', $this->currency);
+        $this->_add($parameters, 'amount', $amountParameters);
 
         $voucherParameters = [];
         $this->_add($voucherParameters, 'number', $this->cardNumber);
@@ -343,9 +351,10 @@ class VoucherPaymentRequest extends RequestData
             $this->_add($stats, 'extra2', $this->stats->getExtra2());
             $this->_add($stats, 'extra3', $this->stats->getExtra3());
             $this->_add($stats, 'domainId', $this->stats->getDomainId());
-            $this->_add($stats, 'transferData', $this->transferData);
             $this->_add($parameters, 'stats', $stats);
         }
+
+        $this->_add($parameters, 'transferData', $this->transferData);
 
         return $parameters;
     }
@@ -372,14 +381,6 @@ class VoucherPaymentRequest extends RequestData
             $__object = 'PHP-SDK ' . ($composerVersion ?? 'unknown');
         }
         return $__object;
-    }
-
-    /**
-     * @param string $expire
-     */
-    public function setExpire(string $expire): void
-    {
-        $this->expire = $expire;
     }
 
     /**

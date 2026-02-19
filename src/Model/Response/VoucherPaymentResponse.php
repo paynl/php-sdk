@@ -18,6 +18,7 @@ class VoucherPaymentResponse implements ModelInterface
     /**
      * @var string
      */
+
     protected $id;
 
     /**
@@ -41,11 +42,6 @@ class VoucherPaymentResponse implements ModelInterface
     protected $manualTransferCode;
 
     /**
-     * @var Amount
-     */
-    protected $amount;
-
-    /**
      * @var string
      */
     protected $createdAt;
@@ -56,22 +52,20 @@ class VoucherPaymentResponse implements ModelInterface
     protected $expiresAt;
 
     /**
-     * @var object
+     * @var Amount
+     */
+    protected $amount;
+
+    /**   
+     * @var array
      */
     protected $integration;
 
     /**
-     * @var object
+     * @var array
      */
     protected $links;
 
-    /**
-     * @return string
-     */
-    public function getId(): string
-    {
-        return (string) $this->id;
-    }
 
     /**
      * @param string $id
@@ -86,9 +80,27 @@ class VoucherPaymentResponse implements ModelInterface
     /**
      * @return string
      */
-    public function getDescription(): string
+    public function getId(): string
     {
-        return (string) $this->description;
+        return $this->id;
+    }
+
+    /**
+     * @param string $id
+     * @return $this
+     */
+    public function setOrderId(string $orderId): self
+    {
+        $this->orderId = $orderId;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOrderId(): string
+    {
+        return $this->orderId;
     }
 
     /**
@@ -104,9 +116,9 @@ class VoucherPaymentResponse implements ModelInterface
     /**
      * @return string
      */
-    public function getReference(): string
+    public function getDescription(): string
     {
-        return (string) $this->reference;
+        return $this->description;
     }
 
     /**
@@ -122,27 +134,9 @@ class VoucherPaymentResponse implements ModelInterface
     /**
      * @return string
      */
-    public function getOrderId(): string
+    public function getReference(): string
     {
-        return (string) $this->orderId;
-    }
-
-    /**
-     * @param string $orderId
-     * @return $this
-     */
-    public function setOrderId(string $orderId): self
-    {
-        $this->orderId = $orderId;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getManualTransferCode(): string
-    {
-        return (string) $this->manualTransferCode;
+        return $this->reference;
     }
 
     /**
@@ -156,11 +150,48 @@ class VoucherPaymentResponse implements ModelInterface
     }
 
     /**
-     * @return Amount
+     * @return string
      */
-    public function getAmount(): Amount
+    public function getManualTransferCode(): string
     {
-        return $this->amount;
+        return $this->manualTransferCode;
+    }
+
+    /**
+     * @param string $createdAt
+     * @return $this
+     */
+    public function setCreatedAt(string $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+        return $this;
+
+    }
+
+    /**
+     * @return string
+     */
+    public function getCreatedAt(): string
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @param string $expiresAt
+     * @return $this
+     */
+    public function setExpiresAt(string $expiresAt): self
+    {
+        $this->expiresAt = $expiresAt;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getExpiresAt(): string
+    {
+        return $this->expiresAt;
     }
 
     /**
@@ -173,78 +204,87 @@ class VoucherPaymentResponse implements ModelInterface
         return $this;
     }
 
-
     /**
-     * @return string
+     * @return float|integer
      */
-    public function getcreatedAt(): string
+    public function getAmount(): float|int
     {
-        return (string) $this->createdAt;
-    }
-
-    /**
-     * @param string $createdAt
-     * @return $this
-     */
-    public function setcreatedAtAt(string $createdAt): self
-    {
-        $this->createdAtAt = $createdAt;
-        return $this;
+        return $this->amount->getValue() / 100;
     }
 
     /**
      * @return string
      */
-    public function getexpiresAt(): string
+    public function getCurrency(): string
     {
-        return (string) $this->expiresAt;
+        return (string) $this->amount->getCurrency();
     }
 
     /**
-     * @param string $expiresAt
+     * @param array $integration
      * @return $this
      */
-    public function setexpiresAt(string $expiresAt): self
+    public function setIntegration(array $integration): self
     {
-        $this->expiresAt = $expiresAt;
+        $this->integration = $integration;
         return $this;
     }
 
     /**
-     * @return boolean
+     * @return array
      */
-    public function getIntegration(): object
+    public function getIntegration(): array
     {
         return $this->integration;
     }
 
     /**
-     * @param object $integration
-     * @return $this
+     * @return boolean
      */
-    public function setIntegration(object $integration): self
+    public function getTest(): bool
     {
-        $this->integration = $integration;
-        return $this;
-    }
-   
-  
-    /**
-     * @return string
-     */
-    public function getLinks(): object
-    {
-        return $this->links;
+        return $this->integration['test'] ?? false;
     }
 
     /**
-     * @param object $links
+     * @return string
+     */
+    public function getPointOfInteraction(): string
+    {
+        return $this->integration['pointOfInteraction'] ?? '';
+    }
+
+    /**
+     * @param array $links
      * @return $this
      */
-    public function setLinks(object $links): self
+    public function setLinks(array $links): self
     {
         $this->links = $links;
         return $this;
     }
 
+    /**
+     * @return array
+     */
+    public function getLinks(): array
+    {
+        return $this->links;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStatusLink(): string
+    {
+        return $this->links['status'] ?? '';
+    }
+
+    /**
+     * @return string
+     */
+    public function getRedirectLink(): string
+    {
+        return $this->links['redirect'] ?? '';
+    }
 }

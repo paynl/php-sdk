@@ -39,6 +39,13 @@ try {
 
 echo '<pre>';
 echo 'Success, values:' . PHP_EOL;
-echo 'getAmount value: ' . $response->getAmount() . PHP_EOL;
-echo 'createdAt: ' . $payOrder->getCreated() . PHP_EOL;
-echo 'modifiedBy: ' . $payOrder->getModified() . PHP_EOL;
+echo 'getAmount: ' . $response->getAmount() . PHP_EOL;
+echo 'getCurrency: ' . $response->getCurrency() . PHP_EOL;
+echo 'expiresAt: ' . $response->getExpiresAt() . PHP_EOL;
+echo 'Integration: ' . PHP_EOL;
+echo ' - Test: ' . ($response->getTest() ? 'true' : 'false') . PHP_EOL;
+echo ' - Point of Interaction: ' . $response->getPointOfInteraction() . PHP_EOL;
+echo 'brand: ' .  PHP_EOL;
+echo ' - id: ' . $response->getBrandId() . PHP_EOL;
+echo ' - name: ' . $response->getBrandName() . PHP_EOL;
+echo ' - iconUrl: ' . $response->getBrandIconUrl() . PHP_EOL;

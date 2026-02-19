@@ -13,12 +13,18 @@ use PayNL\Sdk\Config\Config;
 $request = new VoucherPaymentRequest();
 
 $request->setServiceId($_REQUEST['slcode'] ?? '');
+$request->setDescription('Order ABC0123456789');
+$request->setReference('SDK0123456789');
+$request->setReturnurl($_REQUEST['returnUrl'] ?? 'https://yourdomain/finish.php');
+$request->setExchangeUrl($_REQUEST['exchangeUrl'] ?? 'https://yourdomain/exchange.php');
+
+$request->setAmount(amount: (float) ($_REQUEST['amount'] ?? 0.01));
+$request->setCurrency('EUR');
 
 $request->setPointOfInteraction('IN_PERSON'); // ['ON_THE_MOVE', 'ECOMMERCE', 'IN_PERSON', 'INVOICE', 'DEBT_COLLECTION', 'FUNDING', 'PAYMENT_REQUEST', 'RECURRING', 'UNATTENDED', 'MOTO', 'PAYOUT']
 
 $request->setCardNumber('12345678901234567');
 $request->setPinCode('12345');
-
 
 $customer = new \PayNL\Sdk\Model\Customer();
 $customer->setFirstName('John');
@@ -74,7 +80,7 @@ $product = new Product();
 $product->setId('p1');
 $product->setDescription('product1Desc');
 $product->setType(Product::TYPE_ARTICLE);
-$product->setAmount(1);
+$product->setAmount(0.01);
 $product->setCurrency('EUR');
 $product->setQuantity(1);
 $product->setVatPercentage(0);
@@ -117,11 +123,18 @@ try {
 
 echo '<pre>';
 echo 'Success, values:' . PHP_EOL;
-echo 'getOrderId: <b>' . $payOrder->getOrderId() . '</b>' . PHP_EOL;
+
 echo 'getId: ' . $response->getId() . PHP_EOL;
-echo 'getDescription: ' . $response->getDescription() . PHP_EOL;
-echo 'getReference: ' . $response->getReference() . PHP_EOL;
-echo 'getPaymentUrl: ' . '<a target="_blank" href="' . $response->getPaymentUrl() . '">' . $response->getPaymentUrl() . '</a>' . PHP_EOL;
-echo 'getAmount value: ' . $response->getAmount() . PHP_EOL;
-echo 'createdAt: ' . $payOrder->getCreated() . PHP_EOL;
-echo 'modifiedBy: ' . $payOrder->getModified() . PHP_EOL;
+echo 'getAmount: ' . $response->getAmount() . PHP_EOL;
+echo 'getCurrency: ' . $response->getCurrency() . PHP_EOL;
+
+echo 'getCreatedAt: ' . $response->getCreatedAt() . PHP_EOL;
+echo 'getExpiresAt: ' . $response->getExpiresAt() . PHP_EOL;
+
+echo 'Integration: ' . PHP_EOL;
+echo '- Test: ' . ($response->getTest() ? 'true' : 'false') . PHP_EOL;
+echo '- Point of Interaction: ' . $response->getPointOfInteraction() . PHP_EOL;
+
+echo 'Links: ' . PHP_EOL;
+echo '- getStatusLink: ' . $response->getStatusLink() . PHP_EOL;
+echo '- getRedirectLink: ' . $response->getRedirectLink() . PHP_EOL;
