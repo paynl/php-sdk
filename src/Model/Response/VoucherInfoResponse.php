@@ -81,7 +81,7 @@ class VoucherInfoResponse implements ModelInterface
      */
     public function getAmount(): float|int
     {
-        return $this->voucher['amount']['value'] / 100 ?? 0;
+        return $this->voucher['amount']['value'] / 100;
     }
 
     /**
@@ -89,7 +89,7 @@ class VoucherInfoResponse implements ModelInterface
      */
     public function getCurrency(): string
     {
-        return (string)$this->voucher['amount']['currency'] ?? '';
+        return (string)$this->voucher['amount']['currency'];
     }
 
     /**
@@ -97,7 +97,7 @@ class VoucherInfoResponse implements ModelInterface
      */
     public function getExpiresAt(): string
     {
-        return (string) $this->voucher['expiresAt'] ?? '';
+        return (string) $this->voucher['expiresAt'];
     }
 
     /**
