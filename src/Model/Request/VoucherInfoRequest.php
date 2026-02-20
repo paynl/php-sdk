@@ -5,9 +5,6 @@ declare(strict_types=1);
 namespace PayNL\Sdk\Model\Request;
 
 use PayNL\Sdk\Exception\PayException;
-use PayNL\Sdk\Model\Customer;
-use PayNL\Sdk\Model\Order;
-use PayNL\Sdk\Model\Stats;
 use PayNL\Sdk\Request\RequestData;
 use PayNL\Sdk\Request\RequestInterface;
 use PayNL\Sdk\Model\Response\VoucherInfoResponse;
@@ -36,7 +33,7 @@ class VoucherInfoRequest extends RequestData
      * @param $value
      * @return void
      */
-    private function _add(&$returnArr, $field, $value)
+    private function add(&$returnArr, $field, $value)
     {
         if (!empty($value)) {
             $returnArr = array_merge($returnArr, [$field => $value]);
@@ -116,16 +113,16 @@ class VoucherInfoRequest extends RequestData
 
         $parameters = [];
 
-        $this->_add($parameters, 'serviceId', $this->serviceId);
+        $this->add($parameters, 'serviceId', $this->serviceId);
 
         $integrationParameters = [];
-        $this->_add($integrationParameters, 'pointOfInteraction', $this->pointOfInteraction);
-        $this->_add($parameters, 'integration', $integrationParameters);
+        $this->add($integrationParameters, 'pointOfInteraction', $this->pointOfInteraction);
+        $this->add($parameters, 'integration', $integrationParameters);
 
         $voucherParameters = [];
-        $this->_add($voucherParameters, 'number', $this->cardNumber);
-        $this->_add($voucherParameters, 'pincode', $this->pinCode);
-        $this->_add($parameters, 'voucher', $voucherParameters);
+        $this->add($voucherParameters, 'number', $this->cardNumber);
+        $this->add($voucherParameters, 'pincode', $this->pinCode);
+        $this->add($parameters, 'voucher', $voucherParameters);
 
         return $parameters;
     }

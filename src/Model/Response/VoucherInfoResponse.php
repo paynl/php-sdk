@@ -8,7 +8,7 @@ use PayNL\Sdk\Model\ModelInterface;
 use PayNL\Sdk\Model\Amount;
 
 /**
- * Class VoucherPaymentResponse
+ * Class VoucherInfoResponse
  *
  * @package PayNL\Sdk\Model
  */

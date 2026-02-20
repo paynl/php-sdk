@@ -6,7 +6,7 @@ use PayNL\Sdk\Application\Application;
 use PayNL\Sdk\Config\Config;
 use PayNL\Sdk\Exception\PayException;
 use PayNL\Sdk\Model\Request\VoucherPaymentRequest;
-use PayNL\Sdk\Model\Response\VoucherPaymentResponse;
+use PayNL\Sdk\Model\Pay\PayOrder;
 use PayNL\Sdk\Model\Customer;
 use PayNL\Sdk\Model\Order;
 use PayNL\Sdk\Model\Stats;
@@ -139,10 +139,10 @@ class VoucherPaymentRequestTest extends TestCase
     public function testStart(): void
     {
         $serviceGetConfigRequest = $this->getMockBuilder(VoucherPaymentRequest::class)->getMock();
-        $mockResponse = $this->createMock(VoucherPaymentResponse::class);
+        $mockResponse = $this->createMock(PayOrder::class);
         $serviceGetConfigRequest->method('start')->willReturn($mockResponse);
         $result = $serviceGetConfigRequest->start();
-        $this->assertInstanceOf(VoucherPaymentResponse::class, $result);
+        $this->assertInstanceOf(PayOrder::class, $result);
     }
 
     /**

@@ -182,7 +182,6 @@ class ConfigProvider implements ConfigProviderInterface
                 'TransactionRefundResponse'  => Response\TransactionRefundResponse::class,
                 'TransactionStatusResponse'  => Response\TransactionStatusResponse::class,
                 'ServiceGetConfigResponse'   => Response\ServiceGetConfigResponse::class,
-                'VoucherPaymentResponse'     => Response\VoucherPaymentResponse::class,
                 'VoucherInfoResponse'        => Response\VoucherInfoResponse::class,
                 'PayOrder'                   => Pay\PayOrder::class,
                 'CheckoutOptions'       => CheckoutOptions::class,

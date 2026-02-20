@@ -21,7 +21,7 @@ $request->setExchangeUrl($_REQUEST['exchangeUrl'] ?? 'https://yourdomain/exchang
 $request->setAmount(amount: (float) ($_REQUEST['amount'] ?? 0.01));
 $request->setCurrency('EUR');
 
-$request->setPointOfInteraction('IN_PERSON'); // ['ON_THE_MOVE', 'ECOMMERCE', 'IN_PERSON', 'INVOICE', 'DEBT_COLLECTION', 'FUNDING', 'PAYMENT_REQUEST', 'RECURRING', 'UNATTENDED', 'MOTO', 'PAYOUT']
+$request->setPointOfInteraction('ECOMMERCE'); // ['ON_THE_MOVE', 'ECOMMERCE', 'IN_PERSON', 'INVOICE', 'DEBT_COLLECTION', 'FUNDING', 'PAYMENT_REQUEST', 'RECURRING', 'UNATTENDED', 'MOTO', 'PAYOUT']
 
 $request->setCardNumber('12345678901234567');
 $request->setPinCode('12345');
@@ -132,9 +132,9 @@ echo 'getCreatedAt: ' . $response->getCreatedAt() . PHP_EOL;
 echo 'getExpiresAt: ' . $response->getExpiresAt() . PHP_EOL;
 
 echo 'Integration: ' . PHP_EOL;
-echo '- Test: ' . ($response->getTest() ? 'true' : 'false') . PHP_EOL;
+echo '- Test: ' . ($response->isTestmode() ? 'true' : 'false') . PHP_EOL;
 echo '- Point of Interaction: ' . $response->getPointOfInteraction() . PHP_EOL;
 
 echo 'Links: ' . PHP_EOL;
-echo '- getStatusLink: ' . $response->getStatusLink() . PHP_EOL;
-echo '- getRedirectLink: ' . $response->getRedirectLink() . PHP_EOL;
+echo '- getStatusLink: ' . $response->getStatusUrl() . PHP_EOL;
+echo '- getRedirectLink: ' . $response->getPaymentUrl() . PHP_EOL;
