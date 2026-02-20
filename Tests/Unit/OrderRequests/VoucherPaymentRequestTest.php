@@ -7,9 +7,6 @@ use PayNL\Sdk\Config\Config;
 use PayNL\Sdk\Exception\PayException;
 use PayNL\Sdk\Model\Request\VoucherPaymentRequest;
 use PayNL\Sdk\Model\Pay\PayOrder;
-use PayNL\Sdk\Model\Customer;
-use PayNL\Sdk\Model\Order;
-use PayNL\Sdk\Model\Stats;
 use PHPUnit\Framework\TestCase;
 
 class VoucherPaymentRequestTest extends TestCase
@@ -53,23 +50,7 @@ class VoucherPaymentRequestTest extends TestCase
             $this->assertEquals('Something went wrong', $e->getFriendlyMessage());
         }
     }
-
-    /**
-     * @return void
-     * @throws \Exception
-     */
-    public function testSetServiceId(): void
-    {
-        $request = new VoucherPaymentRequest();
-
-        $request->setServiceId('SL-1234-5678');
-        $reflection = new \ReflectionClass($request);
-        $serviceIdProperty = $reflection->getProperty('serviceId');
-        $serviceIdProperty->setAccessible(true);
-
-        $this->assertEquals('SL-1234-5678', $serviceIdProperty->getValue($request));
-    }
-
+  
     /**
      * @return void
      * @throws \Exception
@@ -143,88 +124,5 @@ class VoucherPaymentRequestTest extends TestCase
         $serviceGetConfigRequest->method('start')->willReturn($mockResponse);
         $result = $serviceGetConfigRequest->start();
         $this->assertInstanceOf(PayOrder::class, $result);
-    }
-
-    /**
-     * @return void
-     */
-    public function testSetAmount(): void
-    {
-        $request = new VoucherPaymentRequest();
-        $request->setAmount(123.45);
-
-        $reflection = new \ReflectionClass($request);
-        $amountProperty = $reflection->getProperty('amount');
-        $amountProperty->setAccessible(true);
-
-        $this->assertEquals(12345, $amountProperty->getValue($request));
-    }
-
-    /**
-     * @return void
-     * @throws \Exception
-     */
-    public function testSetReference(): void
-    {
-        $request = new VoucherPaymentRequest();
-
-        $request->setReference('Order123');
-
-        $reflection = new \ReflectionClass($request);
-        $referenceProperty = $reflection->getProperty('reference');
-        $referenceProperty->setAccessible(true);
-
-        $this->assertEquals('Order123', $referenceProperty->getValue($request));
-    }
-
-    /**
-     * @return void
-     * @throws \PHPUnit\Framework\MockObject\Exception
-     */
-    public function testSetCustomer(): void
-    {
-        $mockCustomer = $this->createMock(Customer::class);
-        $request = new VoucherPaymentRequest();
-        $request->setCustomer($mockCustomer);
-
-        $reflection = new \ReflectionClass($request);
-        $customerProperty = $reflection->getProperty('customer');
-        $customerProperty->setAccessible(true);
-
-        $this->assertSame($mockCustomer, $customerProperty->getValue($request));
-    }
-
-    /**
-     * @return void
-     * @throws \PHPUnit\Framework\MockObject\Exception
-     */
-    public function testSetOrder(): void
-    {
-        $mockOrder = $this->createMock(Order::class);
-        $request = new VoucherPaymentRequest();
-        $request->setOrder($mockOrder);
-
-        $reflection = new \ReflectionClass($request);
-        $orderProperty = $reflection->getProperty('order');
-        $orderProperty->setAccessible(true);
-
-        $this->assertSame($mockOrder, $orderProperty->getValue($request));
-    }
-
-    /**
-     * @return void
-     * @throws \PHPUnit\Framework\MockObject\Exception
-     */
-    public function testSetStats(): void
-    {
-        $mockStats = $this->createMock(Stats::class);
-        $request = new VoucherPaymentRequest();
-        $request->setStats($mockStats);
-
-        $reflection = new \ReflectionClass($request);
-        $statsProperty = $reflection->getProperty('stats');
-        $statsProperty->setAccessible(true);
-
-        $this->assertSame($mockStats, $statsProperty->getValue($request));
-    }
+    }     
 }

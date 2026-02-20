@@ -16,24 +16,27 @@ use PayNL\Sdk\Model\Response\VoucherInfoResponse;
  */
 class VoucherInfoRequest extends RequestData
 {
-    private string $serviceId;    
+    private string $serviceId;
     private string $pointOfInteraction = '';
     private array $pointOfInteraction_types = ['ON_THE_MOVE', 'ECOMMERCE', 'IN_PERSON', 'INVOICE', 'DEBT_COLLECTION', 'FUNDING', 'PAYMENT_REQUEST', 'RECURRING', 'UNATTENDED', 'MOTO', 'PAYOUT'];
     private string $cardNumber = '';
     private string $pinCode = '';
 
+    /**
+     * Construct
+     */
     public function __construct()
     {
         parent::__construct('VoucherInfo', 'vouchers/info', RequestInterface::METHOD_POST);
     }
 
     /**
-     * @param $returnArr
-     * @param $field
-     * @param $value
+     * @param array  $returnArr
+     * @param string $field
+     * @param mixed  $value
      * @return void
      */
-    private function add(&$returnArr, $field, $value)
+    private function addField(&$returnArr, $field, $value)
     {
         if (!empty($value)) {
             $returnArr = array_merge($returnArr, [$field => $value]);
@@ -71,7 +74,7 @@ class VoucherInfoRequest extends RequestData
     }
 
     /**
-     * @param string $pointOfInteraction 
+     * @param string $pointOfInteraction
      * @return $this
      */
     public function setPointOfInteraction(string $pointOfInteraction): self
@@ -113,16 +116,16 @@ class VoucherInfoRequest extends RequestData
 
         $parameters = [];
 
-        $this->add($parameters, 'serviceId', $this->serviceId);
+        $this->addField($parameters, 'serviceId', $this->serviceId);
 
         $integrationParameters = [];
-        $this->add($integrationParameters, 'pointOfInteraction', $this->pointOfInteraction);
-        $this->add($parameters, 'integration', $integrationParameters);
+        $this->addField($integrationParameters, 'pointOfInteraction', $this->pointOfInteraction);
+        $this->addField($parameters, 'integration', $integrationParameters);
 
         $voucherParameters = [];
-        $this->add($voucherParameters, 'number', $this->cardNumber);
-        $this->add($voucherParameters, 'pincode', $this->pinCode);
-        $this->add($parameters, 'voucher', $voucherParameters);
+        $this->addField($voucherParameters, 'number', $this->cardNumber);
+        $this->addField($voucherParameters, 'pincode', $this->pinCode);
+        $this->addField($parameters, 'voucher', $voucherParameters);
 
         return $parameters;
     }

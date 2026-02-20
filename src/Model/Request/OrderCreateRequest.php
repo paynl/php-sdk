@@ -44,7 +44,7 @@ class OrderCreateRequest extends RequestData
     private string $notificationRecipient = '';
     private array $transferData = [];
     private array $optimize = [];
-    
+
     /**
      * Construct
      */

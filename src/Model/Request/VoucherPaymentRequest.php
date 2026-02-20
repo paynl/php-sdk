@@ -20,7 +20,9 @@ class VoucherPaymentRequest extends OrderCreateRequest
     private string $cardNumber = '';
     private string $pinCode = '';
 
-
+    /**
+     * Construct
+     */
     public function __construct()
     {
         parent::__construct('VoucherPayment', 'vouchers/payment', RequestInterface::METHOD_POST);
@@ -47,7 +49,7 @@ class VoucherPaymentRequest extends OrderCreateRequest
     }
 
     /**
-     * @param string $pointOfInteraction 
+     * @param string $pointOfInteraction
      * @return $this
      */
     public function setPointOfInteraction(string $pointOfInteraction): self
@@ -90,7 +92,7 @@ class VoucherPaymentRequest extends OrderCreateRequest
                     'number' => $this->cardNumber,
                 ],
                 'pointOfInteraction' => $this->pointOfInteraction,
-        ];        
+        ];
 
         if ($this->pointOfInteraction != 'IN_PERSON') {
             $voucherParameters['voucher']['pincode'] = $this->pinCode;
