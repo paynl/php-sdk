@@ -43,7 +43,7 @@ class PayOrder implements ModelInterface
     /**
      * @var string
      */
-    protected $manualTransferCode;
+    protected ?string $manualTransferCode;
 
     /**
      * @var string
@@ -78,17 +78,17 @@ class PayOrder implements ModelInterface
     /**
      * @var Amount
      */
-    protected $amount;
+    protected Amount $amount;
 
     /**
      * @var Amount
      */
-    protected $authorizedAmount;
+    protected ?Amount $authorizedAmount;
 
     /**
      * @var Amount
      */
-    protected $capturedAmount;
+    protected ?Amount $capturedAmount;
 
     /**
      * @var array
@@ -133,12 +133,22 @@ class PayOrder implements ModelInterface
     /**
      * @var Amount
      */
-    protected $amountRefunded;
+    protected ?Amount $amountRefunded;
 
     /**
      * @var array
      */
     protected $links;
+
+    /**
+     * @var array
+     */
+    protected ?array $transferData;
+
+    /**
+     * @var array
+     */
+    protected ?array $stats = [];
 
     /**
      * @param array|null $payload
@@ -159,11 +169,11 @@ class PayOrder implements ModelInterface
     }
 
     /**
-     * @return mixed
+     * @return float|integer|null
      */
     public function getAmountRefunded()
     {
-        if (!empty($this->amountRefunded) && $this->amountRefunded instanceof Amount) {
+        if (!empty($this->amountRefunded)) {
             return $this->amountRefunded->getValue() / 100;
         }
         return null;
@@ -253,7 +263,7 @@ class PayOrder implements ModelInterface
      */
     public function getServiceId(): string
     {
-        return (string)$this->serviceId;
+        return (string)($this->serviceId ?? '');
     }
 
     /**
@@ -307,7 +317,7 @@ class PayOrder implements ModelInterface
      */
     public function getManualTransferCode(): string
     {
-        return (string)$this->manualTransferCode;
+        return (string)($this->manualTransferCode ?? '');
     }
 
     /**
@@ -488,7 +498,7 @@ class PayOrder implements ModelInterface
     {
         return $this->payments[0]['customerName'] ?? null;
     }
-    
+
     /**
      * @param Amount $amount
      * @return $this
@@ -500,11 +510,11 @@ class PayOrder implements ModelInterface
     }
 
     /**
-     * @return Amount
+     * @return ?Amount
      */
-    public function getAuthorizedAmount(): Amount
+    public function getAuthorizedAmount(): ?Amount
     {
-        return $this->authorizedAmount;
+        return $this->authorizedAmount ?? null;
     }
 
     /**
@@ -518,11 +528,11 @@ class PayOrder implements ModelInterface
     }
 
     /**
-     * @return Amount
+     * @return ?Amount
      */
-    public function getCapturedAmount(): Amount
+    public function getCapturedAmount(): ?Amount
     {
-        return $this->capturedAmount;
+        return $this->capturedAmount ?? null;
     }
 
     /**
@@ -766,7 +776,7 @@ class PayOrder implements ModelInterface
     {
         return (new PayStatus())->get($this->getStatusCode()) === PayStatus::DENIED;
     }
-    
+
     /**
      * @return boolean
      * @throws Exception
@@ -829,5 +839,97 @@ class PayOrder implements ModelInterface
         }
 
         return false;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getTransferData(): ?array
+    {
+        return $this->transferData;
+    }
+
+    /**
+     * @param array|null $transferData
+     * @return $this
+     */
+    public function setTransferData(?array $transferData): self
+    {
+        $this->transferData = $transferData;
+        return $this;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getStats(): ?array
+    {
+        return $this->stats;
+    }
+
+    /**
+     * @param array|null $stats
+     * @return $this
+     */
+    public function setStats(?array $stats): self
+    {
+        $this->stats = $stats;
+        return $this;
+    }
+
+    /**
+     * @return mixed|null
+     */
+    public function getExtra1()
+    {
+        return $this->stats['extra1'] ?? null;
+    }
+
+    /**
+     * @return mixed|null
+     */
+    public function getExtra2()
+    {
+        return $this->stats['extra2'] ?? null;
+    }
+
+    /**
+     * @return mixed|null
+     */
+    public function getExtra3()
+    {
+        return $this->stats['extra3'] ?? null;
+    }
+
+    /**
+     * @return mixed|null
+     */
+    public function getTool()
+    {
+        return $this->stats['tool'] ?? null;
+    }
+
+    /**
+     * @return mixed|null
+     */
+    public function getInfo()
+    {
+        return $this->stats['info'] ?? null;
+    }
+
+    /**
+     * @return mixed|null
+     */
+    public function getObject()
+    {
+        return $this->stats['object'] ?? null;
+    }
+
+    /**
+     * @return mixed|null
+     */
+    public function getDomainId()
+    {
+        return $this->stats['domainId'] ?? null;
     }
 }

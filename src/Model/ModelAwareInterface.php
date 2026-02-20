@@ -11,7 +11,14 @@ namespace PayNL\Sdk\Model;
  */
 interface ModelAwareInterface
 {
+    /**
+     * @return ModelInterface|null
+     */
     public function getModel(): ?ModelInterface;
 
+    /**
+     * @param ModelInterface $model
+     * @return mixed
+     */
     public function setModel(ModelInterface $model);
 }

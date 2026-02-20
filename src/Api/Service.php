@@ -45,7 +45,7 @@ class Service
     /**
      * Service constructor.
      *
-     * @param Api $api
+     * @param Api            $api
      * @param ServiceManager $serviceManager
      */
     public function __construct(Api $api, ServiceManager $serviceManager)

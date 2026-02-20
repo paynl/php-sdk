@@ -21,7 +21,7 @@ class OrderUpdateRequest extends RequestData
     private string $reference = '';
 
     /**
-     * @param $transactionId
+     * @param string $transactionId
      */
     public function __construct(string $transactionId)
     {

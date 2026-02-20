@@ -76,13 +76,7 @@ class ConfigProvider implements ProviderInterface
         return [
             'RequestModelMapper' => [
                 'GetTerminals'                  => 'Terminals',
-                'GetTerminalTransactionStatus'  => 'TerminalTransaction',
-                'PayTransaction'                => 'TerminalTransaction',
                 'GetConfig'                     => 'ServiceGetConfigResponse',
-                'GetIpAddresses'                => 'IpAddresses',
-                'TerminalPaymentStatus'         => 'TerminalPaymentStatus',
-                'TerminalCancelPayment'         => 'TerminalPaymentStatus',
-                'DeclineTransaction'            => 'Transaction',
                 'TransactionRefund'             => 'TransactionRefundResponse',
                 'TransactionStatus'             => 'PayOrder',
                 'OrderCreate'                   => 'PayOrder',

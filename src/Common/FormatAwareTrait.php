@@ -77,7 +77,7 @@ trait FormatAwareTrait
     /**
      * @param string $format
      *
-     * @return bool
+     * @return boolean
      */
     public function isFormat(string $format): bool
     {

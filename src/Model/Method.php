@@ -47,9 +47,9 @@ class Method implements ModelInterface
     protected $options;
 
     /**
-     * @var array
+     * @var array|null
      */
-    protected $settings;
+    protected ?array $settings;
 
     /**
      * @var int

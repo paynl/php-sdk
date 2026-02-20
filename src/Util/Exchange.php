@@ -22,6 +22,13 @@ use PayNL\Sdk\Model\Request\TransactionStatusRequest;
  */
 class Exchange
 {
+    public const ERROR_EMPTY_PAYLOAD = 8001;
+    public const ERROR_EMPTY_PAYLOAD_INCOMPLETE = 8002;
+    public const ERROR_EMPTY_CONFIG = 8003;
+    public const ERROR_PAYLOAD_OBJECT = 8004;
+    public const ERROR_ACTION_FAULT = 8005;
+    public const ERROR_PAYLOAD_VALIDATION = 8006;
+
     private PayLoad $payload;
     private ?array $custom_payload;
     private mixed $headers;
@@ -37,7 +44,7 @@ class Exchange
 
     /**
      * Specifies the field to use for order retrieval when older exchange types, such as refunds, provide the order ID in a non-standard field(extra1).
-     * @param $key
+     * @param mixed $key
      * @return $this
      */
     public function setGmsReferenceKey($key): self
@@ -55,13 +62,19 @@ class Exchange
     }
 
     /**
-     * @param boolean $includeAuth If yes, treat authorize as "paid"
+     * @param boolean $includeAuth If yes, treat authorize as "paid".
      * @return boolean
      * @throws PayException
      */
     public function eventPaid(bool $includeAuth = false): bool
     {
-        return $this->getAction() === PayStatus::EVENT_PAID || ($includeAuth == true && $this->getAction() === PayStatus::AUTHORIZE);
+        $action = $this->getAction();
+
+        if ($action === PayStatus::EVENT_PAID) {
+            return true;
+        }
+
+        return $includeAuth && $action === PayStatus::EVENT_AUTHORISED;
     }
 
     /**
@@ -95,7 +108,7 @@ class Exchange
      * Set your exchange response in the end of your exchange processing
      *
      * @param boolean $result
-     * @param string $message
+     * @param string  $message
      * @param boolean $returnOutput
      * @return false|string|void
      */
@@ -119,7 +132,7 @@ class Exchange
 
     /**
      * @param \PayNL\Sdk\Util\ExchangeResponse $e
-     * @param boolean $returnOutput
+     * @param boolean                          $returnOutput
      * @return false|string|null
      */
     public function setExchangeResponse(ExchangeResponse $e, bool $returnOutput = false)
@@ -143,7 +156,7 @@ class Exchange
         }
     }
     /**
-     * @return bool
+     * @return boolean
      */
     public function isFastCheckout(): bool
     {
@@ -208,9 +221,9 @@ class Exchange
             # In case a payload has been provided, use that one.
             $request = $this->custom_payload;
         } else {
-            $request = $_REQUEST ?? false;
-            if ($request === false) {
-                throw new Exception('Empty payload', 8001);
+            $request = $_REQUEST;
+            if (empty($request)) {
+                throw new Exception('Empty payload', Exchange::ERROR_EMPTY_PAYLOAD);
             }
         }
 
@@ -219,7 +232,6 @@ class Exchange
         if (!empty($action)) {
             # The argument "action" tells us this is GMS
             [$action, $paymentProfile, $payOrderId, $orderId, $reference] = $this->legacyReturn($request);
-
         } else {
             # TGU
             if (isset($request['object'])) {
@@ -227,13 +239,13 @@ class Exchange
             } else {
                 $rawBody = file_get_contents('php://input');
                 if (empty(trim($rawBody))) {
-                    throw new Exception('Empty or incomplete payload', 8002);
+                    throw new Exception('Empty or incomplete payload', Exchange::ERROR_EMPTY_PAYLOAD_INCOMPLETE);
                 }
                 $tguData = json_decode($rawBody, true, 512, JSON_BIGINT_AS_STRING);
             }
 
             if (empty($tguData['object'])) {
-                throw new Exception('Payload error: object empty', 8004);
+                throw new Exception('Payload error: object empty', Exchange::ERROR_PAYLOAD_OBJECT);
             }
 
             if (!isset($tguData['type']) && isset($tguData['action'])) {
@@ -288,7 +300,7 @@ class Exchange
      *
      * @param Config|null $config Optional configuration object. If not provided, default config is used.
      * @return PayOrder
-     * @throws Exception If signing fails or order status cannot be retrieved
+     * @throws Exception If signing fails or order status cannot be retrieved.
      */
     public function process(?Config $config = null): PayOrder
     {
@@ -299,7 +311,7 @@ class Exchange
         }
 
         if (empty($config->getUsername()) || empty($config->getPassword())) {
-            throw new Exception('Process failed, config not set', 8003);
+            throw new Exception('Process failed, config not set', Exchange::ERROR_EMPTY_CONFIG);
         }
 
         if ($this->isSignExchange()) {
@@ -329,7 +341,6 @@ class Exchange
             $payOrder->setType($payload->getType());
             $payOrder->setStatusCodeName(PayStatus::PENDING, 'PENDING');
         } else {
-
             try {
                 $payOrderId = $payload->getPayOrderId();
                 if (empty($payOrderId)) {
@@ -352,17 +363,18 @@ class Exchange
                         # ..and TransactionStatusRequest above, wasn't used.
                         $payOrder = (new TransactionStatusRequest($payOrderId))->setConfig($config)->start();
                     }
-
                 } catch (Exception $exception) {
                     paydbg('Exchange process exception: ' . $exception . '. Trying legacy platform for: ' . $payOrderId);
                     $payOrder = (new TransactionStatusRequest($payOrderId))->setConfig($config)->start();
                 }
-
             } catch (PayException $e) {
                 throw new Exception('API Retrieval error: ' . $payload->getPayOrderId() . ' - ' . $e->getFriendlyMessage());
-
             } catch (Exception $e) {
                 throw new Exception('API-Retrieval error: ' . $payload->getPayOrderId() . ' - ' . $e->getMessage());
+            }
+
+            if ($payOrder->isPending() && $action != PayStatus::EVENT_PENDING) {
+                throw new Exception('Unexpected API status `' . $payOrder->getStatusName() . '`. Action: ' . $action, Exchange::ERROR_ACTION_FAULT);
             }
         }
 
@@ -370,8 +382,8 @@ class Exchange
     }
 
     /**
-     * @param $payload
-     * @return int|mixed|null
+     * @param mixed $payload
+     * @return integer|mixed|null
      */
     private function getPayloadState($payload)
     {
@@ -384,9 +396,9 @@ class Exchange
     }
 
     /**
-     * @param string $username Token code
-     * @param string $password API Token
-     * @return boolean Returns true if the signing is successful and authorised
+     * @param string $username Token code.
+     * @param string $password API Token.
+     * @return boolean Returns true if the signing is successful and authorised.
      */
     public function checkSignExchange(string $username = '', string $password = ''): bool
     {
@@ -434,7 +446,7 @@ class Exchange
     }
 
     /**
-     * @return array|false|string
+     * @return boolean|array|string
      */
     private function getRequestHeaders(): bool|array|string
     {

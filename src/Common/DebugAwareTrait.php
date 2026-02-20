@@ -63,9 +63,9 @@ trait DebugAwareTrait
     }
 
     /**
-     * @param string $arguments
-     * @param string $title
-     * @param int $height
+     * @param string  $arguments
+     * @param string  $title
+     * @param integer $height
      * @return void
      */
     public function dumpPreString(string $arguments, string $title = '', int $height = 40): void
@@ -99,9 +99,8 @@ trait DebugAwareTrait
         echo print_r(json_decode($arguments), true);
         echo '</div>';
 
-        echo '<div id="data-json">'.$arguments.'</div>';
+        echo '<div id="data-json">' . $arguments . '</div>';
 
         echo '</div>' . PHP_EOL;
     }
-
 }

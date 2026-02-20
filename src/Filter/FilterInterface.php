@@ -30,8 +30,7 @@ interface FilterInterface
 
     /**
      * @param mixed $value
-     *
-     * @return static
+     * @return self
      */
     public function setValue($value): self;
 

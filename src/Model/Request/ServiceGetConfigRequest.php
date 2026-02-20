@@ -23,7 +23,7 @@ class ServiceGetConfigRequest extends RequestData
     use StaticCacheTrait;
 
     /**
-     * @var string|mixed
+     * @var string
      */
     private string $serviceId;
 
@@ -64,7 +64,6 @@ class ServiceGetConfigRequest extends RequestData
         $cacheKey = 'service_getconfig_' . md5(json_encode([$this->config->getUsername(), $this->config->getPassword(), $this->serviceId]));
 
         if ($this->config->isCacheEnabled()) {
-
             if ($this->hasStaticCache($cacheKey)) {
                 return $this->getStaticCacheValue($cacheKey);
             }

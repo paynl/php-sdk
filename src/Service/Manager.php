@@ -20,8 +20,6 @@ use Exception as stdException;
  * Class Manager
  *
  * @package PayNL\Sdk
- *
- * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class Manager implements ContainerInterface
 {
@@ -230,7 +228,7 @@ class Manager implements ContainerInterface
     /**
      * @param array $initializers
      *
-     * @throws InvalidArgumentException when the initializer can not be found/loaded or is not a callable object
+     * @throws InvalidArgumentException When the initializer can not be found/loaded or is not a callable object.
      *
      * @return void
      */
@@ -271,25 +269,14 @@ class Manager implements ContainerInterface
 
     /**
      * @inheritDoc
-     *
-     * @throws InvalidArgumentException when given name is not a string
      */
-    public function has($name): bool
+    public function has(string $name): bool
     {
-        if (false === is_string($name)) {
-            throw new InvalidArgumentException(
-                sprintf(
-                    'Given name to "%s" must be a string, %s given',
-                    __METHOD__,
-                    gettype($name)
-                )
-            );
-        }
-
         $name = $this->resolvedAliases[$name] ?? $name;
 
         return isset($this->services[$name]) || isset($this->factories[$name]);
     }
+
 
     /**
      * @inheritDoc
@@ -319,7 +306,7 @@ class Manager implements ContainerInterface
     }
 
     /**
-     * @param string $name
+     * @param string     $name
      * @param array|null $options
      *
      * @return mixed
@@ -334,7 +321,7 @@ class Manager implements ContainerInterface
     /**
      * Indicate whether or not the instance is immutable.
      *
-     * @param bool $allow
+     * @param boolean $allow
      *
      * @return Manager
      */
@@ -347,7 +334,7 @@ class Manager implements ContainerInterface
     /**
      * Retrieve the flag indicating immutability status.
      *
-     * @return bool
+     * @return boolean
      */
     public function hasAllowOverride(): bool
     {
@@ -355,7 +342,7 @@ class Manager implements ContainerInterface
     }
 
     /**
-     * @param string $resolvedName
+     * @param string     $resolvedName
      * @param array|null $options
      *
      * @throws ServiceNotCreatedException
@@ -430,7 +417,7 @@ class Manager implements ContainerInterface
     }
 
     /**
-     * @param string $name
+     * @param string          $name
      * @param string|callable $factory
      *
      * @return void
@@ -490,7 +477,7 @@ class Manager implements ContainerInterface
     }
 
     /**
-     * @param array $services
+     * @param array  $services
      * @param string $type
      *
      * @throws ContainerModificationsNotAllowedException

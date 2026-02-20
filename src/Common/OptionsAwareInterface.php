@@ -22,5 +22,5 @@ interface OptionsAwareInterface
      * @param array|Traversable $options
      *
      */
-    public function setOptions(iterable  $options): void;
+    public function setOptions(iterable $options): void;
 }

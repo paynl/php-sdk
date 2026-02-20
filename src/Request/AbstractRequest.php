@@ -27,19 +27,17 @@ use PayNL\Sdk\{
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
-use PayNL\Sdk\Packages\Symfony\Serializer\Encoder\{
+use Symfony\Component\Serializer\Encoder\{
     JsonEncoder,
     XmlEncoder
 };
-use PayNL\Sdk\Packages\Symfony\Serializer\Exception\NotEncodableValueException;
+use Symfony\Component\Serializer\Exception\NotEncodableValueException;
 
 /**
  * Class AbstractRequest
  *
  * @package PayNL\Sdk\Request
  *
- * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractRequest implements
     RequestInterface,
@@ -440,7 +438,7 @@ abstract class AbstractRequest implements
     /**
      * @param Response $response
      *
-     * @throws RuntimeException when no HTTP client is set
+     * @throws RuntimeException When no HTTP client is set.
      *
      * @return void
      */
@@ -494,7 +492,7 @@ abstract class AbstractRequest implements
             $errorMessages = '';
             $rawBody = $re->getMessage();
 
-            if (true === method_exists($re, 'getResponse') && null !== $re->getResponse()) {
+            if (null !== $re->getResponse()) {
                 $guzzleExceptionBody = $re->getResponse()->getBody();
                 $size = $guzzleExceptionBody->isSeekable() === true ? (int)$guzzleExceptionBody->getSize() : 0;
 
@@ -514,22 +512,22 @@ abstract class AbstractRequest implements
                 $body = $this->getErrorsString($response->getFormat(), (int)$statusCode, $errorMessages);
             }
         } catch (GuzzleException | ExceptionInterface $e) {
-            $statusCode = $e->getCode() ?? 500;
+            $statusCode = $e->getCode() ?: 500;
             $rawBody = 'Error: ' . $e->getMessage() . ' (' . $statusCode . ')';
             $body = $this->getErrorsString($response->getFormat(), (int)$statusCode, $rawBody);
         }
 
         if (function_exists('displayPayRequest')) {
-            displayPayRequest($guzzleClient->getConfig('base_uri') . $uri, $requestBody, $rawBody, $curlRequest);
+            displayPayRequest($guzzleClient->getConfig('base_uri') . $uri, $requestBody ?? '', $rawBody, $curlRequest ?? '');
         }
 
         $response->setStatusCode($statusCode)->setRawBody($rawBody)->setBody($body);
     }
 
     /**
-     * @param string $responseFormat
+     * @param string  $responseFormat
      * @param integer $statusCode
-     * @param string $rawBody
+     * @param string  $rawBody
      *
      * @return string
      */
@@ -558,17 +556,14 @@ abstract class AbstractRequest implements
                 ]
             ]
         ];
-        // if given raw body already is Json return that
-        if (true === array_key_exists('errors', $errors)) {
-            // reformat the errors
-            $errors['errors'] = $this->flattenErrors($errors['errors']);
-        }
+
+        $errors['errors'] = $this->flattenErrors($errors['errors']);
 
         return (string)$encoder->encode($errors, $responseFormat);
     }
 
     /**
-     * @param array $errors
+     * @param array  $errors
      * @param string $context
      *
      * @return array
@@ -596,7 +591,7 @@ abstract class AbstractRequest implements
      *
      * @param mixed $body
      *
-     * @throws RuntimeException when the body is an object and it's invalid
+     * @throws RuntimeException When the body is an object and it's invalid.
      *
      * @return void
      */

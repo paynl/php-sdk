@@ -38,8 +38,9 @@ print_r($terminals);
 $tguList = $serviceConfig->getCores();
 print_r($tguList);
 
-$paymentMethods = $serviceConfig->getPaymentMethods();
-foreach ($paymentMethods as $method) {
+$paymentMethods = $serviceConfig->getPaymentMethods('NL');
+foreach ($paymentMethods as $k =>  $method) {
+    echo $k . '. ';
     echo $method->getId() . ' - ';
     echo $method->getName() . ' - ';
     echo $method->getImage() . ' - ';
@@ -48,8 +49,4 @@ foreach ($paymentMethods as $method) {
     echo $method->getDescription() . ' - ';
     echo $method->hasOptions() ? 'has options' : 'none';
     echo PHP_EOL;
-}
-
-foreach ($serviceConfig->getCheckoutOptions() as $checkoutOption) {
-    echo '=> TAG: ' . $checkoutOption->getTag() . PHP_EOL;
 }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PayNL\Sdk\Model;
 
-use PayNL\Sdk\Packages\Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\ArrayCollection;
 use PayNL\Sdk\Common\CollectionInterface;
 
 /**
@@ -14,7 +14,6 @@ use PayNL\Sdk\Common\CollectionInterface;
  */
 class Errors extends ArrayCollection implements ModelInterface, CollectionInterface
 {
-
     /**
      * @return array
      */

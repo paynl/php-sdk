@@ -17,37 +17,16 @@ use PayNL\Sdk\Request\RequestInterface;
 class OrderCaptureLegacyRequest extends RequestData
 {
     private string $transactionId;
-    private ?int $amount = null;
-    private $productId;
-    private $quantity;
-    private $mode;
 
     /**
      * @param string $transactionId
-     * @param float|null $amount
      */
-    public function __construct(string $transactionId, ?float $amount = null)
+    public function __construct(string $transactionId)
     {
         $this->transactionId = $transactionId;
-        if (!empty($amount)) {
-            $this->setAmount($amount);
-        }
-
         parent::__construct('OrderCaptureLegacy', '/transaction/capture/json', RequestInterface::METHOD_POST);
     }
 
-    /**
-     * @param int|string $productId
-     * @param int $quantity
-     * @return $this
-     */
-    public function setProduct(int|string $productId, int $quantity): self
-    {
-        $this->mode = 'product';
-        $this->productId = $productId;
-        $this->quantity = $quantity;
-        return $this;
-    }
 
     /**
      * @return array
@@ -66,17 +45,6 @@ class OrderCaptureLegacyRequest extends RequestData
     }
 
     /**
-     * @param float $amount
-     * @return $this
-     */
-    public function setAmount(float $amount): self
-    {
-        $this->mode = 'amount';
-        $this->amount = (int)round($amount * 100);
-        return $this;
-    }
-
-    /**
      * @return PayOrder
      * @throws PayException
      */
@@ -86,5 +54,4 @@ class OrderCaptureLegacyRequest extends RequestData
         $this->config->setVersion(18);
         return parent::start();
     }
-
 }

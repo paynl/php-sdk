@@ -30,7 +30,7 @@ class TransactionStatusRequest extends RequestData
     public function __construct(string $orderId)
     {
         $this->orderId = $orderId;
-        parent::__construct('TransactionStatus', '/transactions/%transactionId%/status', RequestInterface::METHOD_GET);
+        parent::__construct('TransactionStatus', '/transactions/%transactionId%', RequestInterface::METHOD_GET);
     }
 
     /**
@@ -62,7 +62,6 @@ class TransactionStatusRequest extends RequestData
         $this->config->setCore('https://rest.pay.nl');
 
         if ($this->config->isCacheEnabled()) {
-
             if ($this->hasStaticCache($cacheKey)) {
                 return $this->getStaticCacheValue($cacheKey);
             }
@@ -78,5 +77,4 @@ class TransactionStatusRequest extends RequestData
             return $result;
         });
     }
-
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace PayNL\Sdk\Util;
 
 class ExchangeResponse
@@ -9,7 +11,7 @@ class ExchangeResponse
 
     /**
      * @param boolean $result
-     * @param string $message
+     * @param string  $message
      */
     public function __construct(bool $result, string $message)
     {
@@ -34,7 +36,7 @@ class ExchangeResponse
     }
 
     /**
-     * @param bool $result
+     * @param boolean $result
      * @return self
      */
     public function setResult(bool $result): self
@@ -54,8 +56,8 @@ class ExchangeResponse
     }
 
     /**
-     * @param bool $result
-     * @param string $message
+     * @param boolean $result
+     * @param string  $message
      * @return $this
      */
     public function set(bool $result, string $message): self
@@ -64,5 +66,4 @@ class ExchangeResponse
         $this->setMessage($message);
         return $this;
     }
-
 }

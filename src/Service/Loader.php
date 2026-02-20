@@ -37,8 +37,8 @@ class Loader
     /**
      * Loader constructor.
      *
-     * @param Manager $defaultServiceManager
-     * @param ServiceConfig|null $configuration
+     * @param ServiceManager                 $defaultServiceManager
+     * @param \PayNL\Sdk\Service\Config|null $configuration
      */
     public function __construct(ServiceManager $defaultServiceManager, ?ServiceConfig $configuration = null)
     {
@@ -62,8 +62,8 @@ class Loader
 
     /**
      * @param ServiceManager|string $serviceManager
-     * @param string $key
-     * @param string $mandatoryMethod
+     * @param string                $key
+     * @param string                $mandatoryMethod
      *
      * @throws Exception\RuntimeException
      *
@@ -137,7 +137,7 @@ class Loader
     }
 
     /**
-     * @throws Exception\ServiceNotFoundException when the service manager can not be found
+     * @throws Exception\ServiceNotFoundException When the service manager can not be found.
      *
      * @return void
      */
@@ -154,7 +154,6 @@ class Loader
                     continue;
                 }
 
-                /** @var ServiceManager $instance */
                 $instance = $this->defaultServiceManager->get($sm['service_manager']);
                 if (($instance instanceof ServiceManager) === false) {
                     throw new Exception\ServiceNotFoundException(
@@ -180,14 +179,15 @@ class Loader
 
     /**
      * @param string $key
-     * @param array $metadata
-     * @param array $config
+     * @param array  $metadata
+     * @param array  $config
      *
      * @return Config
      */
     protected function mergeServiceConfig(string $key, array $metadata, array $config): Config
     {
-        if (true === array_key_exists($metadata['config_key'], $config)
+        if (
+            true === array_key_exists($metadata['config_key'], $config)
             && true === is_array($config[$metadata['config_key']])
             && false === empty($config[$metadata['config_key']])
         ) {
@@ -214,7 +214,7 @@ class Loader
     /**
      * @param ServiceConfig|string $config
      *
-     * @throws Exception\RuntimeException when resolved config class is not an instance of ServiceConfig
+     * @throws Exception\RuntimeException When resolved config class is not an instance of ServiceConfig.
      *
      * @return array
      */

@@ -12,12 +12,12 @@ namespace PayNL\Sdk\Common;
 interface DebugAwareInterface
 {
     /**
-     * @return bool
+     * @return boolean
      */
     public function isDebug(): bool;
 
     /**
-     * @param bool $debug
+     * @param boolean $debug
      *
      * @return static
      */

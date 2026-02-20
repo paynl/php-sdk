@@ -18,9 +18,9 @@ class PayException extends Exception
     private int $payCode = 0;
 
     /**
-     * @param $message
-     * @param $payCode
-     * @param $httpStatusCode
+     * @param string  $message
+     * @param integer $payCode
+     * @param integer $httpStatusCode
      */
     public function __construct($message, $payCode, $httpStatusCode)
     {
@@ -57,5 +57,4 @@ class PayException extends Exception
         }
         return $this;
     }
-
 }

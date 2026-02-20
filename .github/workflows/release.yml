@@ -1,0 +1,85 @@
+name: Build and Release PHP-SDK Vendor ZIP (SDK inside vendor)
+
+on:
+  push:
+    tags:
+      - "*"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Detect tag
+        run: |
+          TAG="${GITHUB_REF#refs/tags/}"
+          TAG_STRIPPED="${TAG#v}"
+          echo "TAG=$TAG" >> $GITHUB_ENV
+          echo "TAG_STRIPPED=$TAG_STRIPPED" >> $GITHUB_ENV
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.1"
+          tools: composer:v2
+
+      - name: Build wrapper project (installs SDK into vendor)
+        run: |
+          set -e
+
+          rm -rf _build
+          mkdir -p _build
+          cd _build
+
+          # Wrapper composer.json: install YOUR SDK into vendor as a dependency via path repo
+          cat > composer.json <<'JSON'
+          {
+            "name": "paynl/php-sdk-vendor-bundle",
+            "type": "project",
+            "minimum-stability": "stable",
+            "prefer-stable": true,
+            "repositories": [
+              { "type": "path", "url": "..", "options": { "symlink": false } }
+            ],
+            "require": {
+              "paynl/php-sdk": "*"
+            }
+          }
+          JSON
+
+          # Install deps (no-dev) so vendor/ is complete
+          composer install \
+            --no-dev \
+            --prefer-dist \
+            --no-interaction \
+            --no-progress \
+            --optimize-autoloader
+
+          # Sanity check: SDK should now exist inside vendor
+          test -d "vendor/paynl/php-sdk" || (echo "ERROR: vendor/paynl/php-sdk not found" && exit 1)
+
+      - name: Make vendor ZIP (vendor only)
+        run: |
+          ZIP_NAME="PayPHPSDKv${TAG_STRIPPED}.zip"
+          cd _build
+          zip -r "../${ZIP_NAME}" vendor \
+            -x "*.DS_Store" \
+               "*/.git*" \
+               "*/.github/*"
+          cd ..
+          ls -la "${ZIP_NAME}"
+
+      - name: Upload ZIP to Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: PayPHPSDKv${{ env.TAG_STRIPPED }}.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
