@@ -201,7 +201,7 @@ class OrderCreateRequest extends RequestData
      */
     public function setReference(string $reference): self
     {
-        if (!ctype_alnum($reference)) {
+        if (!preg_match('/^([A-Za-z0-9-]+)$/', $reference)) {
             throw new \Exception('Reference should consist of all letters or digits');
         }
         $this->reference = $reference;
