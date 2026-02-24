@@ -144,10 +144,10 @@ class Exchange
     /**
      * Retrieve payload with exception handling.
      *
-     * @return Payload
+     * @return PayLoad
      * @throws PayException
      */
-    private function getSafePayload(): Payload
+    private function getSafePayload(): PayLoad
     {
         try {
             return $this->getPayload();
