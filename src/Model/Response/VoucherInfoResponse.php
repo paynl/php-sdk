@@ -81,7 +81,7 @@ class VoucherInfoResponse implements ModelInterface
      */
     public function getAmount(): float|int
     {
-        return $this->voucher['amount']['value'] / 100;
+        return ($this->voucher['amount']['value'] ?? 0) / 100;
     }
 
     /**
@@ -89,7 +89,7 @@ class VoucherInfoResponse implements ModelInterface
      */
     public function getCurrency(): string
     {
-        return (string)$this->voucher['amount']['currency'];
+        return (string) ($this->voucher['amount']['currency'] ?? '');
     }
 
     /**
@@ -113,7 +113,7 @@ class VoucherInfoResponse implements ModelInterface
      */
     public function getBrandId(): int
     {
-        return $this->voucher['brand']['id'] ?? '';
+        return $this->voucher['brand']['id'] ?? 0;
     }
 
     /**
