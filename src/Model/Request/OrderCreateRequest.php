@@ -48,9 +48,9 @@ class OrderCreateRequest extends RequestData
     /**
      * Construct
      */
-    public function __construct()
+    public function __construct($mapperName = 'OrderCreate', $uri = 'orders', $method = RequestInterface::METHOD_POST)
     {
-        parent::__construct('OrderCreate', 'orders', RequestInterface::METHOD_POST);
+        parent::__construct($mapperName, $uri, $method);
     }
 
     /**
@@ -506,9 +506,9 @@ class OrderCreateRequest extends RequestData
      * @return PayOrder
      * @throws PayException
      */
-    public function start(): PayOrder
+    public function start($version = 1): PayOrder
     {
-        $this->config->setversion(1);
+        $this->config->setversion($version);
         return parent::start();
     }
 }
