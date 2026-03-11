@@ -358,9 +358,9 @@ class Exchange
                 try {
                     $payOrder = $request->setConfig($config)->start();
 
-                    if (!$useLegacy && $action === 'new_ppt' && $payOrder->isCancelled()) {
-                        # Rely on on legacy platform when retrieved status is cancelled, and request-status(action) is auth/paid
-                        # ..and TransactionStatusRequest above, wasn't used.
+                    if (!$useLegacy && $action === 'new_ppt' && !$payOrder->isPaid() && !$payOrder->isAuthorized()) {
+                        # Fallback to legacy platform when retrieved status is neither paid nor authorized
+                        # and TransactionStatusRequest above wasn't used.
                         $payOrder = (new TransactionStatusRequest($payOrderId))->setConfig($config)->start();
                     }
                 } catch (Exception $exception) {
