@@ -72,7 +72,7 @@ class OrderStatusRequest extends RequestData
 
             $result = (new PayCache())->get($cacheKey, function () {
                 return parent::start();
-            }, 3); // 3 seconds file caching
+            }, 1); // 1 second file caching
         } else {
             $result = parent::start();
         }
