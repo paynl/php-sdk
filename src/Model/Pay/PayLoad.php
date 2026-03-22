@@ -44,7 +44,7 @@ class PayLoad
         $this->checkoutData = is_array($payload['checkout_data'] ?? null) ? $payload['checkout_data'] : [];
         $this->fullPayLoad = is_array($payload['full_payload'] ?? null) ? $payload['full_payload'] : [];
 
-        $payload = $this->isTguLoad() ? $this->fullPayLoad['object'] : $this->fullPayLoad;
+        $payload = $this->isTguLoad() ? ($this->fullPayLoad['object'] ?? null) : $this->fullPayLoad;
 
         $this->extra1 = (string)($payload['extra1'] ?? $payload['stats']['extra1'] ?? '');
         $this->extra2 = (string)($payload['extra2'] ?? $payload['stats']['extra2'] ?? '');
@@ -52,7 +52,7 @@ class PayLoad
     }
 
     /**
-     * @return bool
+     * @return boolean
      */
     public function isTguLoad(): bool
     {
@@ -60,7 +60,7 @@ class PayLoad
     }
 
     /**
-     * @return bool
+     * @return boolean
      */
     public function isLegacyPayLoad(): bool
     {
@@ -98,6 +98,7 @@ class PayLoad
     {
         return $this->type;
     }
+
     /**
      * @return string
      */
@@ -202,14 +203,13 @@ class PayLoad
         return strtolower($this->getType()) === 'payment_based_checkout';
     }
 
-    
+
     /**
-     * @return bool
+     * @return boolean
      */
-    function isTguTransaction(): bool
+    public function isTguTransaction(): bool
     {
         $id = $this->getPayOrderId()[0] ?? null;
         return ctype_digit($id) && (int)$id > 3;
     }
-
 }

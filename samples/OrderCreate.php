@@ -9,12 +9,18 @@ use PayNL\Sdk\Model\Product;
 use PayNL\Sdk\Model\Request\OrderCreateRequest;
 use PayNL\Sdk\Exception\PayException;
 use PayNL\Sdk\Config\Config;
+use PayNL\Sdk\Model\Amount;
 
 $request = new OrderCreateRequest();
 $request->setServiceId($_REQUEST['slcode'] ?? '');
 $request->setDescription('Order ABC0123456789');
-$request->setAmount((float)($_REQUEST['amount'] ?? 5.3));
-$request->setCurrency('EUR');
+$request->setAmount((float)($_REQUEST['amount'] ?? 5.3))->setCurrency('EUR');
+
+# Or set the amount using one of the following ways:
+# $request->setAmount(new Amount(456, 'EUR'));
+# $request->setAmount(Amount::fromCents(567, 'EUR'));
+# $request->setAmount(Amount::fromFloat(6.78, 'EUR'));
+
 $request->setExpire(date('c', time() + 60));
 $request->setReturnurl($_REQUEST['returnUrl'] ?? 'https://yourdomain/finish.php');
 $request->setExchangeUrl($_REQUEST['exchangeUrl'] ?? 'https://yourdomain/exchange.php');
@@ -127,12 +133,13 @@ try {
 
 echo '<pre>';
 echo 'Success, values:' . PHP_EOL;
+echo 'getOrderId: <b>' . $payOrder->getOrderId() . '</b>' . PHP_EOL;
+
 echo 'getId: ' . $payOrder->getId() . PHP_EOL;
 echo 'getServiceId: ' . $payOrder->getServiceId() . PHP_EOL;
 echo 'getDescription: ' . $payOrder->getDescription() . PHP_EOL;
 echo 'getReference: ' . $payOrder->getReference() . PHP_EOL;
 echo 'getManualTransferCode: ' . $payOrder->getManualTransferCode() . PHP_EOL;
-echo 'getOrderId: ' . $payOrder->getOrderId() . PHP_EOL;
 echo 'getPaymentUrl: ' . '<a target="_blank" href="' . $payOrder->getPaymentUrl() . '">' . $payOrder->getPaymentUrl() . '</a>' . PHP_EOL;
 echo 'getStatusUrl: ' . $payOrder->getStatusUrl() . PHP_EOL;
 echo 'getAmount value: ' . $payOrder->getAmount() . PHP_EOL;

@@ -25,7 +25,9 @@ class Factory implements FactoryInterface
         /** @var ValidatorInterface $validator */
         $validator = new $requestedName();
 
+        /** @phpstan-ignore-next-line */
         if ($validator instanceof HydratorAwareInterface) {
+            /** @phpstan-ignore-next-line */
             $validator->setHydrator($container->get('hydratorManager')->get('Entity'));
         }
 

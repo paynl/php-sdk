@@ -15,11 +15,11 @@ interface FactoryInterface
 {
     /**
      * @param ContainerInterface $container
-     * @param string $requestedName
-     * @param array|null $options
+     * @param string             $requestedName
+     * @param array|null         $options
      *
-     * @throws \PayNL\Sdk\Exception\ServiceNotFoundException when unable to resolve the service
-     * @throws \PayNL\Sdk\Exception\ServiceNotCreatedException when an exception occurs during the service creation
+     * @throws \PayNL\Sdk\Exception\ServiceNotFoundException When unable to resolve the service.
+     * @throws \PayNL\Sdk\Exception\ServiceNotCreatedException When an exception occurs during the service creation.
      *
      * @return object
      */

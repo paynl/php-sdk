@@ -47,6 +47,9 @@ class ManagerConfig extends ServiceConfig
         'services'     => [],
     ];
 
+    /**
+     * @param array $config
+     */
     public function __construct(array $config = [])
     {
         $configPaths = $this->config['config_paths'];

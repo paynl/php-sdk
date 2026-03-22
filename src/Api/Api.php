@@ -41,8 +41,8 @@ class Api implements OptionsAwareInterface, DebugAwareInterface
      * Api constructor.
      *
      * @param AuthAdapterInterface $authenticationAdapter
-     * @param Client $client
-     * @param array $options
+     * @param Client               $client
+     * @param array                $options
      */
     public function __construct(AuthAdapterInterface $authenticationAdapter, Client $client, array $options = [])
     {
@@ -94,7 +94,7 @@ class Api implements OptionsAwareInterface, DebugAwareInterface
      * Handle the actual request by executing it and return the populated response object
      *
      * @param RequestInterface $request
-     * @param Response $response
+     * @param Response         $response
      *
      * @return Response
      */

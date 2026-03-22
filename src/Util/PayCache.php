@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace PayNL\Sdk\Util;
 
 class PayCache
@@ -10,7 +12,7 @@ class PayCache
 
     /**
      * @param string|null $cacheDir
-     * @param integer $defaultTtl
+     * @param integer     $defaultTtl
      */
     public function __construct(?string $cacheDir = null, int $defaultTtl = 600)
     {
@@ -30,9 +32,9 @@ class PayCache
     }
 
     /**
-     * @param string $key
+     * @param string        $key
      * @param callable|null $callback
-     * @param integer|null $ttl
+     * @param integer|null  $ttl
      * @return mixed|null
      */
     public function get(string $key, ?callable $callback = null, ?int $ttl = null): mixed
@@ -66,12 +68,12 @@ class PayCache
     }
 
     /**
-     * @param string $key
-     * @param mixed $value
+     * @param string       $key
+     * @param mixed        $value
      * @param integer|null $ttl
      * @return void
      */
-    public function set(string $key, mixed $value,?int $ttl = null): void
+    public function set(string $key, mixed $value, ?int $ttl = null): void
     {
         if (!$this->enabled) {
             return;

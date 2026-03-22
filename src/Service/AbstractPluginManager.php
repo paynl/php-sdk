@@ -34,7 +34,7 @@ abstract class AbstractPluginManager extends Manager
      * AbstractPluginManager constructor.
      *
      * @param ContainerInterface|null $parentLocator
-     * @param array $config
+     * @param array                   $config
      */
     public function __construct($parentLocator = null, array $config = [])
     {
@@ -71,7 +71,7 @@ abstract class AbstractPluginManager extends Manager
      *
      * @param mixed $instance
      *
-     * @throws InvalidServiceException when the plugin created is invalid for the plugin context
+     * @throws InvalidServiceException When the plugin created is invalid for the plugin context.
      *
      * @return void
      */
@@ -120,11 +120,11 @@ abstract class AbstractPluginManager extends Manager
     }
 
     /**
-     * @inheritDoc
-     *
-     * @throws ServiceNotFoundException
-     *
+     * @param mixed      $name
      * @param array|null $options
+     * @return mixed
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
      */
     public function get($name, ?array $options = null)
     {

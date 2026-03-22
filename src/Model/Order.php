@@ -48,6 +48,10 @@ class Order implements
      */
     protected $products;
 
+    /**
+     * @var Customer|null
+     */
+    private ?Customer $customer = null;
 
     /**
      * @return string
@@ -153,7 +157,7 @@ class Order implements
     /**
      * Alias for setDeliveryAddress
      * @param Address $shippingAddress
-     * @return $this
+     * @return Order
      */
     public function setShippingAddress(Address $shippingAddress): self
     {

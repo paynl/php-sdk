@@ -88,12 +88,7 @@ class ConfigProvider implements ConfigProviderInterface
             'requiredParams' => [
               'value' => '[0-9\.]+',
             ],
-          ],
-          'GetIpAddresses' => [
-            'uri' => '/ipaddresses',
-            'method' => RequestInterface::METHOD_GET,
-            'requiredParams' => [],
-          ],
+          ]
         ];
     }
 
@@ -239,11 +234,9 @@ class ConfigProvider implements ConfigProviderInterface
             ],
           ],
           'TransactionStatus' => [
-                'uri' => '/transactions/%transactionId%/status',
+                'uri' => '',
                 'method' => RequestInterface::METHOD_GET,
-                'requiredParams' => [
-                'transactionId' => '',
-                ],
+                'requiredParams' => ['transactionId' => ''],
           ],
           'OrderStatus' => [
             'uri' => '/transactions/%transactionId%/status',
@@ -279,6 +272,16 @@ class ConfigProvider implements ConfigProviderInterface
             'requiredParams' => [
               'transactionId' => '',
             ],
+          ],
+          'VoucherPayment' => [
+            'uri' => '/vouchers/payment',
+            'method' => RequestInterface::METHOD_POST,
+            'requiredParams' => [],
+          ],
+          'VoucherInfo' => [
+            'uri' => '/vouchers/info',
+            'method' => RequestInterface::METHOD_POST,
+            'requiredParams' => [],
           ]
         ];
     }

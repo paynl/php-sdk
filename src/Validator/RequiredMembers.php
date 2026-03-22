@@ -6,7 +6,9 @@ namespace PayNL\Sdk\Validator;
 
 use PayNL\Sdk\Exception\InvalidArgumentException;
 use PayNL\Sdk\Exception\RuntimeException;
-use ReflectionClass, ReflectionException;
+use ReflectionClass,
+
+ReflectionException;
 use PayNL\Sdk\Hydrator\HydratorAwareInterface;
 use PayNL\Sdk\Hydrator\HydratorAwareTrait;
 
@@ -101,7 +103,8 @@ class RequiredMembers extends AbstractValidator implements HydratorAwareInterfac
 
         foreach ($ref->getProperties() as $property) {
             $docComment = $property->getDocComment();
-            if (false !== $docComment
+            if (
+                false !== $docComment
                 && false !== preg_match_all("/@(?P<tag>\S+)(?:\n|\s(?P<type>.+)\n)/s", $docComment, $annotations)
                 && true === in_array('required', $annotations['tag'], true)
             ) {
@@ -115,8 +118,8 @@ class RequiredMembers extends AbstractValidator implements HydratorAwareInterfac
     /**
      * @param mixed $objectToExtract
      *
-     * @throws RuntimeException when the hydrator can not be found
-     * @throws InvalidArgumentException when given object isn't an object
+     * @throws RuntimeException When the hydrator can not be found.
+     * @throws InvalidArgumentException When given object isn't an object.
      *
      * @return array
      */
@@ -149,10 +152,10 @@ class RequiredMembers extends AbstractValidator implements HydratorAwareInterfac
      * Checks if the given $value is empty. In other words, its an empty string, null or
      * (if the key is an id field) equal to zero (0).
      *
-     * @param string|int $key
-     * @param mixed $value
+     * @param string|integer $key
+     * @param mixed          $value
      *
-     * @return bool
+     * @return boolean
      */
     private function isEmpty($key, $value): bool
     {

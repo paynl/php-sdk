@@ -32,7 +32,7 @@ class Manager extends AbstractPluginManager
     {
         $options = $request->getOptions();
         if (true === isset($options['validator'])) {
-            if(true === is_string($options['validator']) && true === $this->has($options['validator'])) {
+            if (true === is_string($options['validator']) && true === $this->has($options['validator'])) {
                 return $this->get($options['validator']);
             }
             if (false === is_callable($options['validator'])) {

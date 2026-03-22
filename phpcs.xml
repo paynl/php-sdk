@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ruleset name="super-linter">
+    <!-- Coding standard -->
+    <rule ref="PSR12">
+        <exclude name="PSR2.Classes.PropertyDeclaration.Underscore" />
+    </rule>
+    <file>src</file>
+    <rule ref="Generic.Files.LineLength">
+        <properties>
+            <property name="lineLimit" value="300"/>
+        </properties>
+        <type>warning</type>
+    </rule>
+    <rule ref="Squiz.Commenting.FunctionComment">
+        <exclude name="Squiz.Commenting.FunctionComment.EmptyThrows" />
+        <exclude name="Squiz.Commenting.FunctionComment.ScalarTypeHintMissing" />
+        <exclude name="Squiz.Commenting.FunctionComment.MissingParamComment" />
+        <exclude name="Squiz.Commenting.FunctionComment.MissingParamTag" />
+        <exclude name="Squiz.Commenting.FunctionComment.MissingReturn" />
+        <exclude name="Squiz.Commenting.FunctionComment.TypeHintMissing" />-->
+    </rule>
+
+    <rule ref="SlevomatCodingStandard.TypeHints.DeclareStrictTypes">
+        <exclude name="SlevomatCodingStandard.TypeHints.DeclareStrictTypes.IncorrectStrictTypesFormat"/>
+    </rule>
+
+</ruleset>

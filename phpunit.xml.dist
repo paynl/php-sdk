@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="vendor/autoload.php"
+         colors="true">
+    <testsuites>
+        <testsuite name="Unit">
+            <directory>Tests/Unit</directory>
+        </testsuite>
+    </testsuites>
+
+    <source>
+        <include>
+            <directory suffix=".php">src/Exception</directory>
+            <directory suffix=".php">src/Model/Pay</directory>
+            <directory suffix=".php">src/Model/Request</directory>
+            <directory suffix=".php">src/Model/Response</directory>
+            <directory suffix=".php">src/Util</directory>
+        </include>
+    </source>
+</phpunit>

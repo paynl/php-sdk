@@ -13,6 +13,12 @@ use PayNL\Sdk\Model\ModelInterface;
  */
 class Response extends AbstractTransformer
 {
+    /**
+     * @param mixed $inputToTransform
+     * @return array|ModelInterface
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
+     */
     public function transform($inputToTransform)
     {
         $inputToTransform = $this->getDecodedInput($inputToTransform);

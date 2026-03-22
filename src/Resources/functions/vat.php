@@ -27,7 +27,7 @@ if (false === function_exists('paynl_determine_vat_class')) {
         $vat = new Vat();
 
         return $vat->determineVatClass(
-          paynl_calc_vat_percentage($amountIncludingVat, $vatAmount)
+            paynl_calc_vat_percentage($amountIncludingVat, $vatAmount)
         );
     }
 }

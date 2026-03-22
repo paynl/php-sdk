@@ -76,13 +76,7 @@ class ConfigProvider implements ProviderInterface
         return [
             'RequestModelMapper' => [
                 'GetTerminals'                  => 'Terminals',
-                'GetTerminalTransactionStatus'  => 'TerminalTransaction',
-                'PayTransaction'                => 'TerminalTransaction',
                 'GetConfig'                     => 'ServiceGetConfigResponse',
-                'GetIpAddresses'                => 'IpAddresses',
-                'TerminalPaymentStatus'         => 'TerminalPaymentStatus',
-                'TerminalCancelPayment'         => 'TerminalPaymentStatus',
-                'DeclineTransaction'            => 'Transaction',
                 'TransactionRefund'             => 'TransactionRefundResponse',
                 'TransactionStatus'             => 'PayOrder',
                 'OrderCreate'                   => 'PayOrder',
@@ -94,8 +88,10 @@ class ConfigProvider implements ProviderInterface
                 'OrderUpdate'                   => 'PayOrder',
                 'OrderApprove'                  => 'PayOrder',
                 'OrderDecline'                  => 'PayOrder',
-                'TerminalsGet'                   => 'Terminal',
-                'TerminalsBrowse'                => 'Terminals'
+                'TerminalsGet'                  => 'Terminal',
+                'TerminalsBrowse'               => 'Terminals',
+                'VoucherPayment'                => 'PayOrder',
+                'VoucherInfo'                   => 'VoucherInfoResponse',
             ],
         ];
     }

@@ -21,7 +21,7 @@ class Error implements ModelInterface
     /**
      * @var int
      */
-    protected $code;
+    protected ?int $code;
 
     /**
      * @var string
@@ -48,7 +48,7 @@ class Error implements ModelInterface
     }
 
     /**
-     * @return int
+     * @return integer
      */
     public function getCode(): int
     {
@@ -56,7 +56,7 @@ class Error implements ModelInterface
     }
 
     /**
-     * @param int $code
+     * @param integer $code
      *
      * @return Error
      */

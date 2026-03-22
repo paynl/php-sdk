@@ -29,6 +29,7 @@ class PayStatus
     public const CONFIRMED = 75;
 
     public const EVENT_PAID = 'new_ppt';
+    public const EVENT_AUTHORISED = 'new_ppt';
     public const EVENT_PENDING = 'pending';
     public const EVENT_CHARGEBACK = 'chargeback';
     public const EVENT_REFUND = 'refund';

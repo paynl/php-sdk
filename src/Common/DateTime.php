@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PayNL\Sdk\Common;
 
 use Exception,
+
     DateTime as stdDateTime,
     DateTimeZone,
     JsonSerializable
@@ -20,8 +21,8 @@ use Exception,
 class DateTime extends stdDateTime implements JsonSerializable
 {
     /**
-     * @param string $format
-     * @param string $time
+     * @param string            $format
+     * @param string            $time
      * @param DateTimeZone|null $timezone
      * @return DateTime|false
      */

@@ -39,7 +39,7 @@ abstract class AbstractScalar implements FilterInterface
     /**
      * @inheritDoc
      *
-     * @throws InvalidArgumentException when given argument is not a string nor an integer
+     * @throws InvalidArgumentException When given argument is not a string nor an integer.
      */
     public function setValue($value): FilterInterface
     {

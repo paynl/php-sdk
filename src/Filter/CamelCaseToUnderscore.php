@@ -9,7 +9,7 @@ class CamelCaseToUnderscore
     protected $separator = '_';
 
     /**
-     * @param $value
+     * @param mixed $value
      * @return array|mixed|string|string[]|null
      */
     public function filter($value)

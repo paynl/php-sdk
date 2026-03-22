@@ -20,7 +20,7 @@ class Factory implements FactoryInterface
     /**
      * @inheritDoc
      *
-     * @throws ServiceNotCreatedException when the mapper configuration can't be found
+     * @throws ServiceNotCreatedException When the mapper configuration can't be found.
      *
      * @return AbstractMapper
      */

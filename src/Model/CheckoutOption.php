@@ -11,7 +11,6 @@ namespace PayNL\Sdk\Model;
  */
 class CheckoutOption implements ModelInterface
 {
-
     /**
      * @var int
      */
@@ -49,7 +48,7 @@ class CheckoutOption implements ModelInterface
 
 
     /**
-     * @return int
+     * @return integer
      */
     public function getId(): int
     {
@@ -57,7 +56,7 @@ class CheckoutOption implements ModelInterface
     }
 
     /**
-     * @param int $id
+     * @param integer $id
      * @return $this
      */
     public function setId(int $id): self
@@ -173,5 +172,4 @@ class CheckoutOption implements ModelInterface
         $this->requiredFields = $requiredFields;
         return $this;
     }
-
 }

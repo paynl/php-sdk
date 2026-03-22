@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PayNL\Sdk\Hydrator;
 
-use PayNL\Sdk\Packages\Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\ArrayCollection;
 use PayNL\Sdk\{Common\CollectionInterface,
     Common\DateTime,
     Common\OptionsAwareInterface,
@@ -13,6 +13,7 @@ use PayNL\Sdk\{Common\CollectionInterface,
     Exception\RuntimeException,
     Model\ModelInterface};
 use ReflectionClass,
+
     ReflectionException,
     Exception;
 
@@ -50,11 +51,11 @@ class Entity extends AbstractHydrator implements OptionsAwareInterface
      * @param ModelInterface $model
      *
      * @throws ReflectionException
-     * @throws LogicException when a property within the object does not have a DocBlock
+     * @throws LogicException When a property within the object does not have a DocBlock.
      *
      * @return array
      */
-    protected function load(ModelInterface $model): array
+    protected function loadStandard(ModelInterface $model): array
     {
         $ref = new ReflectionClass($model);
 
@@ -87,10 +88,73 @@ class Entity extends AbstractHydrator implements OptionsAwareInterface
     }
 
     /**
-     * @param array $data
+     * @param ModelInterface $model
+     * @return array
+     * @throws ReflectionException
+     */
+    protected function load(ModelInterface $model): array
+    {
+        $saveComments = (string)ini_get('opcache.save_comments');
+        $useOpcacheFallback = ($saveComments !== '1');
+
+        if ($useOpcacheFallback === true) {
+            return $this->loadWithFallback($model);
+        }
+
+        return $this->loadStandard($model);
+    }
+
+
+    /**
+     * @param ModelInterface $model
+     * @return array
+     */
+    protected function loadWithFallback(ModelInterface $model): array
+    {
+        $ref = new ReflectionClass($model);
+        $properties = $ref->getProperties();
+
+        $propertyInfo = [];
+
+        foreach ($properties as $property) {
+            $docComment = $property->getDocComment();
+
+            # If docblock exists, try to parse @var
+            if (
+                $docComment !== false &&
+                preg_match("/@var(?:\n|\s(?P<type>.*))\n/s", $docComment, $annotations)
+            ) {
+                $propertyInfo[$property->getName()] = $annotations['type'];
+                continue;
+            }
+
+            # Try to determine type via setter reflection
+            $setter = 'set' . ucfirst($property->getName());
+            if ($ref->hasMethod($setter)) {
+                $method = $ref->getMethod($setter);
+                $params = $method->getParameters();
+
+                if (!empty($params)) {
+                    $param = $params[0];
+                    $paramType = $param->getType();
+
+                    if ($paramType instanceof \ReflectionNamedType && !$paramType->isBuiltin()) {
+                        // Example: PayOrder::setAmount(Amount $amount)
+                        $propertyInfo[$property->getName()] = $paramType->getName();
+                    }
+                }
+            }
+        }
+
+        return $propertyInfo;
+    }
+
+
+    /**
+     * @param array  $data
      * @param object $object
      *
-     * @throws RuntimeException when given object isn't an instance of ModelInterface
+     * @throws RuntimeException When given object isn't an instance of ModelInterface.
      * @throws Exception
      *
      * @return object
@@ -182,6 +246,9 @@ class Entity extends AbstractHydrator implements OptionsAwareInterface
         return $data;
     }
 
+    /**
+     * @return void
+     */
     private function loadCollectionMap(): void
     {
         $collectionMap = $this->getOption('collectionMap');

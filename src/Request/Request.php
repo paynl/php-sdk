@@ -18,8 +18,8 @@ class Request extends AbstractRequest
      *
      * @param string $uri
      * @param string $method
-     * @param array $requiredParams
-     * @param array $options
+     * @param array  $requiredParams
+     * @param array  $options
      *
      * @throws BadMethodCallException
      */

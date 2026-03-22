@@ -46,9 +46,9 @@ abstract class AbstractValidator implements ValidatorInterface
 
     /**
      * @param string $message
-     * @param mixed $messageKey
+     * @param mixed  $messageKey
      *
-     * @throws InvalidArgumentException when message key given is not a string nor an integer
+     * @throws InvalidArgumentException When message key given is not a string nor an integer.
      *
      * @return AbstractValidator
      */
@@ -71,7 +71,7 @@ abstract class AbstractValidator implements ValidatorInterface
      * Quickly add an error based on the given arguments
      *
      * @param string $messageKey
-     * @param mixed ...$arguments
+     * @param mixed  ...$arguments
      *
      * @throws InvalidArgumentException
      *

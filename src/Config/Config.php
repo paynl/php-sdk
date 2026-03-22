@@ -13,7 +13,6 @@ use ArrayAccess;
  *
  * @package PayNL\Sdk
  *
- * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 class Config implements Countable, Iterator, ArrayAccess
 {
@@ -23,7 +22,7 @@ class Config implements Countable, Iterator, ArrayAccess
 
     protected array $data = [];
     private static Config $configObject;
-    private string $serviceId;
+    private ?string $serviceId = null;
 
     /**
      * Config constructor.
