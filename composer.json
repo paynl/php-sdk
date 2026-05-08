@@ -9,7 +9,7 @@
     "ext-json": "*",
     "guzzlehttp/guzzle": "^7",
     "psr/container": "^2 || ^1",
-    "psr/http-message": "^2 || ^1",
+    "psr/http-message": "^2 || ^1"
   },
   "license": "MIT",
   "support": {
