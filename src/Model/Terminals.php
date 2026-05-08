@@ -13,6 +13,7 @@ use PayNL\Sdk\Common\AbstractTotalCollection;
  */
 class Terminals extends AbstractTotalCollection implements ModelInterface
 {
+
     /**
      * @return array
      */

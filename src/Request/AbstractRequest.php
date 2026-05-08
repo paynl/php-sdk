@@ -27,11 +27,11 @@ use PayNL\Sdk\{
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
-use Symfony\Component\Serializer\Encoder\{
+use PayNL\Sdk\Packages\Symfony\Serializer\Encoder\{
     JsonEncoder,
     XmlEncoder
 };
-use Symfony\Component\Serializer\Exception\NotEncodableValueException;
+use PayNL\Sdk\Packages\Symfony\Serializer\Exception\NotEncodableValueException;
 
 /**
  * Class AbstractRequest
@@ -438,7 +438,7 @@ abstract class AbstractRequest implements
     /**
      * @param Response $response
      *
-     * @throws RuntimeException When no HTTP client is set.
+     * @throws RuntimeException when no HTTP client is set
      *
      * @return void
      */
@@ -525,9 +525,9 @@ abstract class AbstractRequest implements
     }
 
     /**
-     * @param string  $responseFormat
+     * @param string $responseFormat
      * @param integer $statusCode
-     * @param string  $rawBody
+     * @param string $rawBody
      *
      * @return string
      */
@@ -563,7 +563,7 @@ abstract class AbstractRequest implements
     }
 
     /**
-     * @param array  $errors
+     * @param array $errors
      * @param string $context
      *
      * @return array
@@ -591,7 +591,7 @@ abstract class AbstractRequest implements
      *
      * @param mixed $body
      *
-     * @throws RuntimeException When the body is an object and it's invalid.
+     * @throws RuntimeException when the body is an object and it's invalid
      *
      * @return void
      */

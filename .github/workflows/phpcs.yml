@@ -6,6 +6,7 @@ on:
   release:
     types: [published]
 
+
 jobs:
   phpcs:
     runs-on: ubuntu-latest
@@ -17,11 +18,11 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'
+          php-version: "8.2"
           coverage: none
 
       - name: Install dependencies
         run: composer install --no-interaction --prefer-dist --no-progress
 
       - name: Run PHPCS
-        run: vendor/bin/phpcs
+        run: composer phpcs

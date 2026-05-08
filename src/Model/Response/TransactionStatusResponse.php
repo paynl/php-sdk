@@ -229,7 +229,7 @@ class TransactionStatusResponse implements ModelInterface
     }
 
     /**
-     * @return float|integer
+     * @return float|int
      */
     public function getAmount()
     {
@@ -477,7 +477,7 @@ class TransactionStatusResponse implements ModelInterface
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isPaid(): bool
     {
@@ -487,7 +487,7 @@ class TransactionStatusResponse implements ModelInterface
     /**
      * Checks whether the payment is authorized
      *
-     * @return boolean
+     * @return bool
      */
     public function isAuthorized(): bool
     {
@@ -497,7 +497,7 @@ class TransactionStatusResponse implements ModelInterface
     /**
      * Checks whether the payment is being verified
      *
-     * @return boolean
+     * @return bool
      */
     public function isBeingVerified(): bool
     {
@@ -507,17 +507,17 @@ class TransactionStatusResponse implements ModelInterface
     /**
      * Checks whether the payment is pending
      *
-     * @return boolean
+     * @return bool
      */
     public function isPending(): bool
     {
-        return in_array(($this->status['action'] ?? ''), ['PENDING', 'VERIFY']);
+        return in_array( ($this->status['action'] ?? ''), ['PENDING', 'VERIFY']);
     }
 
     /**
      * Check whether the status of the transaction is chargeback
      *
-     * @return boolean
+     * @return bool
      */
     public function isChargeBack(): bool
     {
@@ -525,7 +525,7 @@ class TransactionStatusResponse implements ModelInterface
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isCancelled(): bool
     {
@@ -533,9 +533,9 @@ class TransactionStatusResponse implements ModelInterface
     }
 
     /**
-     * @param boolean $allowPartialRefunds
+     * @param bool $allowPartialRefunds
      *
-     * @return boolean
+     * @return bool
      */
     public function isRefunded(bool $allowPartialRefunds = true): bool
     {
@@ -553,7 +553,7 @@ class TransactionStatusResponse implements ModelInterface
     /**
      * Check whether the payment is partial refunded
      *
-     * @return boolean
+     * @return bool
      */
     public function isPartiallyRefunded(): bool
     {
@@ -563,7 +563,7 @@ class TransactionStatusResponse implements ModelInterface
     /**
      * Check whether the payment is a partial payment.
      *
-     * @return boolean
+     * @return bool
      */
     public function isPartialPayment(): bool
     {
@@ -571,7 +571,7 @@ class TransactionStatusResponse implements ModelInterface
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getStatusCode(): int
     {
@@ -587,7 +587,7 @@ class TransactionStatusResponse implements ModelInterface
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getPaymentProfileId(): int
     {
@@ -595,7 +595,7 @@ class TransactionStatusResponse implements ModelInterface
     }
 
     /**
-     * @return float|integer
+     * @return float|int
      */
     public function getAmountConverted()
     {
@@ -611,7 +611,7 @@ class TransactionStatusResponse implements ModelInterface
     }
 
     /**
-     * @return float|integer
+     * @return float|int
      */
     public function getAmountPaid()
     {
@@ -627,7 +627,7 @@ class TransactionStatusResponse implements ModelInterface
     }
 
     /**
-     * @return float|integer
+     * @return float|int
      */
     public function getAmountRefunded()
     {

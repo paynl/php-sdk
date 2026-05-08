@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace PayNL\Sdk\Common;
 
 use JsonSerializable;
-use Doctrine\Common\Collections\ArrayCollection;
+use PayNL\Sdk\Packages\Doctrine\Common\Collections\ArrayCollection;
 use PayNL\Sdk\Exception\LogicException;
 
 /**

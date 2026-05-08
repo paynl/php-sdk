@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PayNL\Sdk\Common;
 
-use Doctrine\Common\Collections\ArrayCollection;
+use PayNL\Sdk\Packages\Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Class TotalCollection
@@ -19,7 +19,7 @@ abstract class AbstractTotalCollection extends ArrayCollection implements Collec
     protected $total = 0;
 
     /**
-     * @return integer
+     * @return int
      */
     public function getTotal(): int
     {
@@ -27,7 +27,7 @@ abstract class AbstractTotalCollection extends ArrayCollection implements Collec
     }
 
     /**
-     * @param integer $total
+     * @param int $total
      *
      * @return AbstractTotalCollection
      */

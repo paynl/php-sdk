@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace PayNL\Sdk\Model;
 
 use DateTime,
-
     JsonSerializable;
 use PayNL\Sdk\{
     Exception\InvalidArgumentException,
@@ -181,7 +180,7 @@ class Customer implements ModelInterface, JsonSerializable
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getTrust(): int
     {

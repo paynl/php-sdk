@@ -54,4 +54,5 @@ class OrderCaptureLegacyRequest extends RequestData
         $this->config->setVersion(18);
         return parent::start();
     }
+
 }

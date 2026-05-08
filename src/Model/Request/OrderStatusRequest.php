@@ -66,6 +66,7 @@ class OrderStatusRequest extends RequestData
         $this->config->setCore(Config::TGU1);
 
         if ($this->config->isCacheEnabled()) {
+
             if ($this->hasStaticCache($cacheKey)) {
                 return $this->getStaticCacheValue($cacheKey);
             }

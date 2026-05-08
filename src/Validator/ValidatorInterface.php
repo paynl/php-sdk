@@ -11,13 +11,14 @@ namespace PayNL\Sdk\Validator;
  */
 interface ValidatorInterface
 {
+
     public const MSG_EMPTY_MEMBER  = '';
     public const MSG_EMPTY_MEMBERS = '';
 
 /**
      * @param mixed $value
      *
-     * @return boolean
+     * @return bool
      */
     public function isValid($value): bool;
 

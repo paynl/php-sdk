@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace PayNL\Sdk\Helpers;
 
 trait StaticCacheTrait
@@ -14,7 +12,7 @@ trait StaticCacheTrait
     /**
      * Get value from static cache, or execute callback and cache it.
      *
-     * @param string   $key
+     * @param string $key
      * @param callable $callback
      * @return mixed
      * @throws \Exception

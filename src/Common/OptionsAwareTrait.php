@@ -43,7 +43,7 @@ trait OptionsAwareTrait
     /**
      * @param string $name
      *
-     * @return boolean
+     * @return bool
      */
     public function hasOption(string $name): bool
     {
@@ -67,8 +67,8 @@ trait OptionsAwareTrait
 
 
     /**
-     * @param string|integer $name
-     * @param mixed          $value
+     * @param string|int $name
+     * @param mixed $value
      *
      * @return static
      */

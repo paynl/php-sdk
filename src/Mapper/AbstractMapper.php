@@ -65,4 +65,5 @@ abstract class AbstractMapper implements MapperInterface
 
         return $this->map[$source] ?? '';
     }
+
 }

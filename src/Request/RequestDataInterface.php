@@ -11,6 +11,7 @@ namespace PayNL\Sdk\Request;
  */
 interface RequestDataInterface
 {
+
     /**
      * @return string
      */
@@ -36,4 +37,5 @@ interface RequestDataInterface
      * @return array
      */
     public function getBodyParameters(): array;
+
 }

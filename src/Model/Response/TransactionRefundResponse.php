@@ -220,4 +220,5 @@ class TransactionRefundResponse implements ModelInterface
         $this->createdBy = $createdBy;
         return $this;
     }
+
 }

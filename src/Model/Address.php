@@ -85,7 +85,7 @@ class Address implements ModelInterface, JsonSerializable
     }
 
     /**
-     * @param string|integer $streetNumber
+     * @param string|int $streetNumber
      *
      * @return Address
      */

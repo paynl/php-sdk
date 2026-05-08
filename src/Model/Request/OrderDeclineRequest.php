@@ -19,7 +19,7 @@ class OrderDeclineRequest extends RequestData
     private string $transactionId;
 
     /**
-     * @param string $transactionId
+     * @param $transactionId
      */
     public function __construct($transactionId)
     {

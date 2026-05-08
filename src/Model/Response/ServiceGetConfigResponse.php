@@ -128,7 +128,7 @@ class ServiceGetConfigResponse implements ModelInterface
     }
 
     /**
-     * @param boolean $testMode
+     * @param bool $testMode
      * @return $this
      */
     public function setTestMode(bool $testMode): self

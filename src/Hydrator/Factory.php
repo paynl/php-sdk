@@ -22,7 +22,7 @@ class Factory implements FactoryInterface
     /**
      * @inheritDoc
      *
-     * @throws ServiceNotFoundException When the model manager is not present in the container.
+     * @throws ServiceNotFoundException when the model manager is not present in the container
      *
      * @return AbstractHydrator
      */
@@ -38,8 +38,7 @@ class Factory implements FactoryInterface
         }
 
         $hydrator = new $requestedName($container->get('hydratorManager'), $container->get('modelManager'));
-        if (
-            $hydrator instanceof ValidatorManagerAwareInterface &&
+        if ($hydrator instanceof ValidatorManagerAwareInterface &&
             true === $container->has('validatorManager')
         ) {
             $hydrator->setValidatorManager($container->get('validatorManager'));

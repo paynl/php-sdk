@@ -52,7 +52,7 @@ class PayLoad
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isTguLoad(): bool
     {
@@ -60,7 +60,7 @@ class PayLoad
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isLegacyPayLoad(): bool
     {
@@ -98,7 +98,7 @@ class PayLoad
     {
         return $this->type;
     }
-
+    
     /**
      * @return string
      */
@@ -203,13 +203,14 @@ class PayLoad
         return strtolower($this->getType()) === 'payment_based_checkout';
     }
 
-
+    
     /**
-     * @return boolean
+     * @return bool
      */
-    public function isTguTransaction(): bool
+    function isTguTransaction(): bool
     {
         $id = $this->getPayOrderId()[0] ?? null;
         return ctype_digit($id) && (int)$id > 3;
     }
+
 }

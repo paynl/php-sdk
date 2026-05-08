@@ -32,7 +32,7 @@ class Integration implements
     protected $testMode = self::TEST_MODE_OFF;
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isTestMode(): bool
     {
@@ -40,7 +40,7 @@ class Integration implements
     }
 
     /**
-     * @param boolean $testMode
+     * @param bool $testMode
      *
      * @return Integration
      */

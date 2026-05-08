@@ -173,7 +173,7 @@ class Stats implements
     }
 
     /**
-     * @param mixed $domainId
+     * @param $domainId
      * @return $this
      * @throws Exception
      */

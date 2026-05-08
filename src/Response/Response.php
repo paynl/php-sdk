@@ -41,7 +41,7 @@ class Response implements ResponseInterface, TransformerAwareInterface, DebugAwa
     protected $body;
 
     /**
-     * @return integer
+     * @return int
      */
     public function getStatusCode(): int
     {
@@ -49,9 +49,9 @@ class Response implements ResponseInterface, TransformerAwareInterface, DebugAwa
     }
 
     /**
-     * @param integer $statusCode
+     * @param int $statusCode
      *
-     * @throws InvalidArgumentException When status code is not recognized.
+     * @throws InvalidArgumentException when status code is not recognized
      *
      * @return Response
      */
@@ -102,7 +102,7 @@ class Response implements ResponseInterface, TransformerAwareInterface, DebugAwa
     }
 
     /**
-     * @param mixed $body
+     * @param $body
      * @return Response|$this
      * @throws \Exception
      */
@@ -127,7 +127,7 @@ class Response implements ResponseInterface, TransformerAwareInterface, DebugAwa
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function hasErrors(): bool
     {

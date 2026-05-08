@@ -62,6 +62,7 @@ class TransactionStatusRequest extends RequestData
         $this->config->setCore('https://rest.pay.nl');
 
         if ($this->config->isCacheEnabled()) {
+
             if ($this->hasStaticCache($cacheKey)) {
                 return $this->getStaticCacheValue($cacheKey);
             }
@@ -77,4 +78,5 @@ class TransactionStatusRequest extends RequestData
             return $result;
         });
     }
+
 }

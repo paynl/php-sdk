@@ -44,7 +44,7 @@ class Exchange
 
     /**
      * Specifies the field to use for order retrieval when older exchange types, such as refunds, provide the order ID in a non-standard field(extra1).
-     * @param mixed $key
+     * @param $key
      * @return $this
      */
     public function setGmsReferenceKey($key): self
@@ -62,7 +62,7 @@ class Exchange
     }
 
     /**
-     * @param boolean $includeAuth If yes, treat authorize as "paid".
+     * @param boolean $includeAuth If yes, treat authorize as "paid"
      * @return boolean
      * @throws PayException
      */
@@ -108,7 +108,7 @@ class Exchange
      * Set your exchange response in the end of your exchange processing
      *
      * @param boolean $result
-     * @param string  $message
+     * @param string $message
      * @param boolean $returnOutput
      * @return false|string|void
      */
@@ -132,7 +132,7 @@ class Exchange
 
     /**
      * @param \PayNL\Sdk\Util\ExchangeResponse $e
-     * @param boolean                          $returnOutput
+     * @param boolean $returnOutput
      * @return false|string|null
      */
     public function setExchangeResponse(ExchangeResponse $e, bool $returnOutput = false)
@@ -156,7 +156,7 @@ class Exchange
         }
     }
     /**
-     * @return boolean
+     * @return bool
      */
     public function isFastCheckout(): bool
     {
@@ -232,6 +232,7 @@ class Exchange
         if (!empty($action)) {
             # The argument "action" tells us this is GMS
             [$action, $paymentProfile, $payOrderId, $orderId, $reference] = $this->legacyReturn($request);
+
         } else {
             # TGU
             if (isset($request['object'])) {
@@ -300,7 +301,7 @@ class Exchange
      *
      * @param Config|null $config Optional configuration object. If not provided, default config is used.
      * @return PayOrder
-     * @throws Exception If signing fails or order status cannot be retrieved.
+     * @throws Exception If signing fails or order status cannot be retrieved
      */
     public function process(?Config $config = null): PayOrder
     {
@@ -341,6 +342,7 @@ class Exchange
             $payOrder->setType($payload->getType());
             $payOrder->setStatusCodeName(PayStatus::PENDING, 'PENDING');
         } else {
+
             try {
                 $payOrderId = $payload->getPayOrderId();
                 if (empty($payOrderId)) {
@@ -363,12 +365,15 @@ class Exchange
                         # and TransactionStatusRequest above wasn't used.
                         $payOrder = (new TransactionStatusRequest($payOrderId))->setConfig($config)->start();
                     }
+
                 } catch (Exception $exception) {
                     paydbg('Exchange process exception: ' . $exception . '. Trying legacy platform for: ' . $payOrderId);
                     $payOrder = (new TransactionStatusRequest($payOrderId))->setConfig($config)->start();
                 }
+
             } catch (PayException $e) {
                 throw new Exception('API Retrieval error: ' . $payload->getPayOrderId() . ' - ' . $e->getFriendlyMessage());
+
             } catch (Exception $e) {
                 throw new Exception('API-Retrieval error: ' . $payload->getPayOrderId() . ' - ' . $e->getMessage());
             }
@@ -382,8 +387,8 @@ class Exchange
     }
 
     /**
-     * @param mixed $payload
-     * @return integer|mixed|null
+     * @param $payload
+     * @return int|mixed|null
      */
     private function getPayloadState($payload)
     {
@@ -396,9 +401,9 @@ class Exchange
     }
 
     /**
-     * @param string $username Token code.
-     * @param string $password API Token.
-     * @return boolean Returns true if the signing is successful and authorised.
+     * @param string $username Token code
+     * @param string $password API Token
+     * @return boolean Returns true if the signing is successful and authorised
      */
     public function checkSignExchange(string $username = '', string $password = ''): bool
     {
@@ -446,7 +451,7 @@ class Exchange
     }
 
     /**
-     * @return boolean|array|string
+     * @return bool|array|string
      */
     private function getRequestHeaders(): bool|array|string
     {

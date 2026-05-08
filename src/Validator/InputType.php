@@ -28,9 +28,8 @@ class InputType extends AbstractValidator
     ];
 
     /**
-     * @param mixed       $value
+     * @inheritDoc
      * @param string|null $type
-     * @return boolean
      */
     public function isValid($value, ?string $type = null): bool
     {

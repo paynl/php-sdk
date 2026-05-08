@@ -503,18 +503,19 @@ class Terminal implements ModelInterface
     /**
      * @return string
      */
-    public function getLinks(): string
+    public function get_links(): string
     {
         return $this->_links;
     }
 
     /**
-     * @param mixed $links
+     * @param string $_links
      * @return $this
      */
-    public function setLinks(mixed $links): self
+    public function set_links(string $_links): self
     {
-        $this->_links = $links;
+        $this->_links = $_links;
         return $this;
     }
+
 }

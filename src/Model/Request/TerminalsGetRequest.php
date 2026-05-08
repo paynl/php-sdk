@@ -20,7 +20,7 @@ class TerminalsGetRequest extends RequestData
     private string $terminalCode;
 
     /**
-     * @param string $terminalCode
+     * @param $terminalCode
      */
     public function __construct($terminalCode)
     {
@@ -28,9 +28,6 @@ class TerminalsGetRequest extends RequestData
         parent::__construct('TerminalsGet', '/terminals/%terminalCode%', RequestInterface::METHOD_GET);
     }
 
-    /**
-     * @return array
-     */
     public function getPathParameters(): array
     {
         return [

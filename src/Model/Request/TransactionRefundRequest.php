@@ -29,9 +29,9 @@ class TransactionRefundRequest extends RequestData
     private string $currency = 'EUR';
 
     /**
-     * @param string     $transactionId Pay's orderid. Use EX-####-####-#### or Pay's orderID.
+     * @param $transactionId Pay's orderid. Use EX-####-####-#### or Pay's orderID.
      * @param float|null $amount
-     * @param string     $currency
+     * @param string $currency
      */
     public function __construct($transactionId, ?float $amount = null, string $currency = '')
     {
@@ -46,8 +46,8 @@ class TransactionRefundRequest extends RequestData
     }
 
     /**
-     * @param mixed   $productId
-     * @param integer $quantity
+     * @param $productId
+     * @param $quantity
      * @return void
      */
     public function addProduct($productId, $quantity)

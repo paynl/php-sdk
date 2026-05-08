@@ -39,7 +39,7 @@ interface FormatAwareInterface
     /**
      * @param string $format
      *
-     * @return boolean
+     * @return bool
      */
     public function isFormat(string $format): bool;
 }
