@@ -17,6 +17,9 @@ class ExchangeTest extends TestCase
     }
 
     /**
+     * Kleine helper om private $headers in Exchange te zetten,
+     * zodat getRequestHeaders() geen getallheaders() hoeft te doen.
+     *
      * @param Exchange $exchange
      * @param array    $headers
      * @return void
