@@ -5,12 +5,10 @@ declare(strict_types=1);
 namespace PayNL\Sdk\Transformer;
 
 use PayNL\Sdk\Exception\UnexpectedValueException;
+use PayNL\Sdk\Hydrator\AbstractHydrator;
 use PayNL\Sdk\Model\ModelAwareInterface;
 use PayNL\Sdk\Model\ModelAwareTrait;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Exception\NotEncodableValueException;
-use Laminas\Hydrator\HydratorAwareInterface;
-use Laminas\Hydrator\HydratorAwareTrait;
+use PayNL\Sdk\Serialization\JsonMapper;
 use PayNL\Sdk\Service\Manager as ServiceManager;
 
 /**
@@ -18,15 +16,16 @@ use PayNL\Sdk\Service\Manager as ServiceManager;
  *
  * @package PayNL\Sdk\Transformer
  */
-abstract class AbstractTransformer implements TransformerInterface, ModelAwareInterface, HydratorAwareInterface
+abstract class AbstractTransformer implements TransformerInterface, ModelAwareInterface
 {
     use ModelAwareTrait;
-    use HydratorAwareTrait;
 
     /**
      * @var ServiceManager
      */
     protected $serviceManager;
+
+    protected ?AbstractHydrator $hydrator = null;
 
     /**
      * @param ServiceManager $serviceManager
@@ -34,6 +33,17 @@ abstract class AbstractTransformer implements TransformerInterface, ModelAwareIn
     public function __construct(ServiceManager $serviceManager)
     {
         $this->serviceManager = $serviceManager;
+    }
+
+    public function getHydrator(): ?AbstractHydrator
+    {
+        return $this->hydrator;
+    }
+
+    public function setHydrator(AbstractHydrator $hydrator): self
+    {
+        $this->hydrator = $hydrator;
+        return $this;
     }
 
     /**
@@ -45,12 +55,7 @@ abstract class AbstractTransformer implements TransformerInterface, ModelAwareIn
      */
     protected function getDecodedInput(string $jsonEncodedString)
     {
-        // always expect a JSON-encoded string
-        try {
-            $transformedInput = (new JsonEncoder())->decode($jsonEncodedString, 'json');
-        } catch (NotEncodableValueException $notEncodableValueException) {
-            throw new UnexpectedValueException('Unable to decode the response', 500);
-        }
+        $transformedInput = (new JsonMapper())->decode($jsonEncodedString);
 
         return $this->filterNotNull($transformedInput);
     }

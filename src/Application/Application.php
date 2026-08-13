@@ -13,6 +13,7 @@ use PayNL\Sdk\{
   Request\RequestDataInterface,
   Response\Response,
   Request\AbstractRequest,
+  Serialization\JsonMapper,
   Service\Manager as ServiceManager,
   Service\ManagerConfig as ServiceManagerConfig
 };
@@ -215,7 +216,7 @@ class Application
 
         $bodyParams = $request->getBodyParameters();
         if (!empty($bodyParams)) {
-            $newRequest->setBody(json_encode($bodyParams));
+            $newRequest->setBody((new JsonMapper())->encode($bodyParams));
         }
 
         $this->request = $newRequest;

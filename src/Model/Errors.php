@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace PayNL\Sdk\Model;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use PayNL\Sdk\Common\CollectionInterface;
+use PayNL\Sdk\Common\{
+    ArrayCollection,
+    CollectionInterface
+};
 
 /**
  * Class Errors

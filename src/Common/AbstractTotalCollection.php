@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace PayNL\Sdk\Common;
 
-use Doctrine\Common\Collections\ArrayCollection;
-
 /**
  * Class TotalCollection
  *
@@ -72,7 +70,7 @@ abstract class AbstractTotalCollection extends ArrayCollection implements Collec
      * @inheritDoc
      * @noinspection ReturnTypeCanBeDeclaredInspection
      */
-    public function removeElement($element)
+    public function removeElement($element): bool
     {
         $result = parent::removeElement($element);
         if (true === $result) {
