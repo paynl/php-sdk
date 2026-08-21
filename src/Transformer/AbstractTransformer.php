@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace PayNL\Sdk\Transformer;
 
 use PayNL\Sdk\Exception\UnexpectedValueException;
-use PayNL\Sdk\Hydrator\AbstractHydrator;
+use PayNL\Sdk\Hydrator\HydratorAwareInterface;
+use PayNL\Sdk\Hydrator\HydratorAwareTrait;
 use PayNL\Sdk\Model\ModelAwareInterface;
 use PayNL\Sdk\Model\ModelAwareTrait;
 use PayNL\Sdk\Serialization\JsonMapper;
@@ -16,16 +17,15 @@ use PayNL\Sdk\Service\Manager as ServiceManager;
  *
  * @package PayNL\Sdk\Transformer
  */
-abstract class AbstractTransformer implements TransformerInterface, ModelAwareInterface
+abstract class AbstractTransformer implements TransformerInterface, ModelAwareInterface, HydratorAwareInterface
 {
     use ModelAwareTrait;
+    use HydratorAwareTrait;
 
     /**
      * @var ServiceManager
      */
     protected $serviceManager;
-
-    protected ?AbstractHydrator $hydrator = null;
 
     /**
      * @param ServiceManager $serviceManager
@@ -33,17 +33,6 @@ abstract class AbstractTransformer implements TransformerInterface, ModelAwareIn
     public function __construct(ServiceManager $serviceManager)
     {
         $this->serviceManager = $serviceManager;
-    }
-
-    public function getHydrator(): ?AbstractHydrator
-    {
-        return $this->hydrator;
-    }
-
-    public function setHydrator(AbstractHydrator $hydrator): self
-    {
-        $this->hydrator = $hydrator;
-        return $this;
     }
 
     /**

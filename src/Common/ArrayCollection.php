@@ -15,24 +15,39 @@ use Traversable;
  */
 class ArrayCollection implements ArrayAccess, Countable, IteratorAggregate
 {
+    /**
+     * @var array
+     */
     protected array $elements = [];
 
+    /**
+     * Create a collection.
+     */
     public function __construct(array $elements = [])
     {
         $this->elements = $elements;
     }
 
+    /**
+     * Add an element to the collection.
+     */
     public function add($element): bool
     {
         $this->elements[] = $element;
         return true;
     }
 
+    /**
+     * Set an element at the specified key.
+     */
     public function set($key, $value): void
     {
         $this->elements[$key] = $value;
     }
 
+    /**
+     * Remove and return the element at the specified key.
+     */
     public function remove($key)
     {
         if (array_key_exists($key, $this->elements) === false) {
@@ -45,6 +60,9 @@ class ArrayCollection implements ArrayAccess, Countable, IteratorAggregate
         return $removed;
     }
 
+    /**
+     * Remove the first matching element.
+     */
     public function removeElement($element): bool
     {
         $key = array_search($element, $this->elements, true);
@@ -56,41 +74,65 @@ class ArrayCollection implements ArrayAccess, Countable, IteratorAggregate
         return true;
     }
 
+    /**
+     * Remove all elements from the collection.
+     */
     public function clear(): void
     {
         $this->elements = [];
     }
 
+    /**
+     * Count the elements in the collection.
+     */
     public function count(): int
     {
         return count($this->elements);
     }
 
+    /**
+     * Return all elements as an array.
+     */
     public function toArray(): array
     {
         return $this->elements;
     }
 
+    /**
+     * Apply a callback to every element and return the resulting collection.
+     */
     public function map(callable $callback): self
     {
         return new self(array_map($callback, $this->elements));
     }
 
+    /**
+     * Return an iterator for the collection.
+     */
     public function getIterator(): Traversable
     {
         return new ArrayIterator($this->elements);
     }
 
+    /**
+     * Determine whether an offset exists.
+     */
     public function offsetExists(mixed $offset): bool
     {
         return array_key_exists($offset, $this->elements);
     }
 
+    /**
+     * Return the element at an offset.
+     */
     public function offsetGet(mixed $offset): mixed
     {
         return $this->elements[$offset] ?? null;
     }
 
+    /**
+     * Set the element at an offset.
+     */
     public function offsetSet(mixed $offset, mixed $value): void
     {
         if ($offset === null) {
@@ -101,6 +143,9 @@ class ArrayCollection implements ArrayAccess, Countable, IteratorAggregate
         $this->set($offset, $value);
     }
 
+    /**
+     * Remove the element at an offset.
+     */
     public function offsetUnset(mixed $offset): void
     {
         $this->remove($offset);

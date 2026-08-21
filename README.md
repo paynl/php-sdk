@@ -1,5 +1,7 @@
 <img src="https://www.pay.nl/uploads/1/brands/main_logo.png" width="100px" style="margin-bottom: -30px"/> <h1 style="position:relative;top:-6px;padding-left:10px;display: inline-block">PHP SDK</h1>
 
+[![codecov](https://codecov.io/gh/paynl/php-sdk/graph/badge.svg)](https://codecov.io/gh/paynl/php-sdk)
+
 Provides easy integration with Pay’s powerful payment platform, enabling online and instore payments with a wide range of local and international payment methods, including iDEAL, Bancontact, Apple Pay, PayPal, Klarna, credit cards, SEPA payments, and more.
 
 This PHP SDK makes it easy to integrate the powerful Pay. API into your integration to start transactions, retrieve payment statuses and process refunds directly from your website or platform.

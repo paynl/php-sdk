@@ -86,6 +86,9 @@ final class JsonMapper
         return $data;
     }
 
+    /**
+     * Extract values exposed by an object's getters.
+     */
     private function extractObject(object $object): array
     {
         $data = [];
