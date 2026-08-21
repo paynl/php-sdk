@@ -86,6 +86,9 @@ abstract class AbstractHydrator implements DebugAwareInterface, ValidatorManager
         return $object;
     }
 
+    /**
+     * Extract values exposed by an object's public getters.
+     */
     public function extract($object): array
     {
         $data = [];
