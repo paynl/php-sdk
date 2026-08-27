@@ -28,32 +28,49 @@ try {
             $responseMessage = 'Processed paid. Order: ' . $payOrder->getReference();
         }
     } elseif ($payOrder->isRefunded()) {
-        $responseResult = true; # Your code to process refund here
+        $responseResult = yourCodeToProcessRefund($payOrder);
         $responseMessage = 'Processed refund.';
     } elseif ($payOrder->isCancelled()) {
-        $responseResult = true; # Your code to cancel order here
+        $responseResult = yourCodeToProcessCancellation($payOrder);
         $responseMessage = 'Processed cancelled.';
     } else {
         $responseResult = true;
         $responseMessage = 'No action defined for payment state ' . $payOrder->getStatusCode();
     }
 } catch (Throwable $exception) {
+    error_log($exception->getMessage());
+
     $responseResult = false;
-    $responseMessage = $exception->getMessage();
+    $responseMessage = 'Exchange processing failed';
 }
 
 function yourCodeToProcessPendingOrder($orderId)
 {
+    // The same exchange call can arrive more than once. Do not process the same order twice.
     return true;
 }
 
 function yourCodeToProcessPaidOrder($orderId)
 {
+    // Only mark or ship the order once. If it was already processed, just return true.
     return true;
 }
 
-function yourCodeToProcessFastcheckoutOrder($orderId)
+function yourCodeToProcessFastcheckoutOrder($fastCheckoutData)
 {
+    // Do not create duplicate customers or orders if this exchange call is repeated.
+    return true;
+}
+
+function yourCodeToProcessRefund($payOrder)
+{
+    // Refund messages can also be repeated. Do not refund or register the refund twice.
+    return true;
+}
+
+function yourCodeToProcessCancellation($payOrder)
+{
+    // Only cancel the order if it was not already paid, cancelled, or otherwise finished.
     return true;
 }
 

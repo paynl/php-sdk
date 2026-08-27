@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace PayNL\Sdk\Hydrator;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use PayNL\Sdk\{Common\CollectionInterface,
+use PayNL\Sdk\{Common\ArrayCollection,
+    Common\CollectionInterface,
     Common\DateTime,
     Common\OptionsAwareInterface,
     Common\OptionsAwareTrait,
@@ -179,23 +179,6 @@ class Entity extends AbstractHydrator implements OptionsAwareInterface
             unset($data['_links']);
         }
 
-        /** @var ModelInterface $object */
-        $propertyInfo = $this->load($object);
-
-        foreach ($data as $key => $value) {
-            $type = $propertyInfo[$key] ?? 'string';
-            if (false === in_array($type, $this->supportedNativeTypes, true)) {
-                if ($type === 'DateTime') {
-                    $data[$key] = $this->getSdkDateTime($value);
-                    continue;
-                }
-
-                $data[$key] = $this->hydratorManager->build(static::class)
-                    ->hydrate($value, $this->modelManager->build($type))
-                ;
-            }
-        }
-
         if ($object instanceof CollectionInterface) {
             $collectionKey = $object->getCollectionName();
             if (false === array_key_exists($collectionKey, $data)) {
@@ -214,6 +197,23 @@ class Entity extends AbstractHydrator implements OptionsAwareInterface
             }
 
             return parent::hydrate($data, $object);
+        }
+
+        /** @var ModelInterface $object */
+        $propertyInfo = $this->load($object);
+
+        foreach ($data as $key => $value) {
+            $type = $propertyInfo[$key] ?? 'string';
+            if (false === in_array($type, $this->supportedNativeTypes, true)) {
+                if ($type === 'DateTime') {
+                    $data[$key] = $this->getSdkDateTime($value);
+                    continue;
+                }
+
+                $data[$key] = $this->hydratorManager->build(static::class)
+                    ->hydrate($value, $this->modelManager->build($type))
+                ;
+            }
         }
 
         return parent::hydrate($data, $object);

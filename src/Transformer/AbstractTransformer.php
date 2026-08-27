@@ -5,12 +5,11 @@ declare(strict_types=1);
 namespace PayNL\Sdk\Transformer;
 
 use PayNL\Sdk\Exception\UnexpectedValueException;
+use PayNL\Sdk\Hydrator\HydratorAwareInterface;
+use PayNL\Sdk\Hydrator\HydratorAwareTrait;
 use PayNL\Sdk\Model\ModelAwareInterface;
 use PayNL\Sdk\Model\ModelAwareTrait;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Exception\NotEncodableValueException;
-use Laminas\Hydrator\HydratorAwareInterface;
-use Laminas\Hydrator\HydratorAwareTrait;
+use PayNL\Sdk\Serialization\JsonMapper;
 use PayNL\Sdk\Service\Manager as ServiceManager;
 
 /**
@@ -45,12 +44,7 @@ abstract class AbstractTransformer implements TransformerInterface, ModelAwareIn
      */
     protected function getDecodedInput(string $jsonEncodedString)
     {
-        // always expect a JSON-encoded string
-        try {
-            $transformedInput = (new JsonEncoder())->decode($jsonEncodedString, 'json');
-        } catch (NotEncodableValueException $notEncodableValueException) {
-            throw new UnexpectedValueException('Unable to decode the response', 500);
-        }
+        $transformedInput = (new JsonMapper())->decode($jsonEncodedString);
 
         return $this->filterNotNull($transformedInput);
     }

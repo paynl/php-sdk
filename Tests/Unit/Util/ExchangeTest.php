@@ -129,4 +129,31 @@ class ExchangeTest extends TestCase
 
         $this->assertFalse($exchange->checkSignExchange('user123', 'secret'));
     }
+
+    public function testLegacyPayloadUsesGetAndPostButNotCookies(): void
+    {
+        $_GET = [
+            'action' => 'pending',
+            'payment_profile_id' => '10',
+            'order_id' => '123456789Xabcdef',
+            'extra1' => 'GET-REF',
+        ];
+        $_POST = [
+            'extra1' => 'POST-REF',
+        ];
+        $_COOKIE = [
+            'extra1' => 'COOKIE-REF',
+        ];
+
+        try {
+            $payload = $this->createExchange()->getPayLoad();
+
+            $this->assertSame('POST-REF', $payload->getReference());
+            $this->assertSame('123456789Xabcdef', $payload->getPayOrderId());
+        } finally {
+            $_GET = [];
+            $_POST = [];
+            $_COOKIE = [];
+        }
+    }
 }
