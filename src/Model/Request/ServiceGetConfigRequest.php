@@ -72,7 +72,7 @@ class ServiceGetConfigRequest extends RequestData
                 return $this->startAPI();
             }, 5);
         } else {
-            $result = $this->startAPI();
+            return $this->startAPI();
         }
         return $this->staticCache($cacheKey, function () use ($result) {
             return $result;
