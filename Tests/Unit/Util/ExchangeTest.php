@@ -106,6 +106,22 @@ class ExchangeTest extends TestCase
         $this->assertFalse($exchange->isSignExchange());
     }
 
+    public function testIsSignExchangeReadsSignatureMethodFromServer(): void
+    {
+        $previous = $_SERVER['HTTP_SIGNATURE_METHOD'] ?? null;
+        $_SERVER['HTTP_SIGNATURE_METHOD'] = 'HMAC';
+
+        try {
+            $this->assertTrue($this->createExchange()->isSignExchange());
+        } finally {
+            if ($previous === null) {
+                unset($_SERVER['HTTP_SIGNATURE_METHOD']);
+            } else {
+                $_SERVER['HTTP_SIGNATURE_METHOD'] = $previous;
+            }
+        }
+    }
+
     public function testCheckSignExchangeReturnsFalseWhenNotSigningExchange(): void
     {
         $exchange = $this->createExchange();
