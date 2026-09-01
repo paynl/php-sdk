@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+namespace Tests\Unit\Util;
+
 use PayNL\Sdk\Util\ExchangeResponse;
 use PHPUnit\Framework\TestCase;
 
@@ -11,7 +13,6 @@ final class ExchangeResponseTest extends TestCase
     {
         $ref = new \ReflectionClass($object);
         $prop = $ref->getProperty($name);
-        $prop->setAccessible(true);
 
         return $prop->getValue($object);
     }

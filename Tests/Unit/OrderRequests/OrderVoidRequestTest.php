@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+namespace Tests\Unit\OrderRequests;
+
 use PayNL\Sdk\Model\Pay\PayOrder;
 use PayNL\Sdk\Model\Request\OrderVoidRequest;
 use PayNL\Sdk\Request\RequestData;

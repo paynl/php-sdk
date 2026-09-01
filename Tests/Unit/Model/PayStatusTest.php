@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+namespace Tests\Unit\Model;
+
 use PayNL\Sdk\Model\Pay\PayStatus;
 use PHPUnit\Framework\TestCase;
 

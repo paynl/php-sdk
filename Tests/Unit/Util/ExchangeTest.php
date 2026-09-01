@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit;
+namespace Tests\Unit\Util;
 
 use PayNL\Sdk\Util\Exchange;
 use PayNL\Sdk\Util\ExchangeResponse;
@@ -25,7 +25,6 @@ class ExchangeTest extends TestCase
     {
         $refClass = new ReflectionClass(Exchange::class);
         $prop     = $refClass->getProperty('headers');
-        $prop->setAccessible(true);
         $prop->setValue($exchange, $headers);
     }
 

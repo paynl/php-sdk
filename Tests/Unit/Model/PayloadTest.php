@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit;
+namespace Tests\Unit\Model;
 
 use PayNL\Sdk\Model\Pay\PayLoad;
 use PHPUnit\Framework\TestCase;
 
-class PayLoadTest extends TestCase
+class PayloadTest extends TestCase
 {
     public function testLegacyPayloadMapping(): void
     {

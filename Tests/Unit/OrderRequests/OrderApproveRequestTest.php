@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Unit\OrderRequests;
 
 use PayNL\Sdk\Model\Pay\PayOrder;
 use PayNL\Sdk\Model\Request\OrderApproveRequest;

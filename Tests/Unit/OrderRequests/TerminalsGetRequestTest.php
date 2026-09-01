@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit;
+namespace Tests\Unit\OrderRequests;
 
 use PayNL\Sdk\Model\Request\TerminalsGetRequest;
 use PHPUnit\Framework\TestCase;
