@@ -28,6 +28,8 @@ use PayNL\Sdk\{
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Psr7\UriResolver;
+use GuzzleHttp\Psr7\Utils as Psr7Utils;
 
 /**
  * Class AbstractRequest
@@ -436,6 +438,7 @@ abstract class AbstractRequest implements
 
         $uri = trim($uri . '?' . implode('&', $filters), '?');
         $url = $this->getOption('url');
+        $requestUrl = $uri;
 
         $this->dumpPreStringAdvanced($this->getBody(), 'Request body', 400);
 
@@ -445,18 +448,20 @@ abstract class AbstractRequest implements
                 throw new RuntimeException('No HTTP client found', 500);
             }
 
+            $requestOptions = [];
             if (!empty($url)) {
-                $guzzleConfig = $guzzleClient->getConfig();
                 # This also will override the version
-                $guzzleConfig['base_uri'] = $url;
-                $guzzleClient = new Client($guzzleConfig);
+                $requestOptions['base_uri'] = $url;
             }
             $requestBody = $this->getBody();
 
             # Create a Guzzle PSR 7 Request
             $guzzleRequest = new \GuzzleHttp\Psr7\Request($this->getMethod(), $uri, $this->getHeaders(), $requestBody);
 
-            $curlRequest = 'curl -X ' . $this->getMethod() . ' ' . $guzzleClient->getConfig('base_uri') . $uri;
+            $baseUri = $requestOptions['base_uri'] ?? $guzzleClient->getConfig('base_uri');
+            $requestUrl = (string)UriResolver::resolve(Psr7Utils::uriFor($baseUri ?? ''), $guzzleRequest->getUri());
+
+            $curlRequest = 'curl -X ' . $this->getMethod() . ' ' . $requestUrl;
             foreach ($this->getHeaders() as $headerfield => $headervalue) {
                 $curlRequest .= ' -H "' . $headerfield . ': ' . $headervalue . '"';
             }
@@ -464,12 +469,12 @@ abstract class AbstractRequest implements
             $curlRequest .= empty($requestBody) ? '' : ' -d \'' . $requestBody . '\'';
 
             $this->dumpPreString($curlRequest, 'Curl request');
-            $this->dumpPreString(rtrim((string)$guzzleClient->getConfig('base_uri'), '/') . '/' . $guzzleRequest->getUri(), 'Requested URL');
+            $this->dumpPreString($requestUrl, 'Requested URL');
             $this->dumpPreString(implode(PHP_EOL, array_map(static function ($item, $key) {
                 return "{$key}: {$item}";
             }, $this->getHeaders(), array_keys($this->getHeaders()))), 'Headers');
 
-            $guzzleResponse = $guzzleClient->send($guzzleRequest);
+            $guzzleResponse = $guzzleClient->send($guzzleRequest, $requestOptions);
 
             $rawBody = $guzzleResponse->getBody()->getContents();
 
@@ -505,7 +510,7 @@ abstract class AbstractRequest implements
         }
 
         if (function_exists('displayPayRequest')) {
-            displayPayRequest($guzzleClient->getConfig('base_uri') . $uri, $requestBody ?? '', $rawBody, $curlRequest ?? '');
+            displayPayRequest($requestUrl, $requestBody ?? '', $rawBody, $curlRequest ?? '');
         }
 
         $response->setStatusCode($statusCode)->setRawBody($rawBody)->setBody($body);

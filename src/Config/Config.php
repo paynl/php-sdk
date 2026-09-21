@@ -7,6 +7,7 @@ namespace PayNL\Sdk\Config;
 use Countable;
 use Iterator;
 use ArrayAccess;
+use PayNL\Sdk\Http\GuzzleClientFactoryInterface;
 
 /**
  * Class Config
@@ -312,6 +313,16 @@ class Config implements Countable, Iterator, ArrayAccess
             return trim($this->data['failoverUrl']);
         }
         return '';
+    }
+
+    /**
+     * @param GuzzleClientFactoryInterface $factory
+     * @return $this
+     */
+    public function setGuzzleClientFactory(GuzzleClientFactoryInterface $factory): self
+    {
+        $this->data['guzzle_client_factory'] = $factory;
+        return $this;
     }
 
     /**
