@@ -461,7 +461,7 @@ abstract class AbstractRequest implements
             $baseUri = $requestOptions['base_uri'] ?? $guzzleClient->getConfig('base_uri');
             $requestUrl = (string)UriResolver::resolve(Psr7Utils::uriFor($baseUri ?? ''), $guzzleRequest->getUri());
 
-            $curlRequest = 'curl -X ' . $this->getMethod() . ' ' . $requestUrl;
+            $curlRequest = 'curl -i -X ' . $this->getMethod() . ' ' . $requestUrl;
             foreach ($this->getHeaders() as $headerfield => $headervalue) {
                 $curlRequest .= ' -H "' . $headerfield . ': ' . $headervalue . '"';
             }
