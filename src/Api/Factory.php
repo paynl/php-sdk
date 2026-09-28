@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace PayNL\Sdk\Api;
 
-use GuzzleHttp\Client;
 use Psr\Container\ContainerInterface;
 use PayNL\Sdk\{
     AuthAdapter\AdapterInterface as AuthAdapterInterface,
@@ -12,6 +11,8 @@ use PayNL\Sdk\{
     Exception\ServiceNotFoundException,
     Exception\InvalidArgumentException,
     Common\FactoryInterface,
+    Http\DefaultGuzzleClientFactory,
+    Http\GuzzleClientFactoryInterface,
     Service\Manager as ServiceManager
 };
 
@@ -53,13 +54,17 @@ class Factory implements FactoryInterface
                 /** @var AuthAdapterInterface $authAdapter */
                 $authAdapter = $container->get('authAdapterManager')->get($options->get('authentication')->get('type', 'basic'));
                 $authAdapter->setUsername($options->get('authentication')->get('username', ''))
-                    ->setPassword($options->get('authentication')->get('password', ''))
-                ;
+                            ->setPassword($options->get('authentication')->get('password', ''));
 
                 $version = $options->get('api')->get('version');
                 $pathVersion = empty($version) ? '' : '/v' . $version;
 
-                $guzzleClient = new Client([
+                $clientFactory = $options->get('guzzle_client_factory', new DefaultGuzzleClientFactory());
+                if (false === ($clientFactory instanceof GuzzleClientFactoryInterface)) {
+                    throw new InvalidArgumentException(sprintf('The guzzle_client_factory option must implement %s', GuzzleClientFactoryInterface::class));
+                }
+
+                $guzzleClient = $clientFactory->create([
                     'base_uri' => $filteredApiUrl . "{$pathVersion}/",
                 ]);
 
