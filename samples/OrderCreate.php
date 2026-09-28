@@ -25,6 +25,9 @@ $request->setExpire(date('c', time() + 60));
 $request->setReturnurl($_REQUEST['returnUrl'] ?? 'https://yourdomain/finish.php');
 $request->setExchangeUrl($_REQUEST['exchangeUrl'] ?? 'https://yourdomain/exchange.php');
 $request->setPaymentMethodId((int)($_REQUEST['paymentMethodId'] ?? 10));
+if (is_string($_REQUEST['issuerId'] ?? null) && $_REQUEST['issuerId'] !== '') {
+    $request->setIssuerId($_REQUEST['issuerId']);
+}
 
 # Example for specifically setting PayPal data
 #$request->setPayPalOrderId('yourPayPalOrderId');
