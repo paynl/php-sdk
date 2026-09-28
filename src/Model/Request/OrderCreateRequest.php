@@ -30,7 +30,7 @@ class OrderCreateRequest extends RequestData
     private int $amount;
     private string $currency = 'EUR';
     private int $paymentMethodId;
-    private int $issuerId;
+    private string $issuerId;
     private string $paypalOrderId;
     private array $paymentInputData = [];
     private string $terminalCode;
@@ -229,11 +229,11 @@ class OrderCreateRequest extends RequestData
     }
 
     /**
-     * @param integer $issuerId Bank id.
+     * @param int|string $issuerId Bank identifier or code
      */
-    public function setIssuerId(int $issuerId): self
+    public function setIssuerId(int|string $issuerId): self
     {
-        $this->issuerId = $issuerId;
+        $this->issuerId = (string) $issuerId;
         return $this;
     }
 
