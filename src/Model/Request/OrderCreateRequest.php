@@ -229,7 +229,7 @@ class OrderCreateRequest extends RequestData
     }
 
     /**
-     * @param int|string $issuerId Bank identifier or code
+     * @param integer|string $issuerId Bank identifier or code.
      */
     public function setIssuerId(int|string $issuerId): self
     {
