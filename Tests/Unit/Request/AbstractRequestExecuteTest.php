@@ -7,13 +7,17 @@ namespace Tests\Unit\Request;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Middleware;
 use GuzzleHttp\Psr7\Request as GuzzleRequest;
 use GuzzleHttp\Psr7\Response as GuzzleResponse;
 use PayNL\Sdk\Request\Request;
 use PayNL\Sdk\Response\Response;
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\RequestInterface as HttpRequestInterface;
+use Psr\Http\Message\ResponseInterface as HttpResponseInterface;
 
 class AbstractRequestExecuteTest extends TestCase
 {
@@ -113,6 +117,55 @@ class AbstractRequestExecuteTest extends TestCase
         $this->assertSame($rawBody, $response->getRawBody());
         $this->assertTrue($response->hasErrors());
         $this->assertStringContainsString('Payment rejected', $response->getErrors());
+    }
+
+    public function testExecutePreservesCustomClientRetryMiddleware(): void
+    {
+        $mock = new MockHandler([
+            new GuzzleResponse(503, [], '{"message":"Temporary failure"}'),
+            new GuzzleResponse(200, [], '{"id":"recovered"}'),
+        ]);
+        $stack = HandlerStack::create($mock);
+        $stack->unshift(Middleware::retry(
+            static fn (
+                int $retries,
+                HttpRequestInterface $request,
+                ?HttpResponseInterface $response,
+                ?\Throwable $exception
+            ): bool => $retries < 1 && $exception instanceof ServerException,
+            static fn (int $retries): int => 0
+        ));
+        $client = new Client([
+            'handler' => $stack,
+            'base_uri' => 'https://rest.pay.nl/v2/',
+        ]);
+        $request = new Request('orders');
+        $request->applyClient($client);
+        $response = new Response();
+
+        $request->execute($response);
+
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertSame('{"id":"recovered"}', $response->getRawBody());
+    }
+
+    public function testExecutePreservesDisabledHttpErrors(): void
+    {
+        $rawBody = '{"message":"Payment rejected"}';
+        $mock = new MockHandler([new GuzzleResponse(422, [], $rawBody)]);
+        $client = new Client([
+            'handler' => HandlerStack::create($mock),
+            'base_uri' => 'https://rest.pay.nl/v2/',
+            'http_errors' => false,
+        ]);
+        $request = new Request('orders');
+        $request->applyClient($client);
+        $response = new Response();
+
+        $request->execute($response);
+
+        $this->assertSame(422, $response->getStatusCode());
+        $this->assertSame($rawBody, $response->getBody());
     }
 
     public function testExecutePreservesResponseFromClientException(): void

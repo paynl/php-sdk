@@ -65,10 +65,7 @@ final class GuzzleClientFactoryTest extends TestCase
             ->getMock();
         $client->expects($this->once())
             ->method('send')
-            ->with($this->isInstanceOf(RequestInterface::class), [
-                'http_errors' => false,
-                'base_uri' => 'https://example.com/custom/',
-            ])
+            ->with($this->isInstanceOf(RequestInterface::class), ['base_uri' => 'https://example.com/custom/'])
             ->willReturn($httpResponse);
 
         $factory = $this->createMock(GuzzleClientFactoryInterface::class);

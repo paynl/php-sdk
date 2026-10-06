@@ -455,7 +455,7 @@ abstract class AbstractRequest implements
                 throw new RuntimeException('No HTTP client found', 500);
             }
 
-            $requestOptions = ['http_errors' => false];
+            $requestOptions = [];
             if (is_string($overrideUrl) && $overrideUrl !== '') {
                 $requestOptions['base_uri'] = $overrideUrl;
             }
@@ -484,10 +484,6 @@ abstract class AbstractRequest implements
             $rawBody = $guzzleResponse->getBody()->getContents();
             $statusCode = $guzzleResponse->getStatusCode();
             $body = $rawBody;
-
-            if ($statusCode >= 400 && $rawBody !== '') {
-                $body = $this->getErrorsString($response->getFormat(), $statusCode, $rawBody);
-            }
         } catch (GuzzleException | ExceptionInterface $e) {
             $errorResponse = method_exists($e, 'getResponse') ? $e->getResponse() : null;
             if ($errorResponse instanceof HttpResponseInterface) {
