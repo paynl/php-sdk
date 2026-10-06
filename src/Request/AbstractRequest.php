@@ -27,7 +27,7 @@ use PayNL\Sdk\{
 };
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
-use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Psr7\Request as Psr7Request;
 
 /**
  * Class AbstractRequest
@@ -81,6 +81,11 @@ abstract class AbstractRequest implements
      * @var Client
      */
     protected $client;
+
+    /**
+     * @var string
+     */
+    protected $clientBaseUri = '';
 
     /**
      * @var array
@@ -333,11 +338,13 @@ abstract class AbstractRequest implements
 
     /**
      * @param Client $client
+     * @param string $baseUri
      * @return $this
      */
-    public function applyClient(Client $client): self
+    public function applyClient(Client $client, string $baseUri = ''): self
     {
         $this->client = $client;
+        $this->clientBaseUri = $baseUri;
         return $this;
     }
 
@@ -435,9 +442,18 @@ abstract class AbstractRequest implements
         $filters = $this->getFilters();
 
         $uri = trim($uri . '?' . implode('&', $filters), '?');
-        $url = $this->getOption('url');
+        $overrideUrl = $this->getOption('url');
+        $baseUri = is_string($overrideUrl) && $overrideUrl !== ''
+            ? $overrideUrl
+            : (string)$this->clientBaseUri;
 
         $this->dumpPreStringAdvanced($this->getBody(), 'Request body', 400);
+
+        $requestBody = '';
+        $curlRequest = '';
+        $rawBody = '';
+        $body = '';
+        $statusCode = 500;
 
         try {
             $guzzleClient = $this->getClient();
@@ -445,18 +461,16 @@ abstract class AbstractRequest implements
                 throw new RuntimeException('No HTTP client found', 500);
             }
 
-            if (!empty($url)) {
-                $guzzleConfig = $guzzleClient->getConfig();
-                # This also will override the version
-                $guzzleConfig['base_uri'] = $url;
-                $guzzleClient = new Client($guzzleConfig);
-            }
             $requestBody = $this->getBody();
+            $method = strtoupper($this->getMethod());
+            $requestUri = $uri;
+            if (is_string($overrideUrl) && $overrideUrl !== '') {
+                $requestUri = rtrim($overrideUrl, '/') . '/' . $uri;
+            }
 
-            # Create a Guzzle PSR 7 Request
-            $guzzleRequest = new \GuzzleHttp\Psr7\Request($this->getMethod(), $uri, $this->getHeaders(), $requestBody);
+            $guzzleRequest = new Psr7Request($method, $requestUri, $this->getHeaders(), $requestBody);
 
-            $curlRequest = 'curl -X ' . $this->getMethod() . ' ' . $guzzleClient->getConfig('base_uri') . $uri;
+            $curlRequest = 'curl -X ' . $method . ' ' . rtrim((string)$baseUri, '/') . '/' . $uri;
             foreach ($this->getHeaders() as $headerfield => $headervalue) {
                 $curlRequest .= ' -H "' . $headerfield . ': ' . $headervalue . '"';
             }
@@ -464,39 +478,18 @@ abstract class AbstractRequest implements
             $curlRequest .= empty($requestBody) ? '' : ' -d \'' . $requestBody . '\'';
 
             $this->dumpPreString($curlRequest, 'Curl request');
-            $this->dumpPreString(rtrim((string)$guzzleClient->getConfig('base_uri'), '/') . '/' . $guzzleRequest->getUri(), 'Requested URL');
+            $this->dumpPreString(rtrim((string)$baseUri, '/') . '/' . $guzzleRequest->getUri(), 'Requested URL');
             $this->dumpPreString(implode(PHP_EOL, array_map(static function ($item, $key) {
                 return "{$key}: {$item}";
             }, $this->getHeaders(), array_keys($this->getHeaders()))), 'Headers');
 
-            $guzzleResponse = $guzzleClient->send($guzzleRequest);
-
+            $guzzleResponse = $guzzleClient->send($guzzleRequest, ['http_errors' => false]);
             $rawBody = $guzzleResponse->getBody()->getContents();
-
             $statusCode = $guzzleResponse->getStatusCode();
             $body = $rawBody;
-        } catch (RequestException $re) {
-            $errorMessages = '';
-            $rawBody = $re->getMessage();
 
-            if (null !== $re->getResponse()) {
-                $guzzleExceptionBody = $re->getResponse()->getBody();
-                $size = $guzzleExceptionBody->isSeekable() === true ? (int)$guzzleExceptionBody->getSize() : 0;
-
-                if (0 < $size) {
-                    $content = $guzzleExceptionBody->read($size);
-                    $guzzleExceptionBody->rewind();
-
-                    $errorMessages = $content;
-                }
-
-                $rawBody = $errorMessages;
-            }
-
-            $statusCode = $re->getCode();
-            $body = '';
-            if ('' !== $errorMessages) {
-                $body = $this->getErrorsString($response->getFormat(), (int)$statusCode, $errorMessages);
+            if ($statusCode >= 400 && $rawBody !== '') {
+                $body = $this->getErrorsString($response->getFormat(), $statusCode, $rawBody);
             }
         } catch (GuzzleException | ExceptionInterface $e) {
             $statusCode = $e->getCode() ?: 500;
@@ -505,7 +498,7 @@ abstract class AbstractRequest implements
         }
 
         if (function_exists('displayPayRequest')) {
-            displayPayRequest($guzzleClient->getConfig('base_uri') . $uri, $requestBody ?? '', $rawBody, $curlRequest ?? '');
+            displayPayRequest(rtrim((string)$baseUri, '/') . '/' . $uri, $requestBody, $rawBody, $curlRequest);
         }
 
         $response->setStatusCode($statusCode)->setRawBody($rawBody)->setBody($body);

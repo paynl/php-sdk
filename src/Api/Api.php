@@ -101,7 +101,11 @@ class Api implements OptionsAwareInterface, DebugAwareInterface
     public function doHandle(RequestInterface $request, Response $response): Response
     {
         $format = $request->getFormat();
-        $request->applyClient($this->getClient());
+        if ($request instanceof AbstractRequest) {
+            $request->applyClient($this->getClient(), $this->getConfiguredBaseUri());
+        } else {
+            $request->applyClient($this->getClient());
+        }
 
         # Apply the correct headers based on the formats set on request and response object
         # and also add the authentication header which is based on the authentication adapter
@@ -125,5 +129,22 @@ class Api implements OptionsAwareInterface, DebugAwareInterface
         $request->execute($response);
 
         return $response;
+    }
+
+    /**
+     * @return string
+     */
+    private function getConfiguredBaseUri(): string
+    {
+        $api = $this->getOption('api');
+        if (!is_array($api)) {
+            return '';
+        }
+
+        $url = rtrim((string)($api['url'] ?? ''), '/');
+        $version = $api['version'] ?? '';
+        $pathVersion = $version === '' ? '' : '/v' . $version;
+
+        return $url . $pathVersion . '/';
     }
 }
