@@ -105,7 +105,7 @@ abstract class RequestData implements RequestDataInterface
             $jsonError = json_last_error();
 
             if (empty($jsonError) && !empty($jsonData)) {
-                $code = $jsonData['violations'][0]['code'] ?? 'PAY-0';
+                $code = $jsonData['violations'][0]['code'] ?? $jsonData['code'] ?? 'PAY-0';
                 $detail = $jsonData['detail'] ?? '';
                 $errorMessage = empty($detail) ? ($jsonData['title'] ?? '') : $detail;
                 $errorMessage = (empty($errorMessage) && !empty($jsonData['error'])) ? $jsonData['error'] : $errorMessage;
