@@ -437,6 +437,24 @@ class Config implements Countable, Iterator, ArrayAccess
     }
 
     /**
+     * @param integer $ttl Cache lifetime in seconds; zero disables caching.
+     * @return self
+     */
+    public function setServiceGetConfigCacheTtl(int $ttl): self
+    {
+        $this->data['serviceGetConfigCacheTtl'] = $ttl;
+        return $this;
+    }
+
+    /**
+     * @return integer
+     */
+    public function getServiceGetConfigCacheTtl(): int
+    {
+        return (int)($this->data['serviceGetConfigCacheTtl'] ?? 3600);
+    }
+
+    /**
      * @return string
      */
     public function getPassword()

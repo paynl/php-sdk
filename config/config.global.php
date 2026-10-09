@@ -8,5 +8,8 @@ return [
         'password' => '', # Use API token or secret. Use Secret in combination with SL-Code.
     ],
     'debug' => false,
-    'useFileCaching' => true
+    'useFileCaching' => true,
+
+    # Cache serviceGetConfig response:
+    'serviceGetConfigCacheTtl' => 3600, // Cache lifetime in seconds.
 ];
