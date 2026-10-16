@@ -44,6 +44,11 @@ class Method implements ModelInterface
     /**
      * @var array
      */
+    protected ?array $targetCountries = null;
+
+    /**
+     * @var array
+     */
     protected $options;
 
     /**
@@ -134,6 +139,24 @@ class Method implements ModelInterface
     public function setImage(string $image): self
     {
         $this->image = $image;
+        return $this;
+    }
+
+    /**
+     * @return array|string[]
+     */
+    public function getTargetCountries(): array
+    {
+        return $this->targetCountries ?? [];
+    }
+
+    /**
+     * @param array $targetedCountries
+     * @return $this
+     */
+    public function setTargetCountries(array $targetedCountries): self
+    {
+        $this->targetCountries = $targetedCountries;
         return $this;
     }
 
