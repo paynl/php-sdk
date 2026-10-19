@@ -95,6 +95,9 @@ $product->setAmount(1);
 $product->setCurrency('EUR');
 $product->setQuantity(1);
 $product->setVatPercentage(0);
+# Optional product image and product page URLs
+$product->setImageUrl('https://shop.pay.nl/cdn/shop/files/A35_V3_1.jpg');
+$product->setProductUrl('https://shop.pay.nl/products/pax-a35-terminal');
 $products->addProduct($product);
 
 $order->setProducts($products);
