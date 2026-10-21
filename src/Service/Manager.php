@@ -270,7 +270,7 @@ class Manager implements ContainerInterface
     /**
      * @inheritDoc
      */
-    public function has(string $name): bool
+    public function has($name): bool
     {
         $name = $this->resolvedAliases[$name] ?? $name;
 
