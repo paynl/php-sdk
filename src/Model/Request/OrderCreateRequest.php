@@ -95,6 +95,8 @@ class OrderCreateRequest extends RequestData
             ];
             $product['quantity'] = $objProduct->getQuantity();
             $product['vatPercentage'] = $objProduct->getVatPercentage();
+            $this->addField($product, 'imageUrl', $objProduct->getImageUrl());
+            $this->addField($product, 'productUrl', $objProduct->getProductUrl());
 
             if (is_null($product['vatPercentage']) && !empty($objProduct->getVatCode())) {
                 $product['vatPercentage'] = (new Vat())->getPercentageByClass($objProduct->getVatCode());
