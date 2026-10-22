@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace PayNL\Sdk\Model;
 
 use JsonSerializable;
-use Doctrine\Common\Collections\ArrayCollection;
 use PayNL\Sdk\Common\{
+    ArrayCollection,
     JsonSerializeTrait,
     CollectionInterface
 };

@@ -70,7 +70,7 @@ class TransactionStatusRequest extends RequestData
                 return parent::start();
             }, 3); // 3 seconds file caching
         } else {
-            $result = parent::start();
+            return parent::start();
         }
 
         return $this->staticCache($cacheKey, function () use ($result) {

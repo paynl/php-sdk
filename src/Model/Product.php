@@ -49,6 +49,16 @@ class Product implements ModelInterface, JsonSerializable
     protected $description;
 
     /**
+     * @var string|null
+     */
+    protected ?string $imageUrl = null;
+
+    /**
+     * @var string|null
+     */
+    protected ?string $productUrl = null;
+
+    /**
      * @var Amount
      */
     protected $price;
@@ -78,8 +88,10 @@ class Product implements ModelInterface, JsonSerializable
      * @param integer     $quantity
      * @param string|null $vatCode
      * @param float|null  $vatPercentage
+     * @param string|null $imageUrl
+     * @param string|null $productUrl
      */
-    public function __construct($id = null, $description = null, $amount = null, $currency = null, $type = null, $quantity = null, ?string $vatCode = null, ?float $vatPercentage = null)
+    public function __construct($id = null, $description = null, $amount = null, $currency = null, $type = null, $quantity = null, ?string $vatCode = null, ?float $vatPercentage = null, ?string $imageUrl = null, ?string $productUrl = null)
     {
         if (!is_null($id)) {
             $this->setId($id);
@@ -104,6 +116,12 @@ class Product implements ModelInterface, JsonSerializable
         }
         if (!is_null($vatPercentage)) {
             $this->setVatPercentage($vatPercentage);
+        }
+        if (!is_null($imageUrl)) {
+            $this->setImageUrl($imageUrl);
+        }
+        if (!is_null($productUrl)) {
+            $this->setProductUrl($productUrl);
         }
     }
 
@@ -181,6 +199,42 @@ class Product implements ModelInterface, JsonSerializable
     {
         $description = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $description);
         $this->description = $description;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getImageUrl(): string
+    {
+        return (string)$this->imageUrl;
+    }
+
+    /**
+     * @param string $imageUrl
+     * @return $this
+     */
+    public function setImageUrl(string $imageUrl): self
+    {
+        $this->imageUrl = $imageUrl;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getProductUrl(): string
+    {
+        return (string)$this->productUrl;
+    }
+
+    /**
+     * @param string $productUrl
+     * @return $this
+     */
+    public function setProductUrl(string $productUrl): self
+    {
+        $this->productUrl = $productUrl;
         return $this;
     }
 

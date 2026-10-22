@@ -209,7 +209,7 @@ class PayLoad
      */
     public function isTguTransaction(): bool
     {
-        $id = $this->getPayOrderId()[0] ?? null;
+        $id = $this->getPayOrderId()[0] ?? '';
         return ctype_digit($id) && (int)$id > 3;
     }
 }

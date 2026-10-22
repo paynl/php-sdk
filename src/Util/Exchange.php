@@ -221,7 +221,7 @@ class Exchange
             # In case a payload has been provided, use that one.
             $request = $this->custom_payload;
         } else {
-            $request = $_REQUEST;
+            $request = array_merge($_GET, $_POST);
             if (empty($request)) {
                 throw new Exception('Empty payload', Exchange::ERROR_EMPTY_PAYLOAD);
             }

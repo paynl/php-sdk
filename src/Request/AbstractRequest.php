@@ -21,17 +21,15 @@ use PayNL\Sdk\{
     Response\Response,
     Exception\InvalidArgumentException,
     Filter\FilterInterface,
+    Serialization\JsonMapper,
     Validator\ValidatorManagerAwareInterface,
     Validator\ValidatorManagerAwareTrait
 };
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
-use Symfony\Component\Serializer\Encoder\{
-    JsonEncoder,
-    XmlEncoder
-};
-use Symfony\Component\Serializer\Exception\NotEncodableValueException;
+use GuzzleHttp\Psr7\UriResolver;
+use GuzzleHttp\Psr7\Utils as Psr7Utils;
 
 /**
  * Class AbstractRequest
@@ -417,22 +415,13 @@ abstract class AbstractRequest implements
      */
     private function encodeBody(mixed $body): string
     {
-        $encoder = new JsonEncoder();
-        $contentTypeHeader = 'application/json';
-        $context = [
-            'json_encode_options' => JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | ($this->isDebug() === true ? JSON_PRETTY_PRINT : 0),
-        ];
-
         if (true === $this->isFormat(static::FORMAT_XML)) {
-            $encoder = new XmlEncoder([
-                XmlEncoder::ROOT_NODE_NAME => static::XML_ROOT_NODE_NAME,
-            ]);
-            $contentTypeHeader = 'application/xml';
-            $context = [];
+            throw new RuntimeException('XML request serialization is not supported in SDK 2.0', 500);
         }
-        $this->setHeader(static::HEADER_CONTENT_TYPE, $contentTypeHeader);
 
-        return (string)$encoder->encode($body, $this->getFormat(), $context);
+        $this->setHeader(static::HEADER_CONTENT_TYPE, 'application/json');
+
+        return (new JsonMapper())->encode($body, $this->isDebug());
     }
 
     /**
@@ -449,6 +438,7 @@ abstract class AbstractRequest implements
 
         $uri = trim($uri . '?' . implode('&', $filters), '?');
         $url = $this->getOption('url');
+        $requestUrl = $uri;
 
         $this->dumpPreStringAdvanced($this->getBody(), 'Request body', 400);
 
@@ -458,18 +448,20 @@ abstract class AbstractRequest implements
                 throw new RuntimeException('No HTTP client found', 500);
             }
 
+            $requestOptions = [];
             if (!empty($url)) {
-                $guzzleConfig = $guzzleClient->getConfig();
                 # This also will override the version
-                $guzzleConfig['base_uri'] = $url;
-                $guzzleClient = new Client($guzzleConfig);
+                $requestOptions['base_uri'] = $url;
             }
             $requestBody = $this->getBody();
 
             # Create a Guzzle PSR 7 Request
             $guzzleRequest = new \GuzzleHttp\Psr7\Request($this->getMethod(), $uri, $this->getHeaders(), $requestBody);
 
-            $curlRequest = 'curl -X ' . $this->getMethod() . ' ' . $guzzleClient->getConfig('base_uri') . $uri;
+            $baseUri = $requestOptions['base_uri'] ?? $guzzleClient->getConfig('base_uri');
+            $requestUrl = (string)UriResolver::resolve(Psr7Utils::uriFor($baseUri ?? ''), $guzzleRequest->getUri());
+
+            $curlRequest = 'curl -i -X ' . $this->getMethod() . ' ' . $requestUrl;
             foreach ($this->getHeaders() as $headerfield => $headervalue) {
                 $curlRequest .= ' -H "' . $headerfield . ': ' . $headervalue . '"';
             }
@@ -477,12 +469,12 @@ abstract class AbstractRequest implements
             $curlRequest .= empty($requestBody) ? '' : ' -d \'' . $requestBody . '\'';
 
             $this->dumpPreString($curlRequest, 'Curl request');
-            $this->dumpPreString(rtrim((string)$guzzleClient->getConfig('base_uri'), '/') . '/' . $guzzleRequest->getUri(), 'Requested URL');
+            $this->dumpPreString($requestUrl, 'Requested URL');
             $this->dumpPreString(implode(PHP_EOL, array_map(static function ($item, $key) {
                 return "{$key}: {$item}";
             }, $this->getHeaders(), array_keys($this->getHeaders()))), 'Headers');
 
-            $guzzleResponse = $guzzleClient->send($guzzleRequest);
+            $guzzleResponse = $guzzleClient->send($guzzleRequest, $requestOptions);
 
             $rawBody = $guzzleResponse->getBody()->getContents();
 
@@ -518,7 +510,7 @@ abstract class AbstractRequest implements
         }
 
         if (function_exists('displayPayRequest')) {
-            displayPayRequest($guzzleClient->getConfig('base_uri') . $uri, $requestBody ?? '', $rawBody, $curlRequest ?? '');
+            displayPayRequest($requestUrl, $requestBody ?? '', $rawBody, $curlRequest ?? '');
         }
 
         $response->setStatusCode($statusCode)->setRawBody($rawBody)->setBody($body);
@@ -533,18 +525,8 @@ abstract class AbstractRequest implements
      */
     private function getErrorsString(string $responseFormat, int $statusCode, string $rawBody): string
     {
-        $encoderClass = JsonEncoder::class;
         if (static::FORMAT_XML === $responseFormat) {
-            $encoderClass = XmlEncoder::class;
-        }
-
-        $encoder = new $encoderClass();
-        try {
-            $errors = $encoder->decode($rawBody, $responseFormat);
-        } catch (NotEncodableValueException $notEncodableValueException) {
-            $statusCode = $notEncodableValueException->getCode();
-            $rawBody = $notEncodableValueException->getMessage();
-            $errors = [];
+            throw new RuntimeException('XML response serialization is not supported in SDK 2.0', 500);
         }
 
         $errors = [
@@ -559,7 +541,7 @@ abstract class AbstractRequest implements
 
         $errors['errors'] = $this->flattenErrors($errors['errors']);
 
-        return (string)$encoder->encode($errors, $responseFormat);
+        return (new JsonMapper())->encode($errors, $this->isDebug());
     }
 
     /**

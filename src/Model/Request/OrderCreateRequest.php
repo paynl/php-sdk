@@ -30,7 +30,7 @@ class OrderCreateRequest extends RequestData
     private int $amount = 0;
     private string $currency = 'EUR';
     private int $paymentMethodId;
-    private int $issuerId;
+    private string $issuerId;
     private string $paypalOrderId;
     private array $paymentInputData = [];
     private string $terminalCode;
@@ -95,6 +95,8 @@ class OrderCreateRequest extends RequestData
             ];
             $product['quantity'] = $objProduct->getQuantity();
             $product['vatPercentage'] = $objProduct->getVatPercentage();
+            $this->addField($product, 'imageUrl', $objProduct->getImageUrl());
+            $this->addField($product, 'productUrl', $objProduct->getProductUrl());
 
             if (is_null($product['vatPercentage']) && !empty($objProduct->getVatCode())) {
                 $product['vatPercentage'] = (new Vat())->getPercentageByClass($objProduct->getVatCode());
@@ -229,11 +231,11 @@ class OrderCreateRequest extends RequestData
     }
 
     /**
-     * @param integer $issuerId Bank id.
+     * @param integer|string $issuerId Bank identifier or code.
      */
-    public function setIssuerId(int $issuerId): self
+    public function setIssuerId(int|string $issuerId): self
     {
-        $this->issuerId = $issuerId;
+        $this->issuerId = (string) $issuerId;
         return $this;
     }
 

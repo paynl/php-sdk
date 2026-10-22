@@ -24,7 +24,7 @@ To use this PHP SDK, you’ll need:
 * A Pay. account (register here).
 * You can immediately use the API in sandbox mode.
 * API credentials which you will find in your Dashboard.
-* PHP 8.1–8.4
+* PHP 8.1+
 * JSON extension
 * CURL extension
 

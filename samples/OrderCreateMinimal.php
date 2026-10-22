@@ -9,9 +9,9 @@ use PayNL\Sdk\Model\Request\OrderCreateRequest;
 use PayNL\Sdk\Exception\PayException;
 use PayNL\Sdk\Config\Config;
 
-$username = ''; // Your AT-code (AT-####-####)
-$password = ''; // Your API Token
-$serviceId = ''; // Your Sales location code (SL-####-####)
+$username = $_REQUEST['username'] ?? ''; // Your AT-code (AT-####-####)
+$password = $_REQUEST['password'] ?? ''; //  Your API Token
+$serviceId = $_REQUEST['slcode'] ?? ''; // Your Sales location code (SL-####-####)
 
 $config = new Config();
 $config->setUsername($username);
