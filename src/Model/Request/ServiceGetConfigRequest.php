@@ -9,7 +9,6 @@ use PayNL\Sdk\Request\RequestData;
 use PayNL\Sdk\Model\Response\ServiceGetConfigResponse;
 use PayNL\Sdk\Request\RequestInterface;
 use PayNL\Sdk\Util\PayCache;
-use PayNL\Sdk\Helpers\StaticCacheTrait;
 
 /**
  * Class ServiceGetConfigRequest
@@ -20,8 +19,6 @@ use PayNL\Sdk\Helpers\StaticCacheTrait;
  */
 class ServiceGetConfigRequest extends RequestData
 {
-    use StaticCacheTrait;
-
     /**
      * @var string
      */
@@ -61,22 +58,15 @@ class ServiceGetConfigRequest extends RequestData
      */
     public function start(): ServiceGetConfigResponse
     {
-        $cacheKey = 'service_getconfig_' . md5(json_encode([$this->config->getUsername(), $this->config->getPassword(), $this->serviceId]));
-
-        if ($this->config->isCacheEnabled()) {
-            if ($this->hasStaticCache($cacheKey)) {
-                return $this->getStaticCacheValue($cacheKey);
-            }
-
-            $result = (new PayCache())->get($cacheKey, function () {
-                return $this->startAPI();
-            }, 5);
-        } else {
+        $ttl = $this->config->getServiceGetConfigCacheTtl();
+        if (!$this->config->isCacheEnabled() || $ttl <= 0) {
             return $this->startAPI();
         }
-        return $this->staticCache($cacheKey, function () use ($result) {
-            return $result;
-        });
+
+        $cacheKey = 'service_getconfig_' . md5(json_encode([$this->config->getUsername(), $this->config->getPassword(), $this->serviceId, $ttl]));
+        return (new PayCache())->get($cacheKey, function () {
+            return $this->startAPI();
+        }, $ttl);
     }
 
 
