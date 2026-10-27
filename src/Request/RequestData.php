@@ -59,7 +59,7 @@ abstract class RequestData implements RequestDataInterface
     }
 
     /**
-     * @param $json
+     * @param string|array $json
      * @return void
      */
     public function setBody($json)

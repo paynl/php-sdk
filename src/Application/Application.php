@@ -225,7 +225,7 @@ class Application
 
     /**
      * Sets body of the request
-     * @param string|array $json JSON string or associative array to be encoded
+     * @param string|array $json JSON string or associative array to be encoded.
      * @return self
      */
     public function setBody($json): self
