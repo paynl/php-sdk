@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Unit\OrderRequests;
 
 use PayNL\Sdk\Model\Request\ServiceGetConfigRequest;
 use PayNL\Sdk\Model\Response\ServiceGetConfigResponse;

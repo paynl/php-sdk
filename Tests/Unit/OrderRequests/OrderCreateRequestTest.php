@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit;
+namespace Tests\Unit\OrderRequests;
 
 use PayNL\Sdk\Model\Amount;
 use PayNL\Sdk\Model\Customer;
@@ -23,7 +23,6 @@ class OrderCreateRequestTest extends TestCase
 
         $reflection = new \ReflectionClass($request);
         $optimizeProperty = $reflection->getProperty('optimize');
-        $optimizeProperty->setAccessible(true);
 
         $this->assertEquals([
             'flow' => 'fastCheckout',
@@ -43,7 +42,6 @@ class OrderCreateRequestTest extends TestCase
 
         $reflection = new \ReflectionClass($request);
         $returnUrlProperty = $reflection->getProperty('returnUrl');
-        $returnUrlProperty->setAccessible(true);
 
         $this->assertEquals('https://example.com/return', $returnUrlProperty->getValue($request));
     }
@@ -58,7 +56,6 @@ class OrderCreateRequestTest extends TestCase
 
         $reflection = new \ReflectionClass($request);
         $amountProperty = $reflection->getProperty('amount');
-        $amountProperty->setAccessible(true);
 
         $this->assertEquals(12345, $amountProperty->getValue($request));
     }
@@ -73,10 +70,8 @@ class OrderCreateRequestTest extends TestCase
 
         $reflection = new \ReflectionClass($request);
         $amountProperty = $reflection->getProperty('amount');
-        $amountProperty->setAccessible(true);
 
         $currencyProperty = $reflection->getProperty('currency');
-        $currencyProperty->setAccessible(true);
 
         $this->assertEquals(12345, $amountProperty->getValue($request));
         $this->assertEquals('EUR', $currencyProperty->getValue($request));
@@ -94,7 +89,6 @@ class OrderCreateRequestTest extends TestCase
 
         $reflection = new \ReflectionClass($request);
         $referenceProperty = $reflection->getProperty('reference');
-        $referenceProperty->setAccessible(true);
 
         $this->assertEquals('Order123', $referenceProperty->getValue($request));
     }
@@ -124,9 +118,7 @@ class OrderCreateRequestTest extends TestCase
 
         $reflection = new \ReflectionClass($request);
         $notificationTypeProperty = $reflection->getProperty('notificationType');
-        $notificationTypeProperty->setAccessible(true);
         $notificationRecipientProperty = $reflection->getProperty('notificationRecipient');
-        $notificationRecipientProperty->setAccessible(true);
 
         $this->assertEquals('email', $notificationTypeProperty->getValue($request));
         $this->assertEquals('test@example.com', $notificationRecipientProperty->getValue($request));
@@ -170,7 +162,6 @@ class OrderCreateRequestTest extends TestCase
 
         $reflection = new \ReflectionClass($request);
         $customerProperty = $reflection->getProperty('customer');
-        $customerProperty->setAccessible(true);
 
         $this->assertSame($mockCustomer, $customerProperty->getValue($request));
     }
@@ -187,7 +178,6 @@ class OrderCreateRequestTest extends TestCase
 
         $reflection = new \ReflectionClass($request);
         $orderProperty = $reflection->getProperty('order');
-        $orderProperty->setAccessible(true);
 
         $this->assertSame($mockOrder, $orderProperty->getValue($request));
     }
@@ -204,7 +194,6 @@ class OrderCreateRequestTest extends TestCase
 
         $reflection = new \ReflectionClass($request);
         $statsProperty = $reflection->getProperty('stats');
-        $statsProperty->setAccessible(true);
 
         $this->assertSame($mockStats, $statsProperty->getValue($request));
     }

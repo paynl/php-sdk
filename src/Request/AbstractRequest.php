@@ -27,9 +27,10 @@ use PayNL\Sdk\{
 };
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
-use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Psr7\Request as Psr7Request;
 use GuzzleHttp\Psr7\UriResolver;
 use GuzzleHttp\Psr7\Utils as Psr7Utils;
+use Psr\Http\Message\ResponseInterface as HttpResponseInterface;
 
 /**
  * Class AbstractRequest
@@ -437,10 +438,16 @@ abstract class AbstractRequest implements
         $filters = $this->getFilters();
 
         $uri = trim($uri . '?' . implode('&', $filters), '?');
-        $url = $this->getOption('url');
+        $overrideUrl = $this->getOption('url');
         $requestUrl = $uri;
 
         $this->dumpPreStringAdvanced($this->getBody(), 'Request body', 400);
+
+        $requestBody = '';
+        $curlRequest = '';
+        $rawBody = '';
+        $body = '';
+        $statusCode = 500;
 
         try {
             $guzzleClient = $this->getClient();
@@ -449,19 +456,18 @@ abstract class AbstractRequest implements
             }
 
             $requestOptions = [];
-            if (!empty($url)) {
-                # This also will override the version
-                $requestOptions['base_uri'] = $url;
+            if (is_string($overrideUrl) && $overrideUrl !== '') {
+                $requestOptions['base_uri'] = $overrideUrl;
             }
             $requestBody = $this->getBody();
+            $method = strtoupper($this->getMethod());
 
-            # Create a Guzzle PSR 7 Request
-            $guzzleRequest = new \GuzzleHttp\Psr7\Request($this->getMethod(), $uri, $this->getHeaders(), $requestBody);
+            $guzzleRequest = new Psr7Request($method, $uri, $this->getHeaders(), $requestBody);
 
             $baseUri = $requestOptions['base_uri'] ?? $guzzleClient->getConfig('base_uri');
             $requestUrl = (string)UriResolver::resolve(Psr7Utils::uriFor($baseUri ?? ''), $guzzleRequest->getUri());
 
-            $curlRequest = 'curl -i -X ' . $this->getMethod() . ' ' . $requestUrl;
+            $curlRequest = 'curl -i -X ' . $method . ' ' . $requestUrl;
             foreach ($this->getHeaders() as $headerfield => $headervalue) {
                 $curlRequest .= ' -H "' . $headerfield . ': ' . $headervalue . '"';
             }
@@ -475,42 +481,24 @@ abstract class AbstractRequest implements
             }, $this->getHeaders(), array_keys($this->getHeaders()))), 'Headers');
 
             $guzzleResponse = $guzzleClient->send($guzzleRequest, $requestOptions);
-
             $rawBody = $guzzleResponse->getBody()->getContents();
-
             $statusCode = $guzzleResponse->getStatusCode();
             $body = $rawBody;
-        } catch (RequestException $re) {
-            $errorMessages = '';
-            $rawBody = $re->getMessage();
-
-            if (null !== $re->getResponse()) {
-                $guzzleExceptionBody = $re->getResponse()->getBody();
-                $size = $guzzleExceptionBody->isSeekable() === true ? (int)$guzzleExceptionBody->getSize() : 0;
-
-                if (0 < $size) {
-                    $content = $guzzleExceptionBody->read($size);
-                    $guzzleExceptionBody->rewind();
-
-                    $errorMessages = $content;
-                }
-
-                $rawBody = $errorMessages;
-            }
-
-            $statusCode = $re->getCode();
-            $body = '';
-            if ('' !== $errorMessages) {
-                $body = $this->getErrorsString($response->getFormat(), (int)$statusCode, $errorMessages);
-            }
         } catch (GuzzleException | ExceptionInterface $e) {
-            $statusCode = $e->getCode() ?: 500;
-            $rawBody = 'Error: ' . $e->getMessage() . ' (' . $statusCode . ')';
-            $body = $this->getErrorsString($response->getFormat(), (int)$statusCode, $rawBody);
+            $errorResponse = method_exists($e, 'getResponse') ? $e->getResponse() : null;
+            if ($errorResponse instanceof HttpResponseInterface) {
+                $statusCode = $errorResponse->getStatusCode();
+                $rawBody = (string)$errorResponse->getBody();
+                $body = $rawBody === '' ? '' : $this->getErrorsString($response->getFormat(), $statusCode, $rawBody);
+            } else {
+                $statusCode = $e->getCode() ?: 500;
+                $rawBody = 'Error: ' . $e->getMessage() . ' (' . $statusCode . ')';
+                $body = $this->getErrorsString($response->getFormat(), (int)$statusCode, $rawBody);
+            }
         }
 
         if (function_exists('displayPayRequest')) {
-            displayPayRequest($requestUrl, $requestBody ?? '', $rawBody, $curlRequest ?? '');
+            displayPayRequest($requestUrl, $requestBody, $rawBody, $curlRequest);
         }
 
         $response->setStatusCode($statusCode)->setRawBody($rawBody)->setBody($body);

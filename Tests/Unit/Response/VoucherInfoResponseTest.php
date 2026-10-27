@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit;
+namespace Tests\Unit\Response;
 
 use PayNL\Sdk\Model\Amount;
 use PayNL\Sdk\Model\Response\VoucherInfoResponse;

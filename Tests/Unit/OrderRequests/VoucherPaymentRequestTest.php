@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Unit\OrderRequests;
 
 use PayNL\Sdk\Application\Application;
 use PayNL\Sdk\Config\Config;
@@ -62,7 +62,6 @@ class VoucherPaymentRequestTest extends TestCase
         $request->setCardNumber('1234-5678-9012-3456');
         $reflection = new \ReflectionClass($request);
         $cardNumberProperty = $reflection->getProperty('cardNumber');
-        $cardNumberProperty->setAccessible(true);
 
         $this->assertEquals('1234-5678-9012-3456', $cardNumberProperty->getValue($request));
     }
@@ -78,7 +77,6 @@ class VoucherPaymentRequestTest extends TestCase
         $request->setPinCode('123456');
         $reflection = new \ReflectionClass($request);
         $pinCodeProperty = $reflection->getProperty('pinCode');
-        $pinCodeProperty->setAccessible(true);
 
         $this->assertEquals('123456', $pinCodeProperty->getValue($request));
     }
@@ -94,7 +92,6 @@ class VoucherPaymentRequestTest extends TestCase
         $request->setPointOfInteraction('ON_THE_MOVE');
         $reflection = new \ReflectionClass($request);
         $poiProperty = $reflection->getProperty('pointOfInteraction');
-        $poiProperty->setAccessible(true);
 
         $this->assertEquals('ON_THE_MOVE', $poiProperty->getValue($request));
     }
