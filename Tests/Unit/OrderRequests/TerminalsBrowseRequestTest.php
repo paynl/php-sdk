@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Unit\OrderRequests;
 
 use PayNL\Sdk\Application\Application;
 use PayNL\Sdk\Config\Config;

@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+namespace Tests\Unit\OrderRequests;
+
 use PayNL\Sdk\Model\Amount;
 use PayNL\Sdk\Model\Response\TransactionStatusResponse;
 use PHPUnit\Framework\TestCase;

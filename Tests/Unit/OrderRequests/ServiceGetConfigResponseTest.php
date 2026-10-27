@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+namespace Tests\Unit\OrderRequests;
+
 use PayNL\Sdk\Model\CheckoutOptions;
 use PayNL\Sdk\Model\Method;
 use PayNL\Sdk\Model\Response\ServiceGetConfigResponse;

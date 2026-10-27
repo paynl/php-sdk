@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+namespace Tests\Unit\Util;
+
 use PayNL\Sdk\Util\PayCache;
 use PHPUnit\Framework\TestCase;
 
@@ -11,7 +13,6 @@ final class PayCacheTest extends TestCase
     {
         $refClass = new \ReflectionClass($object);
         $refMethod = $refClass->getMethod($method);
-        $refMethod->setAccessible(true);
 
         return $refMethod->invokeArgs($object, $args);
     }

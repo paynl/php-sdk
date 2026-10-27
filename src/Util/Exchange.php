@@ -451,7 +451,24 @@ class Exchange
     private function getRequestHeaders(): bool|array|string
     {
         if (empty($this->headers)) {
-            $this->headers = array_change_key_case(getallheaders());
+            $headers = [];
+            foreach ($_SERVER as $name => $value) {
+                if (!is_string($name)) {
+                    continue;
+                }
+                if (str_starts_with($name, 'HTTP_')) {
+                    $headers[str_replace('_', '-', substr($name, 5))] = $value;
+                    continue;
+                }
+                if ($name === 'CONTENT_TYPE') {
+                    $headers['Content-Type'] = $value;
+                    continue;
+                }
+                if ($name === 'CONTENT_LENGTH') {
+                    $headers['Content-Length'] = $value;
+                }
+            }
+            $this->headers = array_change_key_case($headers);
         }
         return $this->headers;
     }
