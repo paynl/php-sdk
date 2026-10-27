@@ -44,6 +44,7 @@ foreach ($paymentMethods as $k =>  $method) {
     echo $method->getId() . ' - ';
     echo $method->getName() . ' - ';
     echo $method->getImage() . ' - ';
+    echo implode(',', $method->getTargetCountries()) . ' - ';
     echo $method->getMinAmount() . ' - ';
     echo $method->getMaxAmount() . ' - ';
     echo $method->getDescription() . ' - ';
