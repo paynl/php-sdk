@@ -21,13 +21,13 @@ use PayNL\Sdk\Util\Vat;
  */
 class OrderCreateRequest extends RequestData
 {
-    private string $serviceId;
+    private string $serviceId = '';
     private string $description = '';
     private string $reference = '';
     private string $expire = '';
-    private string $returnUrl;
+    private string $returnUrl = '';
     private string $exchangeUrl = '';
-    private int $amount;
+    private int $amount = 0;
     private string $currency = 'EUR';
     private int $paymentMethodId;
     private string $issuerId;
@@ -311,14 +311,6 @@ class OrderCreateRequest extends RequestData
     }
 
     /**
-     * @return string[]
-     */
-    private function requiredArguments()
-    {
-        return ['amount', 'serviceId'];
-    }
-
-    /**
      * @return array
      */
     public function getPathParameters(): array
@@ -332,12 +324,6 @@ class OrderCreateRequest extends RequestData
      */
     public function getBodyParameters(): array
     {
-        foreach ($this->requiredArguments() as $field) {
-            if (empty($this->$field)) {
-                throw new \Exception('Required param `' . $field . '` is empty');
-            }
-        }
-
         # Required parameters
         $parameters = [
             'serviceId' => $this->serviceId,
