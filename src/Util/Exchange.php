@@ -207,7 +207,7 @@ class Exchange
     }
 
     /**
-     * @param boolean $signed Read the raw body only
+     * @param boolean $signed Read the raw body only.
      * @return PayLoad
      * @throws Exception
      */
