@@ -15,6 +15,7 @@ class Method implements ModelInterface
     public const PIN = 1927;
     public const PAYPAL = 138;
     public const RETOURPIN = 2351;
+    public const METJEBANK = 5358;
 
     /**
      * @var int

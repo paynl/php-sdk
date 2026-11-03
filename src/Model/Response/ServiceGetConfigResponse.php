@@ -395,7 +395,7 @@ class ServiceGetConfigResponse implements ModelInterface
     {
         foreach ($this->getCheckoutOptions() as $checkoutOption) {
             foreach ($checkoutOption->getPaymentMethods() as $method) {
-                if ($method->getId() == Method::IDEAL && $method->hasOptions()) {
+                if ($method->getId() == Method::METJEBANK && $method->hasOptions()) {
                     return $method->getOptions();
                 }
             }
