@@ -17,12 +17,12 @@ class VoucherInfoResponse implements ModelInterface
     /**
      * @var array
      */
-    protected $integration;
+    protected $integration = [];
 
     /**
     * @var array
      */
-    protected $voucher;
+    protected $voucher = [];
 
     /**
      * @param array $integration
@@ -97,7 +97,7 @@ class VoucherInfoResponse implements ModelInterface
      */
     public function getExpiresAt(): string
     {
-        return (string) $this->voucher['expiresAt'];
+        return (string) ($this->voucher['expiresAt'] ?? '');
     }
 
     /**

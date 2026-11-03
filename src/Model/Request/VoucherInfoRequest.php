@@ -136,7 +136,7 @@ class VoucherInfoRequest extends RequestData
      */
     public function start(): VoucherInfoResponse
     {
-        $this->config->setVersion(2);
+        $this->config->setVersion(1);
         return parent::start();
     }
 }
