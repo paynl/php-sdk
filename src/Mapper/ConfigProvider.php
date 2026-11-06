@@ -91,6 +91,8 @@ class ConfigProvider implements ProviderInterface
                 'TerminalsGet'                  => 'Terminal',
                 'TerminalsBrowse'               => 'Terminals',
                 'VoucherPayment'                => 'PayOrder',
+                'PayPartsSessionCreate'         => 'PayPartsSessionCreateResponse',
+                'PayPartsSessionGet'            => 'PayPartsSessionGetResponse',
                 'VoucherInfo'                   => 'VoucherInfoResponse',
             ],
         ];

@@ -20,6 +20,16 @@ class Address implements ModelInterface, JsonSerializable
     /**
      * @var string
      */
+    protected string $firstName = '';
+
+    /**
+     * @var string
+     */
+    protected string $lastName = '';
+
+    /**
+     * @var string
+     */
     protected $code;
 
     /**
@@ -204,5 +214,39 @@ class Address implements ModelInterface, JsonSerializable
     public function setCode(string $code): void
     {
         $this->code = $code;
+    }
+
+    /**
+     * Set the address recipient's firstName.
+     */
+    public function setFirstName(string $firstName): self
+    {
+        $this->firstName = $firstName;
+        return $this;
+    }
+
+    /**
+     * Get the address recipient's firstName.
+     */
+    public function getFirstName(): string
+    {
+        return $this->firstName;
+    }
+
+    /**
+     * Set the address recipient's lastName.
+     */
+    public function setLastName(string $lastName): self
+    {
+        $this->lastName = $lastName;
+        return $this;
+    }
+
+    /**
+     * Get the address recipient's lastName.
+     */
+    public function getLastName(): string
+    {
+        return $this->lastName;
     }
 }
