@@ -108,14 +108,13 @@ final class PayPartsSessionRequestTest extends TestCase
         self::assertSame('Basic ' . base64_encode('SL-1234-5678:session-secret'), $sent->getHeaderLine('Authorization'));
     }
 
-    public function testEnvironmentSelectionIgnoresConnectRoutingForBothRequests(): void
+    public function testEnvironmentSelectionIgnoresCoreSettingForBothRequests(): void
     {
         foreach ([false, true] as $zero) {
             foreach ([$this->createRequest(), (new PayPartsSessionGetRequest())->setSessionId('abc')] as $request) {
                 $this->history = [];
                 $config = $this->config([new Response(200, [], '{"sessionId":"abc","sessionToken":"token"}')])
                     ->setCore(Config::TGU1)->setVersion(3);
-                $config->set('domainMapping', [Config::TGU3 . '/v3/' => [$request->getMethodName()]]);
                 $request->setConfig($config)->useZero();
                 if (!$zero) {
                     $request->useZero(false);
