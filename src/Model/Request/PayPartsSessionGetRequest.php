@@ -23,7 +23,7 @@ class PayPartsSessionGetRequest extends RequestData
 
     /**
      * Use the Zero pre-production environment, or pass false to use production.
-     * @param bool $useZero
+     * @param boolean $useZero
      * @return $this
      */
     public function useZero(bool $useZero = true): self

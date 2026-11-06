@@ -14,7 +14,7 @@ use PayNL\Sdk\Request\RequestData;
 
 /**
  * Class PayPartsSessionCreateRequest
- * 
+ *
  * Create a session for the embedded PayParts checkout.
  */
 class PayPartsSessionCreateRequest extends RequestData
@@ -39,7 +39,7 @@ class PayPartsSessionCreateRequest extends RequestData
 
     /**
      * Use the Zero pre-production environment, or pass false to use production.
-     * @param bool $useZero
+     * @param boolean $useZero
      * @return $this
      */
     public function useZero(bool $useZero = true): self
@@ -47,7 +47,7 @@ class PayPartsSessionCreateRequest extends RequestData
         $this->zero = $useZero;
         return $this;
     }
-    
+
     /**
      * Amount in major currency units, or an Amount containing cents.
      * @param float|Amount $amount
@@ -178,7 +178,7 @@ class PayPartsSessionCreateRequest extends RequestData
     public function getBodyParameters(): array
     {
         $parameters = $this->orderRequest->getBodyParameters();
-        
+
         unset($parameters['serviceId'], $parameters['integration']);
         foreach (['returnUrl', 'exchangeUrl'] as $field) {
             if (empty($parameters[$field])) {
@@ -189,9 +189,7 @@ class PayPartsSessionCreateRequest extends RequestData
             throw new PayException('Amount must be greater than zero', 0, 0);
         }
         if ($this->order !== null) {
-            foreach (['deliveryAddress', 'invoiceAddress'] as $field) 
-            {
-                
+            foreach (['deliveryAddress', 'invoiceAddress'] as $field) {
                 $address = $field === 'deliveryAddress' ? $this->order->getDeliveryAddress() : $this->order->getInvoiceAddress();
                 foreach (['firstName', 'lastName'] as $name) {
                     $value = $address->{'get' . ucfirst($name)}();
@@ -215,7 +213,7 @@ class PayPartsSessionCreateRequest extends RequestData
     public function start(): PayPartsSessionCreateResponse
     {
         $this->config = clone $this->config;
-        
+
         $this->config->setCore($this->zero ? self::ZERO_API_URL : self::API_URL);
         $this->config->setVersion(1);
         $response = parent::start();
