@@ -278,6 +278,15 @@ class ConfigProvider implements ConfigProviderInterface
             'method' => RequestInterface::METHOD_POST,
             'requiredParams' => [],
           ],
+          'PayPartsSessionCreate' => [
+            'uri' => '/session/start',
+            'method' => RequestInterface::METHOD_POST,
+          ],
+          'PayPartsSessionGet' => [
+            'uri' => '/session/%sessionId%',
+            'method' => RequestInterface::METHOD_GET,
+            'requiredParams' => ['sessionId' => ''],
+          ],
           'VoucherInfo' => [
             'uri' => '/vouchers/info',
             'method' => RequestInterface::METHOD_POST,
