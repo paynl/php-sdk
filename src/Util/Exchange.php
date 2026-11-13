@@ -28,6 +28,7 @@ class Exchange
     public const ERROR_PAYLOAD_OBJECT = 8004;
     public const ERROR_ACTION_FAULT = 8005;
     public const ERROR_PAYLOAD_VALIDATION = 8006;
+    public const ERROR_API_RETRIEVAL = 8007;
 
     private PayLoad $payload;
     private ?array $custom_payload;
@@ -348,20 +349,20 @@ class Exchange
             $payOrder->setType($payload->getType());
             $payOrder->setStatusCodeName(PayStatus::PENDING, 'PENDING');
         } else {
+            $payOrderId = $payload->getPayOrderId();
+            if (empty($payOrderId)) {
+                throw new Exception('Missing pay order id in payload');
+            }
+
+            $action = $this->getAction();
+
+            $useLegacy = (stripos($action, 'refund') !== false || !$payload->isTguTransaction());
+
+            $request = $useLegacy
+                ? new TransactionStatusRequest($payOrderId) # Using TransactionStatusRequest for refunds and backwards compatibility
+                : new OrderStatusRequest($payOrderId);
+
             try {
-                $payOrderId = $payload->getPayOrderId();
-                if (empty($payOrderId)) {
-                    throw new Exception('Missing pay order id in payload');
-                }
-
-                $action = $this->getAction();
-
-                $useLegacy = (stripos($action, 'refund') !== false || !$payload->isTguTransaction());
-
-                $request = $useLegacy
-                    ? new TransactionStatusRequest($payOrderId) # Using TransactionStatusRequest for refunds and backwards compatibility
-                    : new OrderStatusRequest($payOrderId);
-
                 try {
                     $payOrder = $request->setConfig($config)->start();
 
@@ -375,9 +376,9 @@ class Exchange
                     $payOrder = (new TransactionStatusRequest($payOrderId))->setConfig($config)->start();
                 }
             } catch (PayException $e) {
-                throw new Exception('API Retrieval error: ' . $payload->getPayOrderId() . ' - ' . $e->getFriendlyMessage());
+                throw new Exception('API Retrieval error: ' . $payOrderId . ' - ' . $e->getFriendlyMessage(), Exchange::ERROR_API_RETRIEVAL, $e);
             } catch (Exception $e) {
-                throw new Exception('API-Retrieval error: ' . $payload->getPayOrderId() . ' - ' . $e->getMessage());
+                throw new Exception('API-Retrieval error: ' . $payOrderId . ' - ' . $e->getMessage(), Exchange::ERROR_API_RETRIEVAL, $e);
             }
 
             if ($payOrder->isPending() && $action != PayStatus::EVENT_PENDING) {
